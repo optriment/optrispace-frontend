@@ -1,21 +1,29 @@
 {
-  "name": "rubberduckmethod",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@next/bundle-analyzer": "^9.1.4",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "cross-env": "^6.0.3",
+    "next": "latest",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^2.1.1",
+    "swr": "^0.1.18",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "next test",
+    "lint": "next lint",
+    "analyze": "cross-env ANALYZE=true npm run-script build"
   },
   "eslintConfig": {
     "extends": [
@@ -34,5 +42,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "^12.1.5",
+    "eslint-config-next": "12.1.5",
+    "eslint-plugin-next": "0.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.4.0"
   }
 }
