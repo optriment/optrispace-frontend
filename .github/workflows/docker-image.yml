@@ -16,5 +16,8 @@ jobs:
       with:
         dockerfile: Dockerfile
 
+    - name: Prepare env
+      run: cp .env.local.example .env.production
+
     - name: Build the Docker image
       run: docker build . --file Dockerfile
