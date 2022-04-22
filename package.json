@@ -23,6 +23,7 @@
     "start": "next start",
     "test": "next test",
     "lint": "next lint",
+    "build-production": "next build && next export",
     "analyze": "cross-env ANALYZE=true npm run-script build"
   },
   "eslintConfig": {
