@@ -4,24 +4,36 @@ import {
   Grid,
   Header,
   Segment,
-  Message,
 } from 'semantic-ui-react';
 
 import useSWR from 'swr';
-import { fetcher } from '../../lib/fetcher';
+import { fetchWithToken } from '../../lib/fetcher';
+import { useFetchPerson } from '../../lib/person';
 
-import JobsList from '../../components/JobsList';
+import ContractsList from '../../components/ContractsList';
 import ErrorWrapper from '../../components/ErrorWrapper';
 
-export default function JobsIndex() {
+export default function ContractsIndex() {
   const { publicRuntimeConfig } = getConfig()
 
-  const { data, error } = useSWR(`${publicRuntimeConfig.api_url}/jobs`, fetcher);
+  const { person } = useFetchPerson();
+
+  const { data, error } = useSWR(
+    () => (person ? [`${publicRuntimeConfig.api_url}/contracts`, person.id] : null), fetchWithToken
+  );
+
+  if (!person) {
+    return (
+      <Segment vertical>
+        <p>Loading person...</p>
+      </Segment>
+    )
+  }
 
   if (error) {
     return (
       <ErrorWrapper
-        header='Failed to load jobs'
+        header='Failed to load contracts'
         error={error}
       />
     )
@@ -30,7 +42,7 @@ export default function JobsIndex() {
   if (!data) {
     return (
       <Segment vertical>
-        <p>Loading jobs...</p>
+        <p>Loading contracts...</p>
       </Segment>
     )
   }
@@ -41,12 +53,12 @@ export default function JobsIndex() {
         <Grid.Row>
           <Grid.Column>
             <Header as='h2' style={{ fontSize: '3em' }}>
-              Jobs
+              Contracts
             </Header>
 
             {data.length > 0
-              ? (<JobsList jobs={data} />)
-              : (<div>No jobs</div>)
+              ? (<ContractsList contracts={data} />)
+              : (<div>No contracts</div>)
             }
           </Grid.Column>
         </Grid.Row>

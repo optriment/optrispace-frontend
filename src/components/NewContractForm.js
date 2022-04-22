@@ -119,13 +119,6 @@ export default function NewContractForm({ job, person, application }) {
                 value={application.applicant.id}
                 readonly
               />
-
-              <Form.Input
-                label='Адрес кошелька'
-                placeholder=''
-                value={application.applicant.address}
-                readonly
-              />
             </Grid.Column>
           </Grid.Row>
         </Grid>

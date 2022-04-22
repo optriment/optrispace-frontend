@@ -5,6 +5,7 @@ import useSWR from 'swr';
 
 import { fetcher } from '../../lib/fetcher';
 import JobCard from '../../components/JobCard/JobCard';
+import ErrorWrapper from '../../components/ErrorWrapper';
 
 export default function Job() {
   const { publicRuntimeConfig } = getConfig()
@@ -18,10 +19,10 @@ export default function Job() {
 
   if (jobError) {
     return (
-      <Message negative>
-        <Message.Header>Failed to load job</Message.Header>
-        <p>{jobError.info.message}</p>
-      </Message>
+      <ErrorWrapper
+        header='Failed to load job'
+        error={jobError}
+      />
     )
   }
 

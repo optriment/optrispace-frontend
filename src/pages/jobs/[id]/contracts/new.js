@@ -10,7 +10,7 @@ import { useFetchPerson } from '../../../../lib/person'
 import { isJobOwner } from '../../../../lib/job'
 import NewContractForm from '../../../../components/NewContractForm'
 
-import { fetcher } from '../../../../lib/fetcher';
+import { fetcher, fetchWithToken } from '../../../../lib/fetcher';
 
 export default function NewContract() {
   const { publicRuntimeConfig } = getConfig()
@@ -24,8 +24,11 @@ export default function NewContract() {
   );
 
   const { data: application, error: applicationError } = useSWR(
-    () => query.application_id && `${publicRuntimeConfig.api_url}/applications/${query.application_id}`,
-    fetcher
+    () => (person && query.application_id
+      ? [`${publicRuntimeConfig.api_url}/applications/${query.application_id}`, person.id]
+      : null
+    ),
+    fetchWithToken
   );
 
   if (!person) {
