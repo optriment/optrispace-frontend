@@ -1,9 +1,10 @@
-import Link from 'next/link';
-import { Menu, Dropdown } from 'semantic-ui-react';
-import { useFetchPerson } from '../lib/person';
+import React from 'react'
+import Link from 'next/link'
+import { Menu, Dropdown } from 'semantic-ui-react'
+import { useFetchPerson } from '../lib/person'
 
 export default function MenuComponent() {
-  const { person } = useFetchPerson();
+  const { person } = useFetchPerson()
 
   return (
     <Menu style={{ marginTop: '10px' }}>
@@ -35,15 +36,15 @@ export default function MenuComponent() {
         {person && (
           <Dropdown item text={`Account (${person.id})`}>
             <Dropdown.Menu>
-              <Dropdown.Item icon='edit' text='Edit Profile' />
-              <Dropdown.Item icon='settings' text='Settings' />
-              <Dropdown.Item icon='money' text='Billing' />
+              <Dropdown.Item icon="edit" text="Edit Profile" />
+              <Dropdown.Item icon="settings" text="Settings" />
+              <Dropdown.Item icon="money" text="Billing" />
               <Dropdown.Divider />
-              <Dropdown.Item icon='sign-out' text='Sign Out' />
+              <Dropdown.Item icon="sign-out" text="Sign Out" />
             </Dropdown.Menu>
           </Dropdown>
         )}
       </Menu.Menu>
     </Menu>
-  );
+  )
 }
