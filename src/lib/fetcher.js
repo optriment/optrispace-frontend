@@ -1,78 +1,78 @@
 export const fetcher = async (url) => {
-  const headers = { 'Content-Type': 'application/json' };
+  const headers = { 'Content-Type': 'application/json' }
 
-  let payload = {
+  const payload = {
     method: 'GET',
-    headers: headers,
+    headers,
   }
 
-  const res = await fetch(url, payload);
-  const data = await res.json();
+  const res = await fetch(url, payload)
+  const data = await res.json()
 
   if (!res.ok) {
-    const error = new Error('An error occured while fetching the data');
+    const error = new Error('An error occured while fetching the data')
 
     // Attach extra info to the error object.
-    error.info = data;
-    error.status = res.status;
+    error.info = data
+    error.status = res.status
 
-    throw error;
+    throw error
   }
 
-  return data;
+  return data
 }
 
 export const fetchWithToken = async (url, token) => {
   const headers = {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
-  };
-
-  let payload = {
-    method: 'GET',
-    headers: headers,
+    Authorization: `Bearer ${token}`,
   }
 
-  const res = await fetch(url, payload);
-  const data = await res.json();
+  const payload = {
+    method: 'GET',
+    headers,
+  }
+
+  const res = await fetch(url, payload)
+  const data = await res.json()
 
   if (!res.ok) {
-    const error = new Error('An error occured while fetching the data');
+    const error = new Error('An error occured while fetching the data')
 
     // Attach extra info to the error object.
-    error.info = data;
-    error.status = res.status;
+    error.info = data
+    error.status = res.status
 
-    throw error;
+    throw error
   }
 
-  return data;
+  return data
 }
 
 export const postWithToken = async (url, token, body = {}) => {
   const headers = {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
-  };
+    Authorization: `Bearer ${token}`,
+  }
 
-  let payload = {
+  const payload = {
     method: 'POST',
-    headers: headers,
+    headers,
     body: JSON.stringify(body),
   }
 
-  const res = await fetch(url, payload);
-  const data = await res.json();
+  const res = await fetch(url, payload)
+  const data = await res.json()
 
   if (!res.ok) {
-    const error = new Error('An error occured while sending the data');
+    const error = new Error('An error occured while sending the data')
 
     // Attach extra info to the error object.
-    error.info = data;
-    error.status = res.status;
+    error.info = data
+    error.status = res.status
 
-    throw error;
+    throw error
   }
 
-  return data;
+  return data
 }

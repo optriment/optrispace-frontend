@@ -1,35 +1,36 @@
+import React from 'react'
 import getConfig from 'next/config'
-import {
-  Message,
-  Segment,
-} from 'semantic-ui-react';
+import { Message, Segment } from 'semantic-ui-react'
 
-import { useRouter } from 'next/router';
-import useSWR from 'swr';
+import { useRouter } from 'next/router'
+import useSWR from 'swr'
 import { useFetchPerson } from '../../../../lib/person'
-import { isJobOwner } from '../../../../lib/job'
+import isJobOwner from '../../../../lib/job'
 import NewContractForm from '../../../../components/NewContractForm'
 
-import { fetcher, fetchWithToken } from '../../../../lib/fetcher';
+import { fetcher, fetchWithToken } from '../../../../lib/fetcher'
 
 export default function NewContract() {
   const { publicRuntimeConfig } = getConfig()
 
-  const { person } = useFetchPerson();
+  const { person } = useFetchPerson()
 
-  const { query } = useRouter();
+  const { query } = useRouter()
   const { data: job, error: jobError } = useSWR(
     () => query.id && `${publicRuntimeConfig.api_url}/jobs/${query.id}`,
     fetcher
-  );
+  )
 
   const { data: application, error: applicationError } = useSWR(
-    () => (person && query.application_id
-      ? [`${publicRuntimeConfig.api_url}/applications/${query.application_id}`, person.id]
-      : null
-    ),
+    () =>
+      person && query.application_id
+        ? [
+            `${publicRuntimeConfig.api_url}/applications/${query.application_id}`,
+            person.id,
+          ]
+        : null,
     fetchWithToken
-  );
+  )
 
   if (!person) {
     return (
@@ -62,7 +63,9 @@ export default function NewContract() {
     return (
       <Segment vertical>
         <Message negative>
-          <Message.Header>You can not create contract for not your own job</Message.Header>
+          <Message.Header>
+            You can not create contract for not your own job
+          </Message.Header>
         </Message>
       </Segment>
     )
@@ -91,7 +94,9 @@ export default function NewContract() {
     return (
       <Segment vertical>
         <Message negative>
-          <Message.Header>Application&apos;s job does not match with current job</Message.Header>
+          <Message.Header>
+            Application&apos;s job does not match with current job
+          </Message.Header>
         </Message>
       </Segment>
     )

@@ -1,25 +1,23 @@
+import React from 'react'
 import getConfig from 'next/config'
-import {
-  Message,
-  Segment,
-} from 'semantic-ui-react';
-import { useRouter } from 'next/router';
-import useSWR from 'swr';
+import { Message, Segment } from 'semantic-ui-react'
+import { useRouter } from 'next/router'
+import useSWR from 'swr'
 import { useFetchPerson } from '../../../lib/person'
-import { fetcher } from '../../../lib/fetcher';
-import EditJobForm from '../../../components/EditJobForm';
-import { isJobOwner } from '../../../lib/job';
+import { fetcher } from '../../../lib/fetcher'
+import EditJobForm from '../../../components/EditJobForm'
+import isJobOwner from '../../../lib/job'
 
 export default function JobEditPage() {
   const { publicRuntimeConfig } = getConfig()
 
-  const { person } = useFetchPerson();
+  const { person } = useFetchPerson()
 
-  const { query } = useRouter();
+  const { query } = useRouter()
   const { data: job, error: jobError } = useSWR(
     () => query.id && `${publicRuntimeConfig.api_url}/jobs/${query.id}`,
     fetcher
-  );
+  )
 
   if (!person) {
     return (
@@ -60,7 +58,7 @@ export default function JobEditPage() {
 
   return (
     <Segment vertical>
-       <EditJobForm job={job} />
+      <EditJobForm job={job} />
     </Segment>
   )
 }

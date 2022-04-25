@@ -1,13 +1,11 @@
-import {
-  Segment,
-  Message,
-} from 'semantic-ui-react';
+import React from 'react'
+import { Segment, Message } from 'semantic-ui-react'
 
-import { useFetchPerson } from '../../lib/person';
-import NewJobForm from '../../components/NewJobForm';
+import { useFetchPerson } from '../../lib/person'
+import NewJobForm from '../../components/NewJobForm'
 
 export default function NewJobPage() {
-  const { person, loading, error } = useFetchPerson();
+  const { person, loading, error } = useFetchPerson()
 
   if (error) {
     return (
@@ -18,7 +16,7 @@ export default function NewJobPage() {
   }
 
   if (loading) {
-    return (<div>Loading person...</div>)
+    return <div>Loading person...</div>
   }
 
   if (!person) {
@@ -33,5 +31,5 @@ export default function NewJobPage() {
     <Segment vertical>
       <NewJobForm person={person} />
     </Segment>
-  );
+  )
 }

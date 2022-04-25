@@ -10,6 +10,10 @@ cp .env.local.example .env.local
 
 In the project directory, you can run:
 
+### `make setup`
+
+Will install dependencies.
+
 ### `make run-dev`
 
 Runs the app in the development mode.\
