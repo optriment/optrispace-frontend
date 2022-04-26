@@ -5,59 +5,63 @@ import { Grid, Header, Segment } from 'semantic-ui-react'
 
 import useSWR from 'swr'
 import { fetchWithToken } from '../../lib/fetcher'
-import { useFetchPerson } from '../../lib/person'
 
+import Layout from '../../components/Layout'
 import ContractsList from '../../components/ContractsList'
 import ErrorWrapper from '../../components/ErrorWrapper'
+import JustOneSecond from '../../components/JustOneSecond'
 
-export default function ContractsIndex() {
+import { useAuth } from '../../hooks'
+
+const useContracts = () => {
   const { publicRuntimeConfig } = getConfig()
 
-  const { person } = useFetchPerson()
+  const { loading, token } = useAuth()
 
   const { data, error } = useSWR(
     () =>
-      person ? [`${publicRuntimeConfig.api_url}/contracts`, person.id] : null,
+      !loading && token && [`${publicRuntimeConfig.api_url}/contracts`, token],
     fetchWithToken
   )
 
-  if (!person) {
-    return (
-      <Segment vertical>
-        <p>Loading person...</p>
-      </Segment>
-    )
-  }
+  if (error) return { error }
+  if (!data) return { isLoading: true }
 
-  if (error) {
-    return <ErrorWrapper header="Failed to load contracts" error={error} />
-  }
+  return { contracts: data }
+}
 
-  if (!data) {
-    return (
-      <Segment vertical>
-        <p>Loading contracts...</p>
-      </Segment>
-    )
-  }
+const Page = () => {
+  const { person } = useAuth()
+  const { contracts, isLoading, error } = useContracts()
 
   return (
-    <Segment vertical>
-      <Grid container stackable verticalAlign="middle">
-        <Grid.Row>
-          <Grid.Column>
-            <Header as="h2" style={{ fontSize: '3em' }}>
-              Contracts
-            </Header>
+    <Layout>
+      <Segment vertical>
+        <Grid container stackable verticalAlign="middle">
+          <Grid.Row>
+            <Grid.Column>
+              <Header as="h2" style={{ fontSize: '3em' }}>
+                Contracts
+              </Header>
 
-            {data.length > 0 ? (
-              <ContractsList contracts={data} />
-            ) : (
-              <div>No contracts</div>
-            )}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </Segment>
+              {error && (
+                <ErrorWrapper header="Failed to load contracts" error={error} />
+              )}
+
+              {isLoading && <JustOneSecond />}
+
+              {contracts && (
+                <ContractsList contracts={contracts} person={person} />
+              )}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Segment>
+    </Layout>
   )
 }
+
+Page.requiresAuth = true
+Page.redirectUnauthenticatedTo = '/sign_in'
+
+export default Page

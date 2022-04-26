@@ -1,110 +1,133 @@
 import React from 'react'
 import getConfig from 'next/config'
-import { Message, Segment } from 'semantic-ui-react'
+import { Segment } from 'semantic-ui-react'
 
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
-import { useFetchPerson } from '../../../../lib/person'
 import isJobOwner from '../../../../lib/job'
+import Layout from '../../../../components/Layout'
 import NewContractForm from '../../../../components/NewContractForm'
-
+import JustOneSecond from '../../../../components/JustOneSecond'
 import { fetcher, fetchWithToken } from '../../../../lib/fetcher'
+import { useAuth } from '../../../../hooks'
+import ErrorWrapper from '../../../../components/ErrorWrapper'
 
-export default function NewContract() {
-  const { publicRuntimeConfig } = getConfig()
+const { publicRuntimeConfig } = getConfig()
 
-  const { person } = useFetchPerson()
-
+const useJob = () => {
   const { query } = useRouter()
-  const { data: job, error: jobError } = useSWR(
+  const { data: job, error } = useSWR(
     () => query.id && `${publicRuntimeConfig.api_url}/jobs/${query.id}`,
     fetcher
   )
 
-  const { data: application, error: applicationError } = useSWR(
+  if (error) return { error }
+  if (!job) return { isLoading: true }
+
+  return { job }
+}
+
+const useApplication = () => {
+  const { query } = useRouter()
+  const { token } = useAuth()
+  const { data: application, error } = useSWR(
     () =>
-      person && query.application_id
-        ? [
-            `${publicRuntimeConfig.api_url}/applications/${query.application_id}`,
-            person.id,
-          ]
-        : null,
+      token &&
+      query.application_id && [
+        `${publicRuntimeConfig.api_url}/applications/${query.application_id}`,
+        token,
+      ],
     fetchWithToken
   )
 
-  if (!person) {
+  if (error) return { error }
+  if (!application) return { isLoading: true }
+
+  return { application }
+}
+
+const Page = () => {
+  const { person, token } = useAuth()
+  const { job, isLoading, error } = useJob()
+  const {
+    application,
+    isLoading: isApplicationLoading,
+    error: applicationError,
+  } = useApplication()
+
+  if (error) {
     return (
-      <Segment vertical>
-        <p>Loading person...</p>
-      </Segment>
+      <Layout>
+        <Segment vertical>
+          <ErrorWrapper header="Failed to load job" error={error} />
+        </Segment>
+      </Layout>
     )
   }
 
-  if (jobError) {
+  if (isLoading) {
     return (
-      <Segment vertical>
-        <Message negative>
-          <Message.Header>Failed to load job</Message.Header>
-          <p>{jobError.info.message}</p>
-        </Message>
-      </Segment>
-    )
-  }
-
-  if (!job) {
-    return (
-      <Segment vertical>
-        <p>Loading job...</p>
-      </Segment>
+      <Layout>
+        <Segment vertical>
+          <JustOneSecond />
+        </Segment>
+      </Layout>
     )
   }
 
   if (!isJobOwner(job, person)) {
     return (
-      <Segment vertical>
-        <Message negative>
-          <Message.Header>
-            You can not create contract for not your own job
-          </Message.Header>
-        </Message>
-      </Segment>
+      <Layout>
+        <Segment vertical>
+          <ErrorWrapper header="You don't have access to this action" />
+        </Segment>
+      </Layout>
     )
   }
 
   if (applicationError) {
     return (
-      <Segment vertical>
-        <Message negative>
-          <Message.Header>Failed to load application</Message.Header>
-          <p>{applicationError.info.message}</p>
-        </Message>
-      </Segment>
+      <Layout>
+        <Segment vertical>
+          <ErrorWrapper
+            header="Failed to load application"
+            error={applicationError}
+          />
+        </Segment>
+      </Layout>
     )
   }
 
-  if (!application) {
+  if (isApplicationLoading) {
     return (
-      <Segment vertical>
-        <p>Loading application...</p>
-      </Segment>
+      <Layout>
+        <Segment vertical>
+          <JustOneSecond />
+        </Segment>
+      </Layout>
     )
   }
 
   if (application.job.id !== job.id) {
     return (
-      <Segment vertical>
-        <Message negative>
-          <Message.Header>
-            Application&apos;s job does not match with current job
-          </Message.Header>
-        </Message>
-      </Segment>
+      <Layout>
+        <Segment vertical>
+          <ErrorWrapper header="You don't have access to this action" />
+        </Segment>
+      </Layout>
     )
   }
 
   return (
-    <Segment vertical>
-      <NewContractForm job={job} person={person} application={application} />
-    </Segment>
+    <Layout>
+      <Segment vertical>
+        <NewContractForm job={job} token={token} application={application} />
+      </Segment>
+    </Layout>
   )
 }
+
+Page.requiresAuth = true
+Page.redirectUnauthenticatedTo = '/sign_in'
+
+export default Page
