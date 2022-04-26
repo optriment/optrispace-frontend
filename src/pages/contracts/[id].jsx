@@ -4,51 +4,54 @@ import { Segment } from 'semantic-ui-react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 
-import { useFetchPerson } from '../../lib/person'
 import { fetchWithToken } from '../../lib/fetcher'
+
+import Layout from '../../components/Layout'
 import ContractCard from '../../components/ContractCard/ContractCard'
 import ErrorWrapper from '../../components/ErrorWrapper'
+import JustOneSecond from '../../components/JustOneSecond'
+import { useAuth } from '../../hooks'
 
-export default function Contract() {
+const useContract = () => {
   const { publicRuntimeConfig } = getConfig()
-
-  const { person } = useFetchPerson()
-
+  const { token } = useAuth()
   const { query } = useRouter()
 
-  const { data: contract, error: contractError } = useSWR(
+  const { data: contract, error } = useSWR(
     () =>
-      person && query.id
-        ? [`${publicRuntimeConfig.api_url}/contracts/${query.id}`, person.id]
-        : null,
+      query.id && [
+        `${publicRuntimeConfig.api_url}/contracts/${query.id}`,
+        token,
+      ],
     fetchWithToken
   )
 
-  if (!person) {
-    return (
-      <Segment vertical>
-        <p>Loading person...</p>
-      </Segment>
-    )
-  }
+  if (error) return { error }
+  if (!contract) return { isLoading: true }
 
-  if (contractError) {
-    return (
-      <ErrorWrapper header="Failed to load contract" error={contractError} />
-    )
-  }
+  return { contract }
+}
 
-  if (!contract) {
-    return (
-      <Segment vertical>
-        <p>Loading contract...</p>
-      </Segment>
-    )
-  }
+const Page = () => {
+  const { person } = useAuth()
+  const { contract, isLoading, error } = useContract()
 
   return (
-    <Segment vertical>
-      <ContractCard contract={contract} person={person} />
-    </Segment>
+    <Layout>
+      <Segment vertical>
+        {error && (
+          <ErrorWrapper header="Failed to load contract" error={error} />
+        )}
+
+        {isLoading && <JustOneSecond />}
+
+        {contract && <ContractCard contract={contract} person={person} />}
+      </Segment>
+    </Layout>
   )
 }
+
+Page.requiresAuth = true
+Page.redirectUnauthenticatedTo = '/sign_in'
+
+export default Page

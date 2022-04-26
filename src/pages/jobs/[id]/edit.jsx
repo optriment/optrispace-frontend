@@ -1,64 +1,75 @@
 import React from 'react'
 import getConfig from 'next/config'
-import { Message, Segment } from 'semantic-ui-react'
+import { Segment } from 'semantic-ui-react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
-import { useFetchPerson } from '../../../lib/person'
 import { fetcher } from '../../../lib/fetcher'
+import Layout from '../../../components/Layout'
 import EditJobForm from '../../../components/EditJobForm'
 import isJobOwner from '../../../lib/job'
+import { useAuth } from '../../../hooks'
+import JustOneSecond from '../../../components/JustOneSecond'
+import ErrorWrapper from '../../../components/ErrorWrapper'
 
-export default function JobEditPage() {
+const useJob = () => {
   const { publicRuntimeConfig } = getConfig()
-
-  const { person } = useFetchPerson()
-
   const { query } = useRouter()
-  const { data: job, error: jobError } = useSWR(
+
+  const { data: job, error } = useSWR(
     () => query.id && `${publicRuntimeConfig.api_url}/jobs/${query.id}`,
     fetcher
   )
 
-  if (!person) {
+  if (error) return { error }
+  if (!job) return { isLoading: true }
+
+  return { job }
+}
+
+const Page = () => {
+  const { job, isLoading, error } = useJob()
+  const { person } = useAuth()
+
+  if (error) {
     return (
-      <Segment vertical>
-        <p>Loading person...</p>
-      </Segment>
+      <Layout>
+        <Segment vertical>
+          <ErrorWrapper header="Failed to load job" error={error} />
+        </Segment>
+      </Layout>
     )
   }
 
-  if (jobError) {
+  if (isLoading) {
     return (
-      <Segment vertical>
-        <Message negative>
-          <Message.Header>Failed to load job</Message.Header>
-          <p>{jobError.info.message}</p>
-        </Message>
-      </Segment>
-    )
-  }
-
-  if (!job) {
-    return (
-      <Segment vertical>
-        <p>Loading job...</p>
-      </Segment>
+      <Layout>
+        <Segment vertical>
+          <JustOneSecond />
+        </Segment>
+      </Layout>
     )
   }
 
   if (!isJobOwner(job, person)) {
     return (
-      <Segment vertical>
-        <Message negative>
-          <Message.Header>You can not edit this job</Message.Header>
-        </Message>
-      </Segment>
+      <Layout>
+        <Segment vertical>
+          <ErrorWrapper header="You don't have access to this action" />
+        </Segment>
+      </Layout>
     )
   }
 
   return (
-    <Segment vertical>
-      <EditJobForm job={job} />
-    </Segment>
+    <Layout>
+      <Segment vertical>
+        <EditJobForm job={job} />
+      </Segment>
+    </Layout>
   )
 }
+
+Page.requiresAuth = true
+Page.redirectUnauthenticatedTo = '/sign_in'
+
+export default Page

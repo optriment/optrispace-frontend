@@ -1,24 +1,18 @@
 import React from 'react'
 import { Grid, Header, Icon, Segment, Statistic } from 'semantic-ui-react'
 
-import { useFetchPerson } from '../../lib/person'
 import isJobOwner from '../../lib/job'
+import { useAuth } from '../../hooks'
 
 import JobCardForCustomer from './JobCardForCustomer'
 import JobCardForApplicant from './JobCardForApplicant'
 import JobCardForGuest from './JobCardForGuest'
 
 export default function JobCard({ job }) {
-  const { person } = useFetchPerson()
+  const { person } = useAuth()
 
-  // FIXME: Сомневаюсь по поводу этого условия для isGuest
-  const isGuest = !person
-
-  let isOwner = false
-  let isApplicant = false
-
-  isOwner = isJobOwner(job, person)
-  isApplicant = !isOwner
+  const isOwner = person && isJobOwner(job, person)
+  const isApplicant = person && !isOwner
 
   const defaultHeader = (jobItem) => {
     return (
@@ -93,33 +87,39 @@ export default function JobCard({ job }) {
     )
   }
 
-  return (
-    <Grid container stackable verticalAlign="middle">
-      {isOwner && (
+  if (isOwner) {
+    return (
+      <Grid container stackable verticalAlign="middle">
         <JobCardForCustomer
           job={job}
           renderDescription={defaultDescription(job)}
           renderStats={defaultStats(job)}
         />
-      )}
+      </Grid>
+    )
+  }
 
-      {isApplicant && (
+  if (isApplicant) {
+    return (
+      <Grid container stackable verticalAlign="middle">
         <JobCardForApplicant
           job={job}
           renderHeader={defaultHeader(job)}
           renderDescription={defaultDescription(job)}
           renderStats={defaultStats(job)}
         />
-      )}
+      </Grid>
+    )
+  }
 
-      {isGuest && (
-        <JobCardForGuest
-          job={job}
-          renderHeader={defaultHeader(job)}
-          renderDescription={defaultDescription(job)}
-          renderStats={defaultStats(job)}
-        />
-      )}
+  return (
+    <Grid container stackable verticalAlign="middle">
+      <JobCardForGuest
+        job={job}
+        renderHeader={defaultHeader(job)}
+        renderDescription={defaultDescription(job)}
+        renderStats={defaultStats(job)}
+      />
     </Grid>
   )
 }

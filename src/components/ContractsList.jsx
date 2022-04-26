@@ -1,11 +1,8 @@
 import React from 'react'
 import { Card } from 'semantic-ui-react'
 import ContractListItem from './ContractListItem'
-import { useFetchPerson } from '../lib/person'
 
-export default function ContractsList({ contracts }) {
-  const { person } = useFetchPerson()
-
+export default function ContractsList({ contracts, person }) {
   return (
     <Card.Group>
       {contracts.map((contract) => (

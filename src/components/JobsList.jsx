@@ -1,12 +1,9 @@
 import React from 'react'
 import { Card } from 'semantic-ui-react'
 import JobListItem from './JobListItem'
-import { useFetchPerson } from '../lib/person'
 import isJobOwner from '../lib/job'
 
-export default function JobsList({ jobs }) {
-  const { person } = useFetchPerson()
-
+export default function JobsList({ jobs, person }) {
   return (
     <Card.Group>
       {jobs.map((job) => (

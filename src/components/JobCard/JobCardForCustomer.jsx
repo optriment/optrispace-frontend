@@ -1,37 +1,47 @@
 import React, { useState } from 'react'
 
 import getConfig from 'next/config'
+import { useRouter } from 'next/router'
 
 import { Button, Grid, Header, Segment, Tab } from 'semantic-ui-react'
 
-import ErrorPage from 'next/error'
+import ErrorWrapper from '../ErrorWrapper'
 import Link from 'next/link'
+import JustOneSecond from '../JustOneSecond'
 
 import useSWR from 'swr'
-import { useFetchPerson } from '../../lib/person'
 import { fetchWithToken } from '../../lib/fetcher'
+import { useAuth } from '../../hooks'
 
 import ApplicationsGroup from './ApplicationsGroup'
+
+const useApplications = () => {
+  const { publicRuntimeConfig } = getConfig()
+  const { token } = useAuth()
+  const { query } = useRouter()
+
+  const { data, error } = useSWR(
+    () =>
+      token &&
+      query.id && [
+        `${publicRuntimeConfig.api_url}/jobs/${query.id}/applications`,
+        token,
+      ],
+    fetchWithToken
+  )
+
+  if (error) return { error }
+  if (!data) return { isLoading: true }
+
+  return { applications: data }
+}
 
 export default function JobCardForCustomer({
   job,
   renderDescription,
   renderStats,
 }) {
-  const { publicRuntimeConfig } = getConfig()
-
-  const { person } = useFetchPerson()
-
-  const { data: applications, error: isApplicationsError } = useSWR(
-    () =>
-      job.id
-        ? [
-            `${publicRuntimeConfig.api_url}/jobs/${job.id}/applications`,
-            person.id,
-          ]
-        : null,
-    fetchWithToken
-  )
+  const { applications, isLoading, error } = useApplications()
 
   const [panes, setPanes] = useState(undefined)
 
@@ -68,15 +78,6 @@ export default function JobCardForCustomer({
         'signed'
       ),
     ])
-  }
-
-  if (isApplicationsError) {
-    return (
-      <ErrorPage
-        statusCode={isApplicationsError.status}
-        title={isApplicationsError.info.message}
-      />
-    )
   }
 
   const renderHeader = (jobItem) => {
@@ -117,13 +118,13 @@ export default function JobCardForCustomer({
 
       <Grid.Row>
         <Grid.Column>
-          {panes ? (
-            <Tab panes={panes} />
-          ) : (
-            <Header floated="left" style={{ fontSize: '1.5em' }}>
-              Нет заявок
-            </Header>
+          {error && (
+            <ErrorWrapper header="Failed to load applications" error={error} />
           )}
+
+          {isLoading && <JustOneSecond />}
+
+          {panes && <Tab panes={panes} />}
         </Grid.Column>
       </Grid.Row>
     </>

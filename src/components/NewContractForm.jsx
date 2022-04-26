@@ -12,7 +12,7 @@ import {
 
 import { createContract } from '../lib/api'
 
-export default function NewContractForm({ job, person, application }) {
+export default function NewContractForm({ job, token, application }) {
   const initialFields = {
     title: job.title,
     description: job.description,
@@ -25,14 +25,11 @@ export default function NewContractForm({ job, person, application }) {
   const handleCreateContract = (e) => {
     e.preventDefault()
 
-    createContract(
-      person.id, // Token
-      {
-        application_id: application.id,
-        performer_id: application.applicant.id,
-        ...fields,
-      }
-    )
+    createContract(token, {
+      applicationId: application.id,
+      performerId: application.applicant.id,
+      ...fields,
+    })
       .then((contract) => {
         if (!contract.id) {
           setErrors(contract.message)

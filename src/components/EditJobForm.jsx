@@ -27,7 +27,7 @@ export default function EditJobForm({ job }) {
           </Grid.Column>
 
           <Grid.Column width={8} textAlign="right">
-            <Button primary type="submit">
+            <Button primary type="submit" disabled>
               Сохранить
             </Button>
           </Grid.Column>

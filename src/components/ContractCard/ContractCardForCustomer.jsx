@@ -20,6 +20,7 @@ export default function ContractCardForCustomer({ contract }) {
                 size="tiny"
                 labelPosition="left"
                 icon="pencil"
+                disabled
               />
             </Link>
 

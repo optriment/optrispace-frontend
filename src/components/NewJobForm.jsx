@@ -12,7 +12,7 @@ import {
 
 import { createJob } from '../lib/api'
 
-export default function NewJobForm({ person }) {
+export default function NewJobForm({ token }) {
   const initialFields = {
     title: '',
     description: '',
@@ -25,10 +25,7 @@ export default function NewJobForm({ person }) {
   const handleCreateJob = (e) => {
     e.preventDefault()
 
-    createJob(
-      person.id, // Token
-      { ...fields }
-    )
+    createJob(token, { ...fields })
       .then((job) => {
         if (!job.id) {
           setErrors(job.message)

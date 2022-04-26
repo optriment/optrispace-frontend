@@ -11,7 +11,7 @@ import {
   TextArea,
 } from 'semantic-ui-react'
 
-import { useFetchPerson } from '../../lib/person'
+import { useAuth } from '../../hooks'
 import { createApplication } from '../../lib/api'
 
 export default function JobCardForApplicant({
@@ -20,7 +20,7 @@ export default function JobCardForApplicant({
   renderDescription,
   renderStats,
 }) {
-  const { person } = useFetchPerson()
+  const { token } = useAuth()
 
   const initialFields = {
     comment: '',
@@ -32,11 +32,7 @@ export default function JobCardForApplicant({
   const handleCreateApplication = (e) => {
     e.preventDefault()
 
-    createApplication(
-      person.id, // Token
-      job.id,
-      { ...fields }
-    )
+    createApplication(token, job.id, { ...fields })
       .then((application) => {
         if (!application.id) {
           setErrors(application.message)
