@@ -59,6 +59,12 @@ function AuthDetails() {
 
   return (
     <Container>
+      <Menu.Item active={router.pathname == '/applications'}>
+        <Link href="/applications" passHref>
+          <a>Applications</a>
+        </Link>
+      </Menu.Item>
+
       <Menu.Item active={router.pathname == '/contracts'}>
         <Link href="/contracts" passHref>
           <a>Contracts</a>
