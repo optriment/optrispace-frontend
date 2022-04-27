@@ -106,7 +106,7 @@ export default function JobCardForApplicant({
             {application ? (
               <Message>
                 <Message.Header>
-                  Ваша заявка на сумму ${application.price} принята
+                  Ваша заявка на сумму {application.price} принята
                 </Message.Header>
                 <p>{application.comment}</p>
               </Message>
