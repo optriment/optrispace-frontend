@@ -3,6 +3,23 @@ import { Card, List } from 'semantic-ui-react'
 import Link from 'next/link'
 
 export default function ContractListItem({ person, contract }) {
+  let statusIcon = 'hourglass'
+
+  switch (contract.status) {
+    case 'created':
+      statusIcon = 'hourglass outline'
+      break
+    case 'accepted':
+      statusIcon = 'hourglass start'
+      break
+    case 'sent':
+      statusIcon = 'hourglass half'
+      break
+    case 'approved':
+      statusIcon = 'hourglass end'
+      break
+  }
+
   return (
     <Card fluid>
       <Card.Content>
@@ -25,7 +42,7 @@ export default function ContractListItem({ person, contract }) {
             <List.Content>
               <List.Header>
                 <List.Icon name="user" /> Customer:{' '}
-                {contract.customer.id === person.id
+                {person && contract.customer.id === person.id
                   ? 'Me'
                   : contract.customer.id}
               </List.Header>
@@ -35,7 +52,7 @@ export default function ContractListItem({ person, contract }) {
             <List.Content>
               <List.Header>
                 <List.Icon name="user" /> Performer:{' '}
-                {contract.performer.id === person.id
+                {person && contract.performer.id === person.id
                   ? 'Me'
                   : contract.performer.id}
               </List.Header>
@@ -57,6 +74,13 @@ export default function ContractListItem({ person, contract }) {
               </List.Content>
             </List.Item>
           )}
+          <List.Item>
+            <List.Content>
+              <List.Header>
+                <List.Icon name={statusIcon} /> {contract.status}
+              </List.Header>
+            </List.Content>
+          </List.Item>
         </List>
       </Card.Content>
     </Card>

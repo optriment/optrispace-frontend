@@ -62,17 +62,16 @@ export const postWithToken = async (url, token, body = {}) => {
   }
 
   const res = await fetch(url, payload)
-  const data = await res.json()
 
   if (!res.ok) {
     const error = new Error('An error occured while sending the data')
 
     // Attach extra info to the error object.
-    error.info = data
+    error.info = await res.json()
     error.status = res.status
 
     throw error
   }
 
-  return data
+  return res
 }

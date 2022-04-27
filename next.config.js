@@ -3,12 +3,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 
 const nextConfig = {
-  compiler: {
-    removeConsole: {
-      exclude: ['error'],
-    },
-  },
-
   poweredByHeader: false,
 
   // https://nextjs.org/docs/api-reference/next.config.js/react-strict-mode
