@@ -33,7 +33,7 @@ const useContract = () => {
 }
 
 const Page = () => {
-  const { person } = useAuth()
+  const { person, token } = useAuth()
   const { contract, isLoading, error } = useContract()
 
   return (
@@ -45,7 +45,9 @@ const Page = () => {
 
         {isLoading && <JustOneSecond />}
 
-        {contract && <ContractCard contract={contract} person={person} />}
+        {contract && (
+          <ContractCard contract={contract} person={person} token={token} />
+        )}
       </Segment>
     </Layout>
   )

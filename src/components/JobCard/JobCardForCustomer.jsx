@@ -46,13 +46,13 @@ export default function JobCardForCustomer({
   const [panes, setPanes] = useState(undefined)
 
   if (applications && applications.length > 0 && !panes) {
-    const applicationsWithSignedContracts = applications.filter(
+    const applicationsWithAcceptedContracts = applications.filter(
       (application) =>
-        application.contract && application.contract.status === 'signed'
+        application.contract && application.contract.status !== 'created'
     )
-    const applicationsWithUnsignedContracts = applications.filter(
+    const applicationsWithNotAcceptedContracts = applications.filter(
       (application) =>
-        application.contract && application.contract.status !== 'signed'
+        application.contract && application.contract.status === 'created'
     )
     const applicationsWithoutContracts = applications.filter(
       (application) => !application.contract
@@ -68,14 +68,14 @@ export default function JobCardForCustomer({
       ApplicationsGroup(
         job,
         'Обсуждение',
-        applicationsWithUnsignedContracts,
+        applicationsWithNotAcceptedContracts,
         'discussions'
       ),
       ApplicationsGroup(
         job,
         'Контракт подписан',
-        applicationsWithSignedContracts,
-        'signed'
+        applicationsWithAcceptedContracts,
+        'accepted'
       ),
     ])
   }
