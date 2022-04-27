@@ -7,18 +7,22 @@ export async function createJob(
   token,
   { title, description, duration, budget }
 ) {
-  const response = postWithToken(`${publicRuntimeConfig.api_url}/jobs`, token, {
-    title,
-    description,
-    duration: parseInt(duration, 10),
-    budget: budget.toString(),
-  })
+  const response = await postWithToken(
+    `${publicRuntimeConfig.api_url}/jobs`,
+    token,
+    {
+      title,
+      description,
+      duration: parseInt(duration, 10),
+      budget: budget.toString(),
+    }
+  )
 
   return await response.json()
 }
 
 export async function createApplication(token, jobId, { comment, price }) {
-  const response = postWithToken(
+  const response = await postWithToken(
     `${publicRuntimeConfig.api_url}/jobs/${jobId}/applications`,
     token,
     {
@@ -34,7 +38,7 @@ export async function createContract(
   token,
   { applicationId, performerId, title, description, duration, price }
 ) {
-  const response = postWithToken(
+  const response = await postWithToken(
     `${publicRuntimeConfig.api_url}/contracts`,
     token,
     {
