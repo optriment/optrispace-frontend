@@ -1,6 +1,6 @@
 import React from 'react'
 import getConfig from 'next/config'
-import { Segment } from 'semantic-ui-react'
+import { Header } from 'semantic-ui-react'
 import { useRouter } from 'next/router'
 
 import useSWR from 'swr'
@@ -26,18 +26,31 @@ const useJob = () => {
   return { job }
 }
 
-export default function Job() {
+const JobPage = () => {
   const { job, isLoading, error } = useJob()
 
   return (
-    <Layout>
-      <Segment vertical>
-        {error && <ErrorWrapper header="Failed to load job" error={error} />}
+    <>
+      <Header as="h1">Job</Header>
 
-        {isLoading && <JustOneSecond />}
+      {error && <ErrorWrapper header="Failed to load job" error={error} />}
 
-        {job && <JobCard job={job} />}
-      </Segment>
-    </Layout>
+      {isLoading && <JustOneSecond />}
+
+      {job && <JobCard job={job} />}
+    </>
   )
 }
+
+JobPage.getLayout = (page) => (
+  <Layout
+    meta={{
+      title: 'Job Card | Optrispace',
+      description: 'Welcome to Optrispace',
+    }}
+  >
+    {page}
+  </Layout>
+)
+
+export default JobPage

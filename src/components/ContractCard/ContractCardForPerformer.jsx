@@ -1,9 +1,9 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import { Button, Grid, Header, Divider } from 'semantic-ui-react'
+import { Button, Grid, Divider } from 'semantic-ui-react'
 import { acceptContract, sendContract } from '../../lib/api'
 
-import Content from './Content'
+import TitleDescription from './TitleDescription'
 import Sidebar from './Sidebar'
 
 export default function ContractCardForPerformer({ contract, token }) {
@@ -26,15 +26,13 @@ export default function ContractCardForPerformer({ contract, token }) {
   }
 
   return (
-    <>
+    <Grid container stackable verticalAlign="top">
       <Grid.Row>
-        <Grid.Column width={8}>
-          <Header floated="left" as="h1">
-            Карточка контракта
-          </Header>
-        </Grid.Column>
+        <Grid.Column width={10}>
+          <TitleDescription job={contract} />
 
-        <Grid.Column width={8} textAlign="right">
+          <Divider hidden />
+
           {contract.status === 'created' && (
             <Button
               primary
@@ -59,19 +57,11 @@ export default function ContractCardForPerformer({ contract, token }) {
             </>
           )}
         </Grid.Column>
-      </Grid.Row>
-
-      <Divider />
-
-      <Grid.Row>
-        <Grid.Column width={10}>
-          <Content contract={contract} />
-        </Grid.Column>
 
         <Grid.Column width={6}>
           <Sidebar contract={contract} />
         </Grid.Column>
       </Grid.Row>
-    </>
+    </Grid>
   )
 }

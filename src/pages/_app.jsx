@@ -3,6 +3,8 @@ import { AuthProvider } from '../hooks'
 import Head from 'next/head'
 
 function MyApp({ Component, pageProps }) {
+  const getLayout = Component.getLayout ?? ((page) => page)
+
   return (
     <>
       {Component.requiresAuth && (
@@ -19,9 +21,7 @@ function MyApp({ Component, pageProps }) {
         </Head>
       )}
 
-      <AuthProvider>
-        <Component {...pageProps} />
-      </AuthProvider>
+      <AuthProvider>{getLayout(<Component {...pageProps} />)}</AuthProvider>
     </>
   )
 }

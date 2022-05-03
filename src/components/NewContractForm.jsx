@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import Router from 'next/router'
+import Link from 'next/link'
 
 import {
   Button,
   Form,
+  Icon,
+  Checkbox,
   Grid,
-  Divider,
   TextArea,
   Message,
 } from 'semantic-ui-react'
@@ -16,11 +18,12 @@ export default function NewContractForm({ job, token, application }) {
   const initialFields = {
     title: job.title,
     description: job.description,
-    price: '',
-    duration: '',
+    price: application.price,
+    duration: application.duration,
   }
   const [fields, setFields] = useState(initialFields)
   const [errors, setErrors] = useState(undefined)
+  const [hideNotice, setHideNotice] = useState(false)
 
   const handleCreateContract = (e) => {
     e.preventDefault()
@@ -58,22 +61,19 @@ export default function NewContractForm({ job, token, application }) {
         />
       )}
 
+      {!hideNotice && (
+        <Message warning onDismiss={() => setHideNotice(true)}>
+          <Icon name="info" />
+          Часть полей этой формы автоматически заполнена из{' '}
+          <Link href="/jobs/[id]" as={`/jobs/${job.id}`} passHref>
+            <a>предложения о работе</a>
+          </Link>
+          {' и'} отклике кандидата
+        </Message>
+      )}
+
       <Form onSubmit={handleCreateContract}>
         <Grid container stackable verticalAlign="top">
-          <Grid.Row>
-            <Grid.Column width={8}>
-              <h1>Создание нового контракта</h1>
-            </Grid.Column>
-
-            <Grid.Column width={8} textAlign="right">
-              <Button primary type="submit">
-                Отправить исполнителю
-              </Button>
-            </Grid.Column>
-          </Grid.Row>
-
-          <Divider />
-
           <Grid.Row>
             <Grid.Column width={9}>
               <Form.Input
@@ -121,8 +121,38 @@ export default function NewContractForm({ job, token, application }) {
                 label="ID"
                 placeholder=""
                 value={application.applicant.id}
-                readonly
+                readOnly
               />
+            </Grid.Column>
+          </Grid.Row>
+
+          <Grid.Row>
+            <Grid.Column>
+              <Form.Field
+                control={Checkbox}
+                label={{
+                  children: (
+                    <div>
+                      Я согласен с{' '}
+                      <Link href="#">
+                        <a>Правилами</a>
+                      </Link>
+                      {' и '}
+                      <Link href="#" passHref>
+                        <a>Условиями</a>
+                      </Link>
+                    </div>
+                  ),
+                }}
+              />
+            </Grid.Column>
+          </Grid.Row>
+
+          <Grid.Row>
+            <Grid.Column>
+              <Button primary type="submit">
+                Отправить исполнителю
+              </Button>
             </Grid.Column>
           </Grid.Row>
         </Grid>

@@ -1,6 +1,6 @@
 import React from 'react'
 import getConfig from 'next/config'
-import { Segment } from 'semantic-ui-react'
+import { Header } from 'semantic-ui-react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { fetcher } from '../../../lib/fetcher'
@@ -26,50 +26,43 @@ const useJob = () => {
   return { job }
 }
 
-const Page = () => {
+const EditJobPage = () => {
   const { job, isLoading, error } = useJob()
   const { person } = useAuth()
 
-  if (error) {
-    return (
-      <Layout>
-        <Segment vertical>
-          <ErrorWrapper header="Failed to load job" error={error} />
-        </Segment>
-      </Layout>
-    )
-  }
-
-  if (isLoading) {
-    return (
-      <Layout>
-        <Segment vertical>
-          <JustOneSecond />
-        </Segment>
-      </Layout>
-    )
-  }
-
-  if (!isJobOwner(job, person)) {
-    return (
-      <Layout>
-        <Segment vertical>
-          <ErrorWrapper header="You don't have access to this action" />
-        </Segment>
-      </Layout>
-    )
-  }
-
   return (
-    <Layout>
-      <Segment vertical>
-        <EditJobForm job={job} />
-      </Segment>
-    </Layout>
+    <>
+      <Header as="h1">Edit Job</Header>
+
+      {error && <ErrorWrapper header="Failed to load job" error={error} />}
+
+      {isLoading && <JustOneSecond />}
+
+      {job && (
+        <>
+          {!isJobOwner(job, person) && (
+            <ErrorWrapper header="You don't have access to this action" />
+          )}
+
+          <EditJobForm job={job} />
+        </>
+      )}
+    </>
   )
 }
 
-Page.requiresAuth = true
-Page.redirectUnauthenticatedTo = '/sign_in'
+EditJobPage.requiresAuth = true
+EditJobPage.redirectUnauthenticatedTo = '/sign_in'
 
-export default Page
+EditJobPage.getLayout = (page) => (
+  <Layout
+    meta={{
+      title: 'Edit Job | Optrispace',
+      description: 'Welcome to Optrispace',
+    }}
+  >
+    {page}
+  </Layout>
+)
+
+export default EditJobPage
