@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, List } from 'semantic-ui-react'
 import Link from 'next/link'
 import { formatDateTime } from '../lib/formatDate'
+import { truncateString } from '../lib/helpers'
 
 export default function ApplicationListItem({ application }) {
   return (
@@ -14,9 +15,11 @@ export default function ApplicationListItem({ application }) {
         </Card.Header>
 
         <Card.Description>
-          {application.job.description.split('\n').map((str, idx) => (
-            <p key={idx}>{str}</p>
-          ))}
+          {truncateString(application.job.description, 300)
+            .split('\n')
+            .map((str, idx) => (
+              <p key={idx}>{str}</p>
+            ))}
         </Card.Description>
       </Card.Content>
 

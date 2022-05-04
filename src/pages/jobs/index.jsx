@@ -1,7 +1,7 @@
 import React from 'react'
 import getConfig from 'next/config'
 
-import { Grid, Header, Segment } from 'semantic-ui-react'
+import { Header } from 'semantic-ui-react'
 
 import useSWR from 'swr'
 import { fetcher } from '../../lib/fetcher'
@@ -23,31 +23,31 @@ const useJobs = () => {
   return { jobs: data }
 }
 
-export default function JobsIndex() {
+const JobsPage = () => {
   const { jobs, isLoading, error } = useJobs()
   const { person } = useAuth()
 
   return (
-    <Layout>
-      <Segment vertical>
-        <Grid container stackable verticalAlign="middle">
-          <Grid.Row>
-            <Grid.Column>
-              <Header as="h2" style={{ fontSize: '3em' }}>
-                Jobs
-              </Header>
+    <>
+      <Header as="h1">Jobs</Header>
+      {error && <ErrorWrapper header="Failed to load jobs" error={error} />}
 
-              {error && (
-                <ErrorWrapper header="Failed to load jobs" error={error} />
-              )}
+      {isLoading && <JustOneSecond />}
 
-              {isLoading && <JustOneSecond />}
-
-              {jobs && <JobsList jobs={jobs} person={person} />}
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Segment>
-    </Layout>
+      {jobs && <JobsList jobs={jobs} person={person} />}
+    </>
   )
 }
+
+JobsPage.getLayout = (page) => (
+  <Layout
+    meta={{
+      title: 'Jobs | Optrispace',
+      description: 'Welcome to Optrispace',
+    }}
+  >
+    {page}
+  </Layout>
+)
+
+export default JobsPage

@@ -3,18 +3,27 @@ import { Grid, Header } from 'semantic-ui-react'
 import Layout from '../components/Layout'
 import SignUpForm from '../components/SignUpForm'
 
-export default function SignUp() {
-  return (
-    <Layout renderMenu={false}>
-      <Grid textAlign="center" style={{ height: '100vh', marginTop: '1em' }}>
-        <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as="h2" textAlign="center">
-            Sign Up
-          </Header>
+const SignUpPage = () => (
+  <Grid textAlign="center" style={{ marginTop: '1em' }}>
+    <Grid.Column style={{ maxWidth: 450 }}>
+      <Header as="h2" textAlign="center">
+        Sign Up
+      </Header>
 
-          <SignUpForm />
-        </Grid.Column>
-      </Grid>
-    </Layout>
-  )
-}
+      <SignUpForm />
+    </Grid.Column>
+  </Grid>
+)
+
+SignUpPage.getLayout = (page) => (
+  <Layout
+    meta={{
+      title: 'Sign Up | Optrispace',
+      description: 'Welcome to Optrispace',
+    }}
+  >
+    {page}
+  </Layout>
+)
+
+export default SignUpPage

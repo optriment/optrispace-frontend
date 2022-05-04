@@ -1,23 +1,34 @@
 import React from 'react'
-import { Segment } from 'semantic-ui-react'
 
+import { Header } from 'semantic-ui-react'
 import Layout from '../../components/Layout'
 import NewJobForm from '../../components/NewJobForm'
 import { useAuth } from '../../hooks'
 
-const Page = () => {
+const NewJobPage = () => {
   const { token } = useAuth()
 
   return (
-    <Layout>
-      <Segment vertical>
-        <NewJobForm token={token} />
-      </Segment>
-    </Layout>
+    <>
+      <Header as="h1">Add New Job</Header>
+
+      <NewJobForm token={token} />
+    </>
   )
 }
 
-Page.requiresAuth = true
-Page.redirectUnauthenticatedTo = '/sign_in'
+NewJobPage.requiresAuth = true
+NewJobPage.redirectUnauthenticatedTo = '/sign_in'
 
-export default Page
+NewJobPage.getLayout = (page) => (
+  <Layout
+    meta={{
+      title: 'New Job | Optrispace',
+      description: 'Welcome to Optrispace',
+    }}
+  >
+    {page}
+  </Layout>
+)
+
+export default NewJobPage

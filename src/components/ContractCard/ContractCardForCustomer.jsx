@@ -1,10 +1,10 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import { Button, Divider, Grid, Header } from 'semantic-ui-react'
+import { Button, Divider, Grid } from 'semantic-ui-react'
 import Link from 'next/link'
 import { approveContract } from '../../lib/api'
 
-import Content from './Content'
+import TitleDescription from './TitleDescription'
 import Sidebar from './Sidebar'
 
 export default function ContractCardForCustomer({ contract, token }) {
@@ -19,15 +19,13 @@ export default function ContractCardForCustomer({ contract, token }) {
   }
 
   return (
-    <>
+    <Grid container stackable verticalAlign="top">
       <Grid.Row>
-        <Grid.Column width={8}>
-          <Header floated="left" as="h1">
-            Карточка контракта
-          </Header>
-        </Grid.Column>
+        <Grid.Column width={10}>
+          <TitleDescription job={contract} />
 
-        <Grid.Column width={8} textAlign="right">
+          <Divider hidden />
+
           {contract.status === 'created' && (
             <Link
               href="/contracts/[id]/edit"
@@ -69,19 +67,11 @@ export default function ContractCardForCustomer({ contract, token }) {
             </>
           )}
         </Grid.Column>
-      </Grid.Row>
-
-      <Divider />
-
-      <Grid.Row>
-        <Grid.Column width={10}>
-          <Content contract={contract} />
-        </Grid.Column>
 
         <Grid.Column width={6}>
           <Sidebar contract={contract} />
         </Grid.Column>
       </Grid.Row>
-    </>
+    </Grid>
   )
 }

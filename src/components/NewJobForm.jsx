@@ -1,14 +1,7 @@
 import React, { useState } from 'react'
 import Router from 'next/router'
 
-import {
-  Button,
-  Form,
-  Grid,
-  Divider,
-  TextArea,
-  Message,
-} from 'semantic-ui-react'
+import { Button, Form, Grid, TextArea, Message } from 'semantic-ui-react'
 
 import { createJob } from '../lib/api'
 
@@ -57,20 +50,6 @@ export default function NewJobForm({ token }) {
       <Form onSubmit={handleCreateJob}>
         <Grid container stackable verticalAlign="top">
           <Grid.Row>
-            <Grid.Column width={8}>
-              <h1>Создание новой работы</h1>
-            </Grid.Column>
-
-            <Grid.Column width={8} textAlign="right">
-              <Button primary type="submit">
-                Опубликовать
-              </Button>
-            </Grid.Column>
-          </Grid.Row>
-
-          <Divider />
-
-          <Grid.Row>
             <Grid.Column width={9}>
               <Form.Input
                 id="title"
@@ -96,7 +75,7 @@ export default function NewJobForm({ token }) {
             <Grid.Column width={7}>
               <Form.Input
                 id="budget"
-                label="Примерный бюджет (COIN)"
+                label="Примерный бюджет"
                 placeholder=""
                 value={fields.budget}
                 onChange={handleInputChange}
@@ -110,6 +89,14 @@ export default function NewJobForm({ token }) {
                 value={fields.duration}
                 onChange={handleInputChange}
               />
+            </Grid.Column>
+          </Grid.Row>
+
+          <Grid.Row>
+            <Grid.Column>
+              <Button primary type="submit">
+                Опубликовать
+              </Button>
             </Grid.Column>
           </Grid.Row>
         </Grid>

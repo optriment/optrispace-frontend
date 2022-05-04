@@ -1,7 +1,7 @@
 import React from 'react'
 import getConfig from 'next/config'
 
-import { Grid, Header, Segment } from 'semantic-ui-react'
+import { Header } from 'semantic-ui-react'
 
 import useSWR from 'swr'
 import { fetchWithToken } from '../../lib/fetcher'
@@ -30,38 +30,37 @@ const useContracts = () => {
   return { contracts: data }
 }
 
-const Page = () => {
+const ContractsPage = () => {
   const { person } = useAuth()
   const { contracts, isLoading, error } = useContracts()
 
   return (
-    <Layout>
-      <Segment vertical>
-        <Grid container stackable verticalAlign="middle">
-          <Grid.Row>
-            <Grid.Column>
-              <Header as="h2" style={{ fontSize: '3em' }}>
-                Contracts
-              </Header>
+    <>
+      <Header as="h1">Contracts</Header>
 
-              {error && (
-                <ErrorWrapper header="Failed to load contracts" error={error} />
-              )}
+      {error && (
+        <ErrorWrapper header="Failed to load contracts" error={error} />
+      )}
 
-              {isLoading && <JustOneSecond />}
+      {isLoading && <JustOneSecond />}
 
-              {contracts && (
-                <ContractsList contracts={contracts} person={person} />
-              )}
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Segment>
-    </Layout>
+      {contracts && <ContractsList contracts={contracts} person={person} />}
+    </>
   )
 }
 
-Page.requiresAuth = true
-Page.redirectUnauthenticatedTo = '/sign_in'
+ContractsPage.requiresAuth = true
+ContractsPage.redirectUnauthenticatedTo = '/sign_in'
 
-export default Page
+ContractsPage.getLayout = (page) => (
+  <Layout
+    meta={{
+      title: 'Contracts | Optrispace',
+      description: 'Welcome to Optrispace',
+    }}
+  >
+    {page}
+  </Layout>
+)
+
+export default ContractsPage

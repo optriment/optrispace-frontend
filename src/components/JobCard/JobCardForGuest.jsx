@@ -1,45 +1,39 @@
 import React from 'react'
-import { Button, Grid, Divider, Header } from 'semantic-ui-react'
 
-export default function JobCardForGuest({
-  renderHeader,
-  renderDescription,
-  renderStats,
-}) {
+import { Grid, Divider, Header } from 'semantic-ui-react'
+
+import Link from 'next/link'
+import Statistics from './Statistics'
+import TitleDescription from './TitleDescription'
+
+export default function JobCardForGuest({ job }) {
   return (
-    <>
-      {renderHeader}
+    <Grid container stackable verticalAlign="top">
+      <Grid.Row>
+        <Grid.Column width={10}>
+          <TitleDescription job={job} />
+        </Grid.Column>
 
-      {renderDescription}
+        <Grid.Column width={6}>
+          <Statistics job={job} />
+        </Grid.Column>
+      </Grid.Row>
 
-      {renderStats}
+      <Divider />
 
       <Grid.Row>
         <Grid.Column>
-          <Header as="h2" style={{ fontSize: '1.5em' }}>
-            Оставить заявку ко проекту
-          </Header>
+          <Header as="h3">Оставить заявку ко проекту</Header>
 
           <p>
-            Для отправки заявки на выполнение работы у вас должна быть
-            подтверждённая учётная запись на{' '}
-            <a href="https://binance.com/">Binance</a>.
+            Для отправки заявки на выполнение работы вам необходимо{' '}
+            <Link href="/sign_in" passHref>
+              <a>зарегистироваться</a>
+            </Link>{' '}
+            в системе Optrispace
           </p>
-          <p>
-            Нажмите на кнопку ниже, чтобы выполнить вход в систему OPTRISPACE
-            через Binance и оставить заявку ко проекту.
-          </p>
-
-          <Divider />
-
-          <Button
-            content="Войти через Binance"
-            labelPosition="left"
-            icon="sign-in"
-            color="green"
-          />
         </Grid.Column>
       </Grid.Row>
-    </>
+    </Grid>
   )
 }

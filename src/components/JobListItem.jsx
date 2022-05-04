@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, Icon, List } from 'semantic-ui-react'
 import Link from 'next/link'
 import { formatDateTime } from '../lib/formatDate'
+import { truncateString } from '../lib/helpers'
 
 export default function JobListItem({ job, isOwner }) {
   const formattedDate = formatDateTime(job.updated_at)
@@ -18,9 +19,11 @@ export default function JobListItem({ job, isOwner }) {
         </Card.Header>
 
         <Card.Description>
-          {job.description.split('\n').map((str, idx) => (
-            <p key={idx}>{str}</p>
-          ))}
+          {truncateString(job.description, 300)
+            .split('\n')
+            .map((str, idx) => (
+              <p key={idx}>{str}</p>
+            ))}
         </Card.Description>
       </Card.Content>
 

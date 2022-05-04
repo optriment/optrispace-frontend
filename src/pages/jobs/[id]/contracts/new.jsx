@@ -1,6 +1,6 @@
 import React from 'react'
 import getConfig from 'next/config'
-import { Segment } from 'semantic-ui-react'
+import { Header } from 'semantic-ui-react'
 
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
@@ -46,7 +46,7 @@ const useApplication = () => {
   return { application }
 }
 
-const Page = () => {
+const NewContractPage = () => {
   const { person, token } = useAuth()
   const { job, isLoading, error } = useJob()
   const {
@@ -55,79 +55,60 @@ const Page = () => {
     error: applicationError,
   } = useApplication()
 
-  if (error) {
-    return (
-      <Layout>
-        <Segment vertical>
-          <ErrorWrapper header="Failed to load job" error={error} />
-        </Segment>
-      </Layout>
-    )
-  }
-
-  if (isLoading) {
-    return (
-      <Layout>
-        <Segment vertical>
-          <JustOneSecond />
-        </Segment>
-      </Layout>
-    )
-  }
-
-  if (!isJobOwner(job, person)) {
-    return (
-      <Layout>
-        <Segment vertical>
-          <ErrorWrapper header="You don't have access to this action" />
-        </Segment>
-      </Layout>
-    )
-  }
-
-  if (applicationError) {
-    return (
-      <Layout>
-        <Segment vertical>
-          <ErrorWrapper
-            header="Failed to load application"
-            error={applicationError}
-          />
-        </Segment>
-      </Layout>
-    )
-  }
-
-  if (isApplicationLoading) {
-    return (
-      <Layout>
-        <Segment vertical>
-          <JustOneSecond />
-        </Segment>
-      </Layout>
-    )
-  }
-
-  if (application.job.id !== job.id) {
-    return (
-      <Layout>
-        <Segment vertical>
-          <ErrorWrapper header="You don't have access to this action" />
-        </Segment>
-      </Layout>
-    )
-  }
-
   return (
-    <Layout>
-      <Segment vertical>
-        <NewContractForm job={job} token={token} application={application} />
-      </Segment>
-    </Layout>
+    <>
+      <Header as="h1">Add New Contract</Header>
+
+      {error && <ErrorWrapper header="Failed to load job" error={error} />}
+
+      {isLoading && <JustOneSecond />}
+
+      {job && (
+        <>
+          {!isJobOwner(job, person) && (
+            <ErrorWrapper header="You don't have access to this action" />
+          )}
+
+          {applicationError && (
+            <ErrorWrapper
+              header="Failed to load application"
+              error={applicationError}
+            />
+          )}
+
+          {isApplicationLoading && <JustOneSecond />}
+
+          {application && (
+            <>
+              {application.job.id !== job.id ? (
+                <ErrorWrapper header="You don't have access to this action" />
+              ) : (
+                <NewContractForm
+                  job={job}
+                  token={token}
+                  application={application}
+                />
+              )}
+            </>
+          )}
+        </>
+      )}
+    </>
   )
 }
 
-Page.requiresAuth = true
-Page.redirectUnauthenticatedTo = '/sign_in'
+NewContractPage.requiresAuth = true
+NewContractPage.redirectUnauthenticatedTo = '/sign_in'
 
-export default Page
+NewContractPage.getLayout = (page) => (
+  <Layout
+    meta={{
+      title: 'New Contract | Optrispace',
+      description: 'Welcome to Optrispace',
+    }}
+  >
+    {page}
+  </Layout>
+)
+
+export default NewContractPage

@@ -1,7 +1,7 @@
 import React from 'react'
 import getConfig from 'next/config'
 
-import { Grid, Header, Segment } from 'semantic-ui-react'
+import { Header } from 'semantic-ui-react'
 
 import useSWR from 'swr'
 import { fetchWithToken } from '../../lib/fetcher'
@@ -31,41 +31,39 @@ const useMyApplications = () => {
   return { applications: data }
 }
 
-const Page = () => {
+const ApplicationsPage = () => {
   const { person } = useAuth()
   const { applications, isLoading, error } = useMyApplications()
 
   return (
-    <Layout>
-      <Segment vertical>
-        <Grid container stackable verticalAlign="middle">
-          <Grid.Row>
-            <Grid.Column>
-              <Header as="h2" style={{ fontSize: '3em' }}>
-                Applications
-              </Header>
+    <>
+      <Header as="h1">Applications</Header>
 
-              {error && (
-                <ErrorWrapper
-                  header="Failed to load applications"
-                  error={error}
-                />
-              )}
+      {error && (
+        <ErrorWrapper header="Failed to load applications" error={error} />
+      )}
 
-              {isLoading && <JustOneSecond />}
+      {isLoading && <JustOneSecond />}
 
-              {applications && (
-                <ApplicationsList applications={applications} person={person} />
-              )}
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Segment>
-    </Layout>
+      {applications && (
+        <ApplicationsList applications={applications} person={person} />
+      )}
+    </>
   )
 }
 
-Page.requiresAuth = true
-Page.redirectUnauthenticatedTo = '/sign_in'
+ApplicationsPage.requiresAuth = true
+ApplicationsPage.redirectUnauthenticatedTo = '/sign_in'
 
-export default Page
+ApplicationsPage.getLayout = (page) => (
+  <Layout
+    meta={{
+      title: 'Applications | Optrispace',
+      description: 'Welcome to Optrispace',
+    }}
+  >
+    {page}
+  </Layout>
+)
+
+export default ApplicationsPage

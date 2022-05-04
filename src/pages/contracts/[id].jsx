@@ -1,6 +1,6 @@
 import React from 'react'
 import getConfig from 'next/config'
-import { Segment } from 'semantic-ui-react'
+import { Header } from 'semantic-ui-react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 
@@ -32,28 +32,37 @@ const useContract = () => {
   return { contract }
 }
 
-const Page = () => {
+const ContractPage = () => {
   const { person, token } = useAuth()
   const { contract, isLoading, error } = useContract()
 
   return (
-    <Layout>
-      <Segment vertical>
-        {error && (
-          <ErrorWrapper header="Failed to load contract" error={error} />
-        )}
+    <>
+      <Header as="h1">Contract</Header>
 
-        {isLoading && <JustOneSecond />}
+      {error && <ErrorWrapper header="Failed to load contract" error={error} />}
 
-        {contract && (
-          <ContractCard contract={contract} person={person} token={token} />
-        )}
-      </Segment>
-    </Layout>
+      {isLoading && <JustOneSecond />}
+
+      {contract && (
+        <ContractCard contract={contract} person={person} token={token} />
+      )}
+    </>
   )
 }
 
-Page.requiresAuth = true
-Page.redirectUnauthenticatedTo = '/sign_in'
+ContractPage.requiresAuth = true
+ContractPage.redirectUnauthenticatedTo = '/sign_in'
 
-export default Page
+ContractPage.getLayout = (page) => (
+  <Layout
+    meta={{
+      title: 'Contract | Optrispace',
+      description: 'Welcome to Optrispace',
+    }}
+  >
+    {page}
+  </Layout>
+)
+
+export default ContractPage
