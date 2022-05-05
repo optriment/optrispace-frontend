@@ -8,6 +8,7 @@ import 'semantic-ui-css/semantic.min.css'
 
 const Layout = ({ children, meta = {} }) => {
   const { title, description } = meta
+  const { setAccount, account, tokenContract } = children.props
 
   return (
     <>
@@ -17,7 +18,11 @@ const Layout = ({ children, meta = {} }) => {
       </Head>
 
       <Container>
-        <Header />
+        <Header
+          setAccount={setAccount}
+          account={account}
+          tokenContract={tokenContract}
+        />
 
         <Segment basic vertical padded>
           <Grid container verticalAlign="top">

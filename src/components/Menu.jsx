@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
-import { Container, Dropdown, Menu } from 'semantic-ui-react'
+import { ethers } from 'ethers'
+import { Button, Container, Dropdown, Menu } from 'semantic-ui-react'
 import ClientOnly from './ClientOnly'
 import { useAuth } from '../hooks'
 import { useRouter } from 'next/router'
+import useIsMetaMaskInstalled from '../hooks/useIsMetaMaskInstalled'
 
-export default function MenuComponent() {
+const MenuComponent = ({ setAccount, account, tokenContract }) => {
   const router = useRouter()
 
   return (
@@ -23,15 +25,59 @@ export default function MenuComponent() {
       </Menu.Item>
 
       <ClientOnly>
-        <AuthDetails />
+        <AuthDetails
+          setAccount={setAccount}
+          account={account}
+          tokenContract={tokenContract}
+        />
       </ClientOnly>
     </Menu>
   )
 }
 
-function AuthDetails() {
+function AuthDetails({ setAccount, account, tokenContract }) {
   const { person, logout, isLoading } = useAuth()
   const router = useRouter()
+
+  const [balance, setBalance] = useState()
+  const [symbol, setSymbol] = useState()
+  const isMetaMaskInstalled = useIsMetaMaskInstalled()
+
+  // Handle connection to MetaMask
+  const handleOnConnect = async () => {
+    let address
+
+    try {
+      const accounts = await window.ethereum.request({
+        method: 'eth_requestAccounts',
+      })
+
+      address = ethers.utils.getAddress(accounts[0])
+      setAccount(address)
+    } catch (err) {
+      console.error(err)
+
+      throw err
+    }
+
+    try {
+      const b = await tokenContract.balanceOf(address)
+      setBalance(parseInt(b._hex))
+    } catch (err) {
+      console.error(err)
+
+      throw err
+    }
+
+    try {
+      const s = await tokenContract.symbol()
+      setSymbol(s)
+    } catch (err) {
+      console.error(err)
+
+      throw err
+    }
+  }
 
   if (isLoading) {
     return <p>Loading...</p>
@@ -78,6 +124,26 @@ function AuthDetails() {
           </Link>
         </Menu.Item>
 
+        <Menu.Item>
+          {account && balance !== null && symbol && (
+            <b>
+              Balance: {balance} {symbol}
+            </b>
+          )}
+
+          {!account && isMetaMaskInstalled && (
+            <Button positive onClick={handleOnConnect}>
+              Connect with MetaMask
+            </Button>
+          )}
+
+          {!isMetaMaskInstalled && (
+            <a href="https://metamask.io/" target="_blank" rel="noreferrer">
+              <b>Install MetaMask</b>
+            </a>
+          )}
+        </Menu.Item>
+
         <Dropdown item text="Account">
           <Dropdown.Menu>
             <Dropdown.Item icon="edit" text="Edit Profile" />
@@ -95,3 +161,5 @@ function AuthDetails() {
     </Container>
   )
 }
+
+export default MenuComponent
