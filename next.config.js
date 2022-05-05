@@ -16,6 +16,9 @@ const nextConfig = {
     outputStandalone: true,
   },
 
+  // output source map for debugging
+  productionBrowserSourceMaps: true,
+
   publicRuntimeConfig: {
     // Will be available on both server and client
     api_url: process.env.API_URL,
