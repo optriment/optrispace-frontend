@@ -6,15 +6,17 @@ const Home = () => {
   return <Header as="h1">Welcome to Optrispace</Header>
 }
 
-Home.getLayout = (page) => (
-  <Layout
-    meta={{
-      title: 'Home | Optrispace',
-      description: 'Welcome to Optrispace',
-    }}
-  >
-    {page}
-  </Layout>
-)
+Home.getLayout = (page) => {
+  return (
+    <Layout
+      meta={{
+        title: 'Home | Optrispace',
+        description: 'Welcome to Optrispace',
+      }}
+    >
+      {page}
+    </Layout>
+  )
+}
 
 export default Home

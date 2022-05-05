@@ -1,9 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { AuthProvider } from '../hooks'
 import Head from 'next/head'
+import abi from '../../contracts/token.json'
+import getConfig from 'next/config'
+import useTokenContract from '../hooks/useTokenContract'
 
 function MyApp({ Component, pageProps }) {
+  const { publicRuntimeConfig } = getConfig()
   const getLayout = Component.getLayout ?? ((page) => page)
+
+  const contractAddress = publicRuntimeConfig.token_contract_address
+  const [account, setAccount] = useState()
+  const tokenContract = useTokenContract(contractAddress, abi, account)
 
   return (
     <>
@@ -21,7 +29,16 @@ function MyApp({ Component, pageProps }) {
         </Head>
       )}
 
-      <AuthProvider>{getLayout(<Component {...pageProps} />)}</AuthProvider>
+      <AuthProvider>
+        {getLayout(
+          <Component
+            {...pageProps}
+            setAccount={setAccount}
+            account={account}
+            tokenContract={tokenContract}
+          />
+        )}
+      </AuthProvider>
     </>
   )
 }
