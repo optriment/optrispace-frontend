@@ -18,30 +18,23 @@ export default function SignUpForm() {
 
   const handleSignIn = async (e) => {
     e.preventDefault()
+    setErrors(null)
+    setIsSubmitting(true)
 
     try {
-      setIsSubmitting(true)
-
       const response = await signUp(fields.login, fields.password)
       const json = await response.json()
-
-      if (response.status === 422) {
-        setErrors(json.message)
-        setIsSubmitting(false)
-
-        return
-      }
 
       if (response.ok) {
         await authenticate(json.token)
 
         router.push('/jobs')
+      } else {
+        setErrors(json.message)
       }
-
-      setIsSubmitting(false)
     } catch (error) {
-      console.error({ error })
-
+      setErrors(error)
+    } finally {
       setIsSubmitting(false)
     }
   }
@@ -69,6 +62,7 @@ export default function SignUpForm() {
             iconPosition="left"
             placeholder="Login"
             value={fields.login}
+            autoComplete="username"
             onChange={handleInputChange}
           />
 
@@ -81,6 +75,7 @@ export default function SignUpForm() {
             type="password"
             required
             value={fields.password}
+            autoComplete="new-password"
             onChange={handleInputChange}
           />
 

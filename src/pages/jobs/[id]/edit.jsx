@@ -52,7 +52,6 @@ const EditJobPage = () => {
 }
 
 EditJobPage.requiresAuth = true
-EditJobPage.redirectUnauthenticatedTo = '/sign_in'
 
 EditJobPage.getLayout = (page) => (
   <Layout

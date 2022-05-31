@@ -4,7 +4,7 @@ import { Divider } from 'semantic-ui-react'
 const Footer = () => {
   return (
     <>
-      <Divider horizontal>Footer</Divider>
+      <Divider horizontal>&copy; 2022 OPTRIMENT</Divider>
     </>
   )
 }

@@ -53,7 +53,6 @@ const ApplicationsPage = () => {
 }
 
 ApplicationsPage.requiresAuth = true
-ApplicationsPage.redirectUnauthenticatedTo = '/sign_in'
 
 ApplicationsPage.getLayout = (page) => (
   <Layout

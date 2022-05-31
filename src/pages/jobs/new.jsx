@@ -18,7 +18,6 @@ const NewJobPage = () => {
 }
 
 NewJobPage.requiresAuth = true
-NewJobPage.redirectUnauthenticatedTo = '/sign_in'
 
 NewJobPage.getLayout = (page) => (
   <Layout
