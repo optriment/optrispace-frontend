@@ -1,161 +1,166 @@
-import React, { useState } from 'react'
-import Router from 'next/router'
+import React, { useState, useEffect, useContext } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import {
   Button,
   Form,
   Icon,
-  Checkbox,
-  Grid,
+  Divider,
   TextArea,
   Message,
 } from 'semantic-ui-react'
 
 import { createContract } from '../lib/api'
+import { isEmptyString } from '../lib/validators'
+import ErrorWrapper from './ErrorWrapper'
+import Web3Context from '../context/web3-context'
+import WalletIsNotInstalled from './WalletIsNotInstalled'
+import JustOneSecond from './JustOneSecond'
+import ConnectWallet from './ConnectWallet'
+import WrongBlockchainNetwork from './WrongBlockchainNetwork'
 
 export default function NewContractForm({ job, token, application }) {
+  const router = useRouter()
+
   const initialFields = {
     title: job.title,
     description: job.description,
     price: application.price,
-    duration: application.duration,
   }
-  const [fields, setFields] = useState(initialFields)
-  const [errors, setErrors] = useState(undefined)
-  const [hideNotice, setHideNotice] = useState(false)
 
-  const handleCreateContract = (e) => {
+  const [fields, setFields] = useState(initialFields)
+  const [error, setError] = useState(undefined)
+  const [hideNotice, setHideNotice] = useState(false)
+  const [agreedTo, setAgreedTo] = useState(false)
+  const [formFilled, setFormFilled] = useState(false)
+
+  const {
+    isLoading: isLoadingWeb3,
+    isWalletInstalled,
+    isCorrectNetwork,
+    connectWallet,
+    currentAccount,
+    tokenSymbol,
+  } = useContext(Web3Context)
+
+  const handleCreateContract = async (e) => {
     e.preventDefault()
 
-    createContract(token, {
-      applicationId: application.id,
-      performerId: application.applicant.id,
-      ...fields,
-    })
-      .then((contract) => {
-        if (!contract.id) {
-          setErrors(contract.message)
-
-          return
-        }
-
-        Router.push(`/contracts/${contract.id}`)
+    try {
+      const contract = await createContract(token, {
+        applicationId: application.id,
+        performerId: application.applicant.id,
+        customerAddress: currentAccount,
+        ...fields,
       })
-      .catch((err) => {
-        throw err
-      })
+
+      if (!contract.id) {
+        setError(contract.message)
+      } else {
+        router.push(`/contracts/${contract.id}`)
+      }
+    } catch (err) {
+      console.error({ err })
+      setError(err)
+    }
   }
 
   const handleInputChange = (e) => {
     setFields({ ...fields, ...{ [e.target.id]: e.target.value } })
   }
 
+  useEffect(() => {
+    setFormFilled(
+      !isEmptyString(fields.title) &&
+        !isEmptyString(fields.description) &&
+        !isEmptyString(fields.price) &&
+        agreedTo === true
+    )
+  }, [fields, agreedTo])
+
+  if (!isWalletInstalled) {
+    return <WalletIsNotInstalled />
+  }
+
+  if (!isCorrectNetwork) {
+    return <WrongBlockchainNetwork router={router} />
+  }
+
+  if (currentAccount === '') {
+    return <ConnectWallet connectWallet={connectWallet} />
+  }
+
+  if (isLoadingWeb3) {
+    return <JustOneSecond />
+  }
+
   return (
     <>
-      {errors && (
-        <Message
-          error
-          header="Errors occured"
-          list={Array.isArray(errors) ? errors : [errors]}
-        />
-      )}
+      {error && <ErrorWrapper header="Error occured" error={error} />}
 
       {!hideNotice && (
-        <Message warning onDismiss={() => setHideNotice(true)}>
+        <Message onDismiss={() => setHideNotice(true)}>
           <Icon name="info" />
-          Часть полей этой формы автоматически заполнена из{' '}
+          Several fields on this form were auto-filled from the{' '}
           <Link href="/jobs/[id]" as={`/jobs/${job.id}`} passHref>
-            <a>предложения о работе</a>
+            <a>job offer</a>
           </Link>
-          {' и'} отклике кандидата
+          {' and'} performer&apos;s application
         </Message>
       )}
 
-      <Form onSubmit={handleCreateContract}>
-        <Grid container stackable verticalAlign="top">
-          <Grid.Row>
-            <Grid.Column width={9}>
-              <Form.Input
-                id="title"
-                label="Введите название работы"
-                placeholder=""
-                value={fields.title}
-                onChange={handleInputChange}
-                required
-              />
+      <Form>
+        <Form.Input
+          id="title"
+          label="Title"
+          placeholder=""
+          value={fields.title}
+          onChange={handleInputChange}
+          required
+        />
 
-              <Form.Input
-                control={TextArea}
-                id="description"
-                label="Подробное описание задачи"
-                placeholder=""
-                rows={10}
-                value={fields.description}
-                onChange={handleInputChange}
-                required
-              />
-            </Grid.Column>
+        <Form.Input
+          control={TextArea}
+          id="description"
+          label="Description"
+          placeholder=""
+          rows={10}
+          value={fields.description}
+          onChange={handleInputChange}
+          required
+        />
 
-            <Grid.Column width={7}>
-              <Form.Input
-                id="price"
-                label="Стоимость работы"
-                placeholder=""
-                value={fields.price}
-                onChange={handleInputChange}
-                required
-              />
+        <Form.Group>
+          <Form.Input
+            id="price"
+            label={`Price (${tokenSymbol})`}
+            placeholder=""
+            value={fields.price}
+            onChange={handleInputChange}
+            required
+            width={3}
+          />
+        </Form.Group>
 
-              <Form.Input
-                id="duration"
-                label="Длительность проекта (в днях)"
-                placeholder=""
-                value={fields.duration}
-                onChange={handleInputChange}
-              />
+        <Divider hidden />
 
-              <h2>Исполнитель</h2>
+        <Form.Checkbox
+          label="I agree to the Terms and Conditions"
+          checked={agreedTo}
+          onClick={() => setAgreedTo(!agreedTo)}
+        />
 
-              <Form.Input
-                label="ID"
-                placeholder=""
-                value={application.applicant.id}
-                readOnly
-              />
-            </Grid.Column>
-          </Grid.Row>
+        <Divider hidden />
 
-          <Grid.Row>
-            <Grid.Column>
-              <Form.Field
-                control={Checkbox}
-                label={{
-                  children: (
-                    <div>
-                      Я согласен с{' '}
-                      <Link href="#">
-                        <a>Правилами</a>
-                      </Link>
-                      {' и '}
-                      <Link href="#" passHref>
-                        <a>Условиями</a>
-                      </Link>
-                    </div>
-                  ),
-                }}
-              />
-            </Grid.Column>
-          </Grid.Row>
-
-          <Grid.Row>
-            <Grid.Column>
-              <Button primary type="submit">
-                Отправить исполнителю
-              </Button>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <Button
+          primary
+          type="submit"
+          disabled={isLoadingWeb3 || !formFilled}
+          onClick={(e) => handleCreateContract(e)}
+        >
+          Submit
+        </Button>
       </Form>
     </>
   )

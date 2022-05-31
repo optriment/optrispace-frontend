@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Button, Form, Message, Segment } from 'semantic-ui-react'
-
 import { useAuth } from '../hooks'
 
 export default function LoginForm() {
@@ -18,30 +17,23 @@ export default function LoginForm() {
 
   const handleSignIn = async (e) => {
     e.preventDefault()
+    setErrors(null)
+    setIsSubmitting(true)
 
     try {
-      setIsSubmitting(true)
-
       const response = await signIn(fields.login, fields.password)
       const json = await response.json()
-
-      if (response.status === 422) {
-        setErrors(json.message)
-        setIsSubmitting(false)
-
-        return
-      }
 
       if (response.ok) {
         await authenticate(json.token)
 
         router.push('/jobs')
+      } else {
+        setErrors(json.message)
       }
-
-      setIsSubmitting(false)
     } catch (error) {
-      console.error({ error })
-
+      setErrors(error)
+    } finally {
       setIsSubmitting(false)
     }
   }
@@ -69,6 +61,7 @@ export default function LoginForm() {
             iconPosition="left"
             placeholder="Login"
             required
+            autoComplete="username"
             value={fields.login}
             onChange={handleInputChange}
           />
@@ -81,6 +74,7 @@ export default function LoginForm() {
             placeholder="Password"
             type="password"
             required
+            autoComplete="current-password"
             value={fields.password}
             onChange={handleInputChange}
           />

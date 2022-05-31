@@ -52,7 +52,6 @@ const ContractPage = () => {
 }
 
 ContractPage.requiresAuth = true
-ContractPage.redirectUnauthenticatedTo = '/sign_in'
 
 ContractPage.getLayout = (page) => (
   <Layout

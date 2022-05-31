@@ -2,45 +2,69 @@ import React from 'react'
 import { Segment, Header } from 'semantic-ui-react'
 import { formatDateTime } from '../../lib/formatDate'
 
-export default function Sidebar({ contract }) {
+export default function Sidebar({ contract, tokenSymbol }) {
   return (
     <Segment.Group>
-      <Segment padded>
-        <Header as="h3">Текущий статус</Header>
+      <Segment>
+        <Header as="h3">Price</Header>
 
-        {contract.status}
+        <p>
+          {contract.price} {tokenSymbol}
+        </p>
       </Segment>
 
-      <Segment padded>
-        <Header as="h3">Стоимость работ</Header>
+      <Segment>
+        <Header as="h3">Contract Blockchain Address</Header>
 
-        {contract.price}
+        {contract.contract_address && (
+          <p>
+            <a
+              href={`https://testnet.bscscan.com/address/${contract.contract_address}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {contract.contract_address}
+            </a>
+          </p>
+        )}
       </Segment>
 
-      {contract.duration && (
-        <Segment padded>
-          <Header as="h3">Длительность (в днях)</Header>
+      <Segment>
+        <Header as="h3">Customer Blockchain Address</Header>
 
-          {contract.duration}
-        </Segment>
-      )}
-
-      <Segment padded>
-        <Header as="h3">Заказчик (ID)</Header>
-
-        {contract.customer.id}
+        {contract.customer_address && (
+          <p>
+            <a
+              href={`https://testnet.bscscan.com/address/${contract.customer_address}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {contract.customer_address}
+            </a>
+          </p>
+        )}
       </Segment>
 
-      <Segment padded>
-        <Header as="h3">Исполнитель (ID)</Header>
+      <Segment>
+        <Header as="h3">Performer Blockchain Address</Header>
 
-        {contract.performer.id}
+        {contract.performer_address && (
+          <p>
+            <a
+              href={`https://testnet.bscscan.com/address/${contract.performer_address}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {contract.performer_address}
+            </a>
+          </p>
+        )}
       </Segment>
 
-      <Segment padded>
-        <Header as="h3">Дата последнего изменения</Header>
+      <Segment>
+        <Header as="h3">Updated At</Header>
 
-        {formatDateTime(contract.updated_at)}
+        <p>{formatDateTime(contract.updated_at)}</p>
       </Segment>
     </Segment.Group>
   )

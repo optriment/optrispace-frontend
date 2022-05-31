@@ -13,11 +13,11 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false)
   const isAuthenticated = !!person
 
-  const logout = ({ redirectLocation }) => {
+  const logout = () => {
     Cookies.remove('token')
     setPerson(null)
     setIsLoading(false)
-    router.push(redirectLocation || '/sign_in')
+    router.push('/sign_in')
   }
 
   const authenticate = async (token) => {
@@ -35,16 +35,16 @@ export const AuthProvider = ({ children }) => {
 
       const json = await response.json()
 
-      setPerson(json.subject)
-      Cookies.set('token', token)
+      if (response.ok) {
+        setPerson(json.subject)
+        Cookies.set('token', token)
+        setIsLoading(false)
+      } else {
+        logout()
+      }
     } catch (error) {
-      console.error({ error })
-
-      setPerson(null)
-      Cookies.remove('token')
+      logout()
     }
-
-    setIsLoading(false)
   }
 
   const signIn = async (login, password) => {
@@ -89,7 +89,7 @@ export const AuthProvider = ({ children }) => {
     // If we don't have a token in the cookies, logout
     const token = Cookies.get('token')
     if (!token) {
-      return logout({ redirectLocation: Component.redirectUnauthenticatedTo })
+      return logout()
     }
 
     // If we're not loading give the try to authenticate with the given token.

@@ -1,17 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { AuthProvider } from '../hooks'
 import Head from 'next/head'
-import abi from '../../contracts/token.json'
-import getConfig from 'next/config'
-import useTokenContract from '../hooks/useTokenContract'
+import { Web3Provider } from '../context/web3-context'
 
 function MyApp({ Component, pageProps }) {
-  const { publicRuntimeConfig } = getConfig()
   const getLayout = Component.getLayout ?? ((page) => page)
-
-  const contractAddress = publicRuntimeConfig.token_contract_address
-  const [account, setAccount] = useState()
-  const tokenContract = useTokenContract(contractAddress, abi, account)
 
   return (
     <>
@@ -30,14 +23,7 @@ function MyApp({ Component, pageProps }) {
       )}
 
       <AuthProvider>
-        {getLayout(
-          <Component
-            {...pageProps}
-            setAccount={setAccount}
-            account={account}
-            tokenContract={tokenContract}
-          />
-        )}
+        <Web3Provider>{getLayout(<Component {...pageProps} />)}</Web3Provider>
       </AuthProvider>
     </>
   )

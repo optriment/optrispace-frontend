@@ -28,7 +28,7 @@ export default function JobCardForGuest({ job }) {
           <p>
             Для отправки заявки на выполнение работы вам необходимо{' '}
             <Link href="/sign_in" passHref>
-              <a>зарегистироваться</a>
+              <a>зарегистрироваться</a>
             </Link>{' '}
             в системе Optrispace
           </p>

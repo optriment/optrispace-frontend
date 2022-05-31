@@ -22,7 +22,8 @@ const nextConfig = {
   publicRuntimeConfig: {
     // Will be available on both server and client
     api_url: process.env.API_URL,
-    token_contract_address: process.env.TOKEN_CONTRACT_ADDRESS,
+    token_address: process.env.TOKEN_ADDRESS,
+    contract_factory_address: process.env.CONTRACT_FACTORY_ADDRESS,
   },
 }
 

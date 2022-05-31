@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import Link from 'next/link'
-import { ethers } from 'ethers'
-import { Button, Container, Dropdown, Menu } from 'semantic-ui-react'
+import { Loader, Button, Container, Dropdown, Menu } from 'semantic-ui-react'
 import ClientOnly from './ClientOnly'
 import { useAuth } from '../hooks'
 import { useRouter } from 'next/router'
-import useIsMetaMaskInstalled from '../hooks/useIsMetaMaskInstalled'
+import Web3Context from '../context/web3-context'
 
-const MenuComponent = ({ setAccount, account, tokenContract }) => {
+const MenuComponent = () => {
   const router = useRouter()
 
   return (
@@ -25,62 +24,26 @@ const MenuComponent = ({ setAccount, account, tokenContract }) => {
       </Menu.Item>
 
       <ClientOnly>
-        <AuthDetails
-          setAccount={setAccount}
-          account={account}
-          tokenContract={tokenContract}
-        />
+        <AuthDetails />
       </ClientOnly>
     </Menu>
   )
 }
 
-function AuthDetails({ setAccount, account, tokenContract }) {
+function AuthDetails() {
   const { person, logout, isLoading } = useAuth()
+  const {
+    isWalletInstalled,
+    currentAccount,
+    connectWallet,
+    accountBalance,
+    accountBalanceLoading,
+    tokenSymbol,
+  } = useContext(Web3Context)
   const router = useRouter()
 
-  const [balance, setBalance] = useState()
-  const [symbol, setSymbol] = useState()
-  const isMetaMaskInstalled = useIsMetaMaskInstalled()
-
-  // Handle connection to MetaMask
-  const handleOnConnect = async () => {
-    let address
-
-    try {
-      const accounts = await window.ethereum.request({
-        method: 'eth_requestAccounts',
-      })
-
-      address = ethers.utils.getAddress(accounts[0])
-      setAccount(address)
-    } catch (err) {
-      console.error(err)
-
-      throw err
-    }
-
-    try {
-      const b = await tokenContract.balanceOf(address)
-      setBalance(parseInt(b._hex))
-    } catch (err) {
-      console.error(err)
-
-      throw err
-    }
-
-    try {
-      const s = await tokenContract.symbol()
-      setSymbol(s)
-    } catch (err) {
-      console.error(err)
-
-      throw err
-    }
-  }
-
   if (isLoading) {
-    return <p>Loading...</p>
+    return <Loader size="tiny" active inline />
   }
 
   if (!person) {
@@ -118,28 +81,26 @@ function AuthDetails({ setAccount, account, tokenContract }) {
       </Menu.Item>
 
       <Menu.Menu position="right">
-        <Menu.Item active={router.pathname == '/jobs/new'}>
-          <Link href="/jobs/new" passHref>
-            <a>Add Job</a>
-          </Link>
-        </Menu.Item>
-
         <Menu.Item>
-          {account && balance !== null && symbol && (
-            <b>
-              Balance: {balance} {symbol}
-            </b>
-          )}
-
-          {!account && isMetaMaskInstalled && (
-            <Button positive onClick={handleOnConnect}>
-              Connect with MetaMask
-            </Button>
-          )}
-
-          {!isMetaMaskInstalled && (
+          {isWalletInstalled ? (
+            <>
+              {currentAccount === '' ? (
+                <Button onClick={connectWallet}>Connect wallet</Button>
+              ) : (
+                <>
+                  {accountBalanceLoading ? (
+                    <Loader size="tiny" active inline />
+                  ) : (
+                    <b>
+                      Balance: {accountBalance} {tokenSymbol}
+                    </b>
+                  )}
+                </>
+              )}
+            </>
+          ) : (
             <a href="https://metamask.io/" target="_blank" rel="noreferrer">
-              <b>Install MetaMask</b>
+              Install Wallet
             </a>
           )}
         </Menu.Item>
@@ -151,7 +112,7 @@ function AuthDetails({ setAccount, account, tokenContract }) {
             <Dropdown.Item icon="money" text="Billing" />
             <Dropdown.Divider />
             <Dropdown.Item
-              onClick={() => logout({ redirectLocation: '/sign_in' })}
+              onClick={() => logout()}
               icon="sign-out"
               text="Sign Out"
             />
