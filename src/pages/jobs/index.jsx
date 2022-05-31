@@ -1,7 +1,8 @@
 import React from 'react'
 import getConfig from 'next/config'
+import Link from 'next/link'
 
-import { Header } from 'semantic-ui-react'
+import { Divider, Button, Header } from 'semantic-ui-react'
 
 import useSWR from 'swr'
 import { fetcher } from '../../lib/fetcher'
@@ -30,6 +31,13 @@ const JobsPage = () => {
   return (
     <>
       <Header as="h1">Jobs</Header>
+
+      <Link href="/jobs/new" passHref>
+        <Button primary>New Project</Button>
+      </Link>
+
+      <Divider hidden />
+
       {error && <ErrorWrapper header="Failed to load jobs" error={error} />}
 
       {isLoading && <JustOneSecond />}
