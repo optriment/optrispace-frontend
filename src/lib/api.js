@@ -1,5 +1,5 @@
 import getConfig from 'next/config'
-import { postWithToken } from './fetcher'
+import { postWithToken, putWithToken } from './fetcher'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -9,6 +9,18 @@ export async function createJob(token, { title, description, budget }) {
     description,
     budget: budget.toString(),
   })
+}
+
+export async function updateJob(token, jobId, { title, description, budget }) {
+  return await putWithToken(
+    `${publicRuntimeConfig.api_url}/jobs/${jobId}`,
+    token,
+    {
+      title,
+      description,
+      budget: budget.toString(),
+    }
+  )
 }
 
 export async function createApplication(token, jobId, { comment, price }) {
@@ -70,6 +82,13 @@ export async function sendContract(token, contractId) {
 export async function approveContract(token, contractId) {
   return await postWithToken(
     `${publicRuntimeConfig.api_url}/contracts/${contractId}/approve`,
+    token
+  )
+}
+
+export async function completeContract(token, contractId) {
+  return await postWithToken(
+    `${publicRuntimeConfig.api_url}/contracts/${contractId}/complete`,
     token
   )
 }
