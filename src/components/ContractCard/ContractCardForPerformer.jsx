@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { useRouter } from 'next/router'
 import { Button, Container, Grid, Segment, Step } from 'semantic-ui-react'
-import { acceptContract, sendContract } from '../../lib/api'
+import { acceptContract, completeContract, sendContract } from '../../lib/api'
 import ErrorWrapper from '../ErrorWrapper'
 
 import TitleDescription from './TitleDescription'
@@ -92,7 +92,7 @@ export default function ContractCardForPerformer({ contract, token }) {
 
       await transferFromTx.wait()
 
-      // TODO: Send request to backend to change contract status to 'ended'
+      await completeContract(token, contract.id)
       router.reload()
     } catch (err) {
       console.error({ err })
@@ -111,7 +111,7 @@ export default function ContractCardForPerformer({ contract, token }) {
     deployed: 3,
     sent: 4,
     approved: 5,
-    ended: 6,
+    completed: 6,
   }
 
   const currentStep = statuses[contract.status] + 1

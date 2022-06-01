@@ -335,7 +335,7 @@ export default function ContractCardForCustomer({ contract, token }) {
     deployed: 3,
     sent: 4,
     approved: 5,
-    ended: 6,
+    completed: 6,
   }
 
   const currentStep = statuses[contract.status] + 1

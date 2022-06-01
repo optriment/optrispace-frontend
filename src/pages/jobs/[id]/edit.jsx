@@ -28,7 +28,7 @@ const useJob = () => {
 
 const EditJobPage = () => {
   const { job, isLoading, error } = useJob()
-  const { person } = useAuth()
+  const { person, token } = useAuth()
 
   return (
     <>
@@ -44,7 +44,7 @@ const EditJobPage = () => {
             <ErrorWrapper header="You don't have access to this action" />
           )}
 
-          <EditJobForm job={job} />
+          <EditJobForm job={job} token={token} />
         </>
       )}
     </>

@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
-import { Button, Form, Grid, Message, TextArea } from 'semantic-ui-react'
+import { useRouter } from 'next/router'
+import { Button, Form, Message, TextArea } from 'semantic-ui-react'
+import { updateJob } from '../lib/api'
 
-export default function EditJobForm({ job }) {
+export default function EditJobForm({ job, token }) {
+  const router = useRouter()
+
   const initialFields = {
     title: job.title,
     description: job.description,
     budget: job.budget,
-    duration: job.duration,
   }
   const [fields, setFields] = useState(initialFields)
   const [errors, setErrors] = useState(undefined)
@@ -14,7 +17,19 @@ export default function EditJobForm({ job }) {
   const handleEditJob = (e) => {
     e.preventDefault()
 
-    setErrors([])
+    updateJob(token, job.id, { ...fields })
+      .then((job) => {
+        if (!job.id) {
+          setErrors(job.message)
+
+          return
+        }
+
+        router.push(`/jobs/${job.id}`)
+      })
+      .catch((err) => {
+        throw err
+      })
   }
 
   const handleInputChange = (e) => {
@@ -32,58 +47,39 @@ export default function EditJobForm({ job }) {
       )}
 
       <Form onSubmit={handleEditJob}>
-        <Grid container stackable verticalAlign="top">
-          <Grid.Row>
-            <Grid.Column width={9}>
-              <Form.Input
-                id="title"
-                label="Введите название работы"
-                placeholder=""
-                value={fields.title}
-                onChange={handleInputChange}
-                required
-              />
+        <Form.Input
+          id="title"
+          label="Job Title"
+          placeholder=""
+          value={fields.title}
+          onChange={handleInputChange}
+          required
+        />
 
-              <Form.Input
-                control={TextArea}
-                id="description"
-                label="Подробное описание задачи"
-                placeholder=""
-                rows={10}
-                value={fields.description}
-                onChange={handleInputChange}
-                required
-              />
-            </Grid.Column>
+        <Form.Input
+          control={TextArea}
+          id="description"
+          label="Job Description"
+          placeholder=""
+          rows={10}
+          value={fields.description}
+          onChange={handleInputChange}
+          required
+        />
 
-            <Grid.Column width={7}>
-              <Form.Input
-                id="budget"
-                label="Примерный бюджет"
-                placeholder="100 COIN"
-                value={fields.budget}
-                onChange={handleInputChange}
-                required
-              />
+        <Form.Input
+          id="budget"
+          label="Approx. budget"
+          placeholder=""
+          value={fields.budget}
+          onChange={handleInputChange}
+          required
+          width={3}
+        />
 
-              <Form.Input
-                id="duration"
-                label="Длительность проекта (в днях)"
-                placeholder=""
-                value={fields.duration}
-                onChange={handleInputChange}
-              />
-            </Grid.Column>
-          </Grid.Row>
-
-          <Grid.Row>
-            <Grid.Column>
-              <Button primary type="submit">
-                Сохранить
-              </Button>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <Button primary type="submit">
+          Save
+        </Button>
       </Form>
     </>
   )
