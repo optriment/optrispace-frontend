@@ -11,6 +11,9 @@ const Web3Context = createContext({})
 export default Web3Context
 
 export const Web3Provider = ({ children }) => {
+  const tokenSymbol = 'ALZ'
+  const tokenDecimals = 6
+
   const requiredChainId = '0x61' // Binance Smart Chain Testnet
 
   const [isLoading, setIsLoading] = useState(true)
@@ -23,12 +26,11 @@ export const Web3Provider = ({ children }) => {
   const [currentChainId, setCurrentChainId] = useState(undefined)
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(false)
   const [currentAccount, setCurrentAccount] = useState('')
-  const [tokenSymbol, setTokenSymbol] = useState(undefined)
-  const [tokenDecimals, setTokenDecimals] = useState(null)
   const [accountBalance, setAccountBalance] = useState(null)
   const [accountBalanceLoading, setAccountBalanceLoading] = useState(true)
   const [token, setToken] = useState(undefined)
   const [contractFactory, setContractFactory] = useState(undefined)
+  const [isWalletReady, setIsWalletReady] = useState(false)
 
   const contractFactoryAddress = publicRuntimeConfig.contract_factory_address
   const tokenAddress = publicRuntimeConfig.token_address
@@ -154,15 +156,9 @@ export const Web3Provider = ({ children }) => {
 
     const perform = async () => {
       try {
-        const symbol = await token.symbol()
-        setTokenSymbol(symbol)
+        const balance = await token.balanceOf(currentAccount)
 
-        const decimals = await token.decimals()
-        setTokenDecimals(decimals)
-
-        const b = await token.balanceOf(currentAccount)
-
-        setAccountBalance(parseFloat(b) / 10 ** decimals)
+        setAccountBalance(parseFloat(balance) / 10 ** tokenDecimals)
         setAccountBalanceLoading(false)
       } catch (err) {
         console.error(err)
@@ -175,10 +171,15 @@ export const Web3Provider = ({ children }) => {
   }, [currentAccount, token])
 
   useEffect(() => {
-    if (!accountBalanceLoading) {
-      setIsLoading(false)
-    }
-  }, [accountBalanceLoading])
+    setIsLoading(false)
+
+    setIsWalletReady(
+      isWalletInstalled &&
+        isCorrectNetwork &&
+        isWalletConnected &&
+        currentAccount !== ''
+    )
+  }, [isWalletInstalled, isCorrectNetwork, isWalletConnected, currentAccount])
 
   return (
     <Web3Context.Provider
@@ -197,6 +198,7 @@ export const Web3Provider = ({ children }) => {
 
         accountBalance,
         accountBalanceLoading,
+
         tokenSymbol,
         tokenDecimals,
 
@@ -205,6 +207,8 @@ export const Web3Provider = ({ children }) => {
         contractFactory,
         token,
         signer,
+
+        isWalletReady,
       }}
     >
       {children}

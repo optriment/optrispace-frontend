@@ -6,7 +6,7 @@ export default function ConnectWallet({ connectWallet }) {
     <Message warning icon>
       <Icon name="warning" />
       <Message.Content>
-        <Message.Header>We need to get your blockchain address</Message.Header>
+        <Message.Header>We need to know your blockchain address</Message.Header>
 
         <p>
           Please{' '}
