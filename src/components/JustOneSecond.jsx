@@ -11,3 +11,20 @@ export default function JustOneSecond() {
     </Message>
   )
 }
+
+export function JustOneSecondBlockchain({ message }) {
+  return (
+    <Message icon>
+      <Icon name="circle notched" loading />
+      <Message.Content>
+        <Message.Header>Just one second</Message.Header>
+
+        {message ? (
+          <p>{message}</p>
+        ) : (
+          <p>We are waiting for the blockchain response.</p>
+        )}
+      </Message.Content>
+    </Message>
+  )
+}

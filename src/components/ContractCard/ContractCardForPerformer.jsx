@@ -9,7 +9,7 @@ import Sidebar from './Sidebar'
 
 import Web3Context from '../../context/web3-context'
 import WalletIsNotInstalled from '../WalletIsNotInstalled'
-import JustOneSecond from '../JustOneSecond'
+import { JustOneSecondBlockchain } from '../JustOneSecond'
 import WrongBlockchainNetwork from '../WrongBlockchainNetwork'
 import ConnectWallet from '../ConnectWallet'
 
@@ -19,14 +19,35 @@ export default function ContractCardForPerformer({ contract, token }) {
   const {
     isLoading: isLoadingWeb3,
     isWalletInstalled,
+    isWalletConnected,
     isCorrectNetwork,
     connectWallet,
     currentAccount,
+    tokenSymbol,
+    isWalletReady,
   } = useContext(Web3Context)
 
   const [error, setError] = useState(undefined)
 
+  const isWalletRequired = ['created', 'approved'].includes(contract.status)
+
+  const walletReady = isWalletRequired && isWalletReady
+
+  console.log({
+    isWalletRequired,
+    isWalletInstalled,
+    isWalletConnected,
+    isCorrectNetwork,
+    currentAccount,
+    isWalletReady,
+    walletReady,
+  })
+
   const accept = async () => {
+    if (!walletReady) {
+      return
+    }
+
     try {
       await acceptContract(token, contract.id, currentAccount)
       router.reload()
@@ -46,6 +67,14 @@ export default function ContractCardForPerformer({ contract, token }) {
     }
   }
 
+  const requestMoney = async () => {
+    if (!walletReady) {
+      return
+    }
+
+    alert('Not implemented yet')
+  }
+
   const statuses = {
     created: 1,
     accepted: 2,
@@ -57,24 +86,25 @@ export default function ContractCardForPerformer({ contract, token }) {
 
   const currentStep = statuses[contract.status] + 1
 
-  if (!isWalletInstalled) {
-    return <WalletIsNotInstalled />
-  }
+  if (isWalletRequired) {
+    if (!isWalletInstalled) {
+      return <WalletIsNotInstalled />
+    }
 
-  if (!isCorrectNetwork) {
-    return <WrongBlockchainNetwork router={router} />
-  }
-
-  if (currentAccount === '') {
-    return <ConnectWallet connectWallet={connectWallet} />
-  }
-
-  if (isLoadingWeb3) {
-    return <JustOneSecond />
+    if (!isCorrectNetwork) {
+      return <WrongBlockchainNetwork router={router} />
+    }
   }
 
   return (
     <>
+      {isWalletRequired &&
+        isWalletInstalled &&
+        isCorrectNetwork &&
+        currentAccount === '' && (
+          <ConnectWallet connectWallet={connectWallet} />
+        )}
+
       <Segment basic>
         <Step.Group ordered width={5} fluid>
           <Step completed>
@@ -158,16 +188,22 @@ export default function ContractCardForPerformer({ contract, token }) {
 
           <Grid.Column width={6}>
             {contract.status === 'created' && (
-              <Container textAlign="right">
-                <Button
-                  primary
-                  content="Accept contract"
-                  labelPosition="left"
-                  icon="check"
-                  disabled={!isCorrectNetwork}
-                  onClick={accept}
-                />
-              </Container>
+              <>
+                {isLoadingWeb3 ? (
+                  <JustOneSecondBlockchain />
+                ) : (
+                  <Container textAlign="right">
+                    <Button
+                      primary
+                      content="Accept contract"
+                      labelPosition="left"
+                      icon="check"
+                      disabled={!walletReady}
+                      onClick={accept}
+                    />
+                  </Container>
+                )}
+              </>
             )}
 
             {contract.status === 'deployed' && (
@@ -191,18 +227,25 @@ export default function ContractCardForPerformer({ contract, token }) {
             )}
 
             {contract.status === 'approved' && (
-              <Container textAlign="right">
-                <Button
-                  primary
-                  content="Request Money"
-                  labelPosition="left"
-                  icon="money"
-                  disabled
-                />
-              </Container>
+              <>
+                {isLoadingWeb3 ? (
+                  <JustOneSecondBlockchain />
+                ) : (
+                  <Container textAlign="right">
+                    <Button
+                      primary
+                      content="Request Money"
+                      labelPosition="left"
+                      icon="money"
+                      disabled={!walletReady}
+                      onClick={requestMoney}
+                    />
+                  </Container>
+                )}
+              </>
             )}
 
-            <Sidebar contract={contract} />
+            <Sidebar contract={contract} tokenSymbol={tokenSymbol} />
           </Grid.Column>
         </Grid.Row>
       </Grid>

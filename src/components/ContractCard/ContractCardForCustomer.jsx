@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import {
-  Message,
   Container,
   Button,
   Divider,
@@ -18,7 +17,7 @@ import { ethers } from 'ethers'
 import contractABI from '../../../contracts/Contract.json'
 import Web3Context from '../../context/web3-context'
 import WalletIsNotInstalled from '../WalletIsNotInstalled'
-import JustOneSecond from '../JustOneSecond'
+import { JustOneSecondBlockchain } from '../JustOneSecond'
 import WrongBlockchainNetwork from '../WrongBlockchainNetwork'
 import ConnectWallet from '../ConnectWallet'
 
@@ -34,9 +33,10 @@ export default function ContractCardForCustomer({ contract, token }) {
     currentAccount,
     contractFactory, // FIXME: Rename to contractFactoryContract
     token: tokenContract,
-    tokenSymbol,
     tokenDecimals,
+    tokenSymbol,
     signer,
+    isWalletReady,
   } = useContext(Web3Context)
 
   const [error, setError] = useState(undefined)
@@ -46,6 +46,20 @@ export default function ContractCardForCustomer({ contract, token }) {
 
   const [deployedContractAddress, setDeployedContractAddress] = useState('')
   const [isContractFunded, setIsContractFunded] = useState(false)
+
+  const isWalletRequired = ['accepted', 'sent'].includes(contract.status)
+
+  const walletReady = isWalletRequired && isWalletReady
+
+  console.log({
+    isWalletRequired,
+    isWalletInstalled,
+    isWalletConnected,
+    isCorrectNetwork,
+    currentAccount,
+    isWalletReady,
+    walletReady,
+  })
 
   const getDeployedContractAddress = async () => {
     setTxLoading(true)
@@ -75,12 +89,15 @@ export default function ContractCardForCustomer({ contract, token }) {
   }
 
   const deployToBlockchain = async () => {
+    if (!walletReady) {
+      return
+    }
+
     setTxLoading(true)
+    setTxStatus('Creating Smart Contract on blockchain...')
     setError(null)
 
     try {
-      setTxStatus('Subscribing to events...')
-
       contractFactory.on('ContractCreated', (_address, _contractId) => {
         if (_contractId === contract.id) {
           setDeployedContractAddress(_address)
@@ -88,8 +105,6 @@ export default function ContractCardForCustomer({ contract, token }) {
           // TODO: По идее здесь надо бы отправить на бэкенд информацию с адресом контракта
         }
       })
-
-      setTxStatus('Creating Smart Contract on blockchain...')
 
       const contractPriceMultiplied =
         parseFloat(contract.price) * 10 ** tokenDecimals
@@ -145,7 +160,6 @@ export default function ContractCardForCustomer({ contract, token }) {
     return isFunded
   }
 
-  // TODO: Надо дополнительно проверять, разрешил ли заказчик списывать деньги с его счёта
   const allowSmartContractToTransferTokens = async () => {
     setError(null)
 
@@ -165,12 +179,15 @@ export default function ContractCardForCustomer({ contract, token }) {
   }
 
   const fundContract = async () => {
+    if (!walletReady) {
+      return
+    }
+
     setTxLoading(true)
+    setTxStatus('Allowing Smart Contract to transfer tokens...')
     setError(null)
 
     try {
-      setTxStatus('Allowing Smart Contract to transfer tokens...')
-
       await allowSmartContractToTransferTokens()
 
       const _contract = new ethers.Contract(
@@ -179,15 +196,13 @@ export default function ContractCardForCustomer({ contract, token }) {
         signer
       )
 
-      setTxStatus('Subscribing to events...')
+      setTxStatus('Funding Smart Contract...')
 
       _contract.on('ContractFunded', (_contractId) => {
         if (_contractId === contract.id) {
           setIsContractFunded(true)
         }
       })
-
-      setTxStatus('Funding Smart Contract...')
 
       let fundTx = await _contract.fund()
 
@@ -197,8 +212,7 @@ export default function ContractCardForCustomer({ contract, token }) {
     } catch (err) {
       console.error({ err })
       setError(
-        'Unable to fund contract: ' +
-          (err?.data?.message || err?.message || err)
+        'Unable to fund contract: ' + (err.data?.message || err?.message || err)
       )
     } finally {
       setTxStatus('')
@@ -217,28 +231,35 @@ export default function ContractCardForCustomer({ contract, token }) {
   }
 
   const approve = async () => {
+    if (!walletReady) {
+      return
+    }
+
     setTxLoading(true)
+    setTxStatus('Approving contract...')
     setError(null)
 
     try {
-      setTxStatus('Approving contract...')
-
       const _contract = new ethers.Contract(
-        deployedContractAddress,
+        contract.contract_address,
         contractABI,
         signer
       )
 
       let approveTx = await _contract.approve()
-
       await approveTx.wait()
 
       setTxStatus('Updating status...')
+
       await approveContract(token, contract.id)
 
       router.reload()
     } catch (err) {
       console.error({ err })
+      setError(
+        'Unable to complete contract: ' +
+          (err.data?.message || err?.message || err)
+      )
       throw err
     } finally {
       setTxStatus('')
@@ -248,19 +269,15 @@ export default function ContractCardForCustomer({ contract, token }) {
 
   // NOTE: Здесь идём в блокчейн только в случае, если у нас нет адреса задеплоенного контракта
   useEffect(() => {
-    if (!isWalletInstalled) {
-      return
-    }
-
-    if (!isCorrectNetwork) {
-      return
-    }
-
-    if (!isWalletConnected) {
+    if (!walletReady) {
       return
     }
 
     if (deployedContractAddress !== '') {
+      return
+    }
+
+    if (contract.status !== 'accepted') {
       return
     }
 
@@ -277,15 +294,14 @@ export default function ContractCardForCustomer({ contract, token }) {
         console.error({ err })
         setError(err.reason)
       })
-  }, [
-    isWalletInstalled,
-    isWalletConnected,
-    isCorrectNetwork,
-    deployedContractAddress,
-  ])
+  }, [walletReady, deployedContractAddress])
 
   useEffect(() => {
     if (deployedContractAddress === '') {
+      return
+    }
+
+    if (contract.status !== 'accepted') {
       return
     }
 
@@ -303,20 +319,14 @@ export default function ContractCardForCustomer({ contract, token }) {
       })
   }, [deployedContractAddress])
 
-  if (!isWalletInstalled) {
-    return <WalletIsNotInstalled />
-  }
+  if (isWalletRequired) {
+    if (!isWalletInstalled) {
+      return <WalletIsNotInstalled />
+    }
 
-  if (!isCorrectNetwork) {
-    return <WrongBlockchainNetwork router={router} />
-  }
-
-  if (currentAccount === '') {
-    return <ConnectWallet connectWallet={connectWallet} />
-  }
-
-  if (isLoadingWeb3) {
-    return <JustOneSecond />
+    if (!isCorrectNetwork) {
+      return <WrongBlockchainNetwork router={router} />
+    }
   }
 
   const statuses = {
@@ -332,6 +342,13 @@ export default function ContractCardForCustomer({ contract, token }) {
 
   return (
     <>
+      {isWalletRequired &&
+        isWalletInstalled &&
+        isCorrectNetwork &&
+        currentAccount === '' && (
+          <ConnectWallet connectWallet={connectWallet} />
+        )}
+
       <Segment basic>
         <Step.Group ordered width={5} fluid>
           <Step completed>
@@ -418,78 +435,76 @@ export default function ContractCardForCustomer({ contract, token }) {
 
           <Grid.Column width={6}>
             {contract.status === 'accepted' && (
-              <Container textAlign="right">
-                {deployedContractAddress === '' ? (
-                  <Button
-                    primary
-                    content="Deploy to blockchain"
-                    labelPosition="left"
-                    icon="ship"
-                    disabled={
-                      !isCorrectNetwork ||
-                      deployedContractAddress !== '' ||
-                      txLoading ||
-                      isLoadingWeb3
-                    }
-                    onClick={deployToBlockchain}
-                    loading={txLoading || isLoadingWeb3}
+              <>
+                {isLoadingWeb3 || txLoading ? (
+                  <JustOneSecondBlockchain
+                    message={txStatus !== '' && txStatus}
                   />
                 ) : (
-                  <>
-                    <a
-                      href={`https://testnet.bscscan.com/address/${deployedContractAddress}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button>Open contract…</Button>
-                    </a>
-
-                    {isContractFunded ? (
+                  <Container textAlign="right">
+                    {deployedContractAddress === '' ? (
                       <Button
                         primary
-                        content="Set as funded"
+                        content="Deploy to blockchain"
                         labelPosition="left"
                         icon="ship"
-                        onClick={deployToBackend}
-                        loading={txLoading}
-                        disabled={txLoading}
+                        disabled={!walletReady}
+                        onClick={deployToBlockchain}
                       />
                     ) : (
-                      <Button
-                        primary
-                        content="Fund Smart Contract"
-                        labelPosition="left"
-                        icon="money"
-                        onClick={fundContract}
-                        loading={txLoading}
-                        disabled={txLoading}
-                      />
+                      <>
+                        <a
+                          href={`https://testnet.bscscan.com/address/${deployedContractAddress}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button>Open contract…</Button>
+                        </a>
+
+                        {isContractFunded ? (
+                          <Button
+                            primary
+                            content="Set as funded"
+                            labelPosition="left"
+                            icon="ship"
+                            onClick={deployToBackend}
+                          />
+                        ) : (
+                          <Button
+                            primary
+                            content="Fund Smart Contract"
+                            labelPosition="left"
+                            icon="money"
+                            onClick={fundContract}
+                            disabled={!walletReady}
+                          />
+                        )}
+                      </>
                     )}
-                  </>
+                  </Container>
                 )}
-              </Container>
+              </>
             )}
 
             {contract.status === 'sent' && (
-              <Container textAlign="right">
-                <Button
-                  primary
-                  content="Confirm & Complete Contract"
-                  labelPosition="left"
-                  icon="check"
-                  disabled={txLoading || isLoadingWeb3}
-                  onClick={approve}
-                  loading={txLoading || isLoadingWeb3}
-                />
-              </Container>
-            )}
-
-            {txStatus && txStatus !== '' && (
-              <Message
-                header="Blockchain Status"
-                content={txStatus}
-                size="tiny"
-              />
+              <>
+                {isLoadingWeb3 || txLoading ? (
+                  <JustOneSecondBlockchain
+                    message={txStatus !== '' && txStatus}
+                  />
+                ) : (
+                  <Container textAlign="right">
+                    <Button
+                      primary
+                      content="Confirm & Complete Contract"
+                      labelPosition="left"
+                      icon="check"
+                      disabled={!walletReady}
+                      onClick={approve}
+                    />
+                  </Container>
+                )}
+              </>
             )}
 
             <Sidebar contract={contract} tokenSymbol={tokenSymbol} />

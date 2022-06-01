@@ -1,6 +1,13 @@
 import React, { useContext } from 'react'
 import Link from 'next/link'
-import { Loader, Button, Container, Dropdown, Menu } from 'semantic-ui-react'
+import {
+  Loader,
+  Icon,
+  Button,
+  Container,
+  Dropdown,
+  Menu,
+} from 'semantic-ui-react'
 import ClientOnly from './ClientOnly'
 import { useAuth } from '../hooks'
 import { useRouter } from 'next/router'
@@ -34,6 +41,8 @@ function AuthDetails() {
   const { person, logout, isLoading } = useAuth()
   const {
     isWalletInstalled,
+    isCorrectNetwork,
+    isWalletConnected,
     currentAccount,
     connectWallet,
     accountBalance,
@@ -81,21 +90,43 @@ function AuthDetails() {
       </Menu.Item>
 
       <Menu.Menu position="right">
-        <Menu.Item>
+        <Menu.Item icon>
           {isWalletInstalled ? (
             <>
-              {currentAccount === '' ? (
-                <Button onClick={connectWallet}>Connect wallet</Button>
-              ) : (
+              {isCorrectNetwork ? (
                 <>
-                  {accountBalanceLoading ? (
-                    <Loader size="tiny" active inline />
+                  {isWalletConnected ? (
+                    <>
+                      {currentAccount === '' ? (
+                        <Icon
+                          name="warning sign"
+                          size="large"
+                          color="orange"
+                          title="Unable to get your blockchain address"
+                        />
+                      ) : (
+                        <>
+                          {accountBalanceLoading ? (
+                            <Loader size="tiny" active inline />
+                          ) : (
+                            <b>
+                              Balance: {accountBalance} {tokenSymbol}
+                            </b>
+                          )}
+                        </>
+                      )}
+                    </>
                   ) : (
-                    <b>
-                      Balance: {accountBalance} {tokenSymbol}
-                    </b>
+                    <Button onClick={connectWallet}>Connect Wallet</Button>
                   )}
                 </>
+              ) : (
+                <Icon
+                  name="warning sign"
+                  size="large"
+                  color="red"
+                  title="Please connect your wallet to Binance Smart Chain – Testnet"
+                />
               )}
             </>
           ) : (
