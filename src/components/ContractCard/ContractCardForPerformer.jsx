@@ -23,11 +23,16 @@ export default function ContractCardForPerformer({ contract, token }) {
     isCorrectNetwork,
     connectWallet,
     currentAccount,
+    token: tokenContract,
+    tokenDecimals,
     tokenSymbol,
     isWalletReady,
   } = useContext(Web3Context)
 
   const [error, setError] = useState(undefined)
+
+  const [txLoading, setTxLoading] = useState(false)
+  const [txStatus, setTxStatus] = useState('')
 
   const isWalletRequired = ['created', 'approved'].includes(contract.status)
 
@@ -72,7 +77,32 @@ export default function ContractCardForPerformer({ contract, token }) {
       return
     }
 
-    alert('Not implemented yet')
+    setTxLoading(true)
+    setTxStatus('Requesting money from Smart Contract...')
+    setError(null)
+
+    const price = parseFloat(contract.price) * 10 ** tokenDecimals
+
+    try {
+      let transferFromTx = await tokenContract.transferFrom(
+        contract.contract_address,
+        currentAccount,
+        price
+      )
+
+      await transferFromTx.wait()
+
+      // TODO: Send request to backend to change contract status to 'ended'
+      router.reload()
+    } catch (err) {
+      console.error({ err })
+      setError(
+        'Unable to request money: ' + (err.data?.message || err?.message || err)
+      )
+    } finally {
+      setTxStatus('')
+      setTxLoading(false)
+    }
   }
 
   const statuses = {
@@ -228,8 +258,10 @@ export default function ContractCardForPerformer({ contract, token }) {
 
             {contract.status === 'approved' && (
               <>
-                {isLoadingWeb3 ? (
-                  <JustOneSecondBlockchain />
+                {isLoadingWeb3 || txLoading ? (
+                  <JustOneSecondBlockchain
+                    message={txStatus !== '' && txStatus}
+                  />
                 ) : (
                   <Container textAlign="right">
                     <Button
