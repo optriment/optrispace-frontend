@@ -13,9 +13,6 @@ export default function ApplicationListItem({ job, application }) {
       />
 
       <Item.Content>
-        <Button size="tiny" floated="right">
-          Чат
-        </Button>
         {contract ? (
           <Link
             href="/contracts/[id]"
@@ -23,7 +20,7 @@ export default function ApplicationListItem({ job, application }) {
             passHref
           >
             <Button primary size="tiny" floated="right">
-              Перейти в контракт
+              Open contract
             </Button>
           </Link>
         ) : (
@@ -35,21 +32,14 @@ export default function ApplicationListItem({ job, application }) {
             passHref
           >
             <Button color="green" size="tiny" floated="right">
-              Предложить контракт
+              Make a job offer
             </Button>
           </Link>
         )}
         <Item.Header>{applicant?.display_name || applicant.login}</Item.Header>
-        <Item.Meta>
-          <span>
-            0 завершённых проектов, 0.0 рейтинг, 0% заказчиков рекомендуют
-          </span>
-        </Item.Meta>
         <Item.Description>{application.comment}</Item.Description>
         <Item.Extra>
-          {application.price && (
-            <Label>Готов выполнить за: {application.price} COIN</Label>
-          )}
+          {application.price && <Label>Price: {application.price} ALZ</Label>}
         </Item.Extra>
       </Item.Content>
     </Item>

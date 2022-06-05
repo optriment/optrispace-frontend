@@ -54,19 +54,19 @@ const Applications = ({ job }) => {
     setPanes([
       ApplicationsGroup(
         job,
-        'Заявки',
+        'New applications',
         applicationsWithoutContracts,
         'applications'
       ),
       ApplicationsGroup(
         job,
-        'Обсуждение',
+        'Discussions',
         applicationsWithNotAcceptedContracts,
         'discussions'
       ),
       ApplicationsGroup(
         job,
-        'Контракт подписан',
+        'Contract accepted',
         applicationsWithAcceptedContracts,
         'accepted'
       ),

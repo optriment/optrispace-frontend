@@ -4,27 +4,21 @@ const Statistics = ({ job }) => {
   return (
     <Segment.Group>
       <Segment padded>
-        <Header as="h3">Заказчик</Header>
+        <Header as="h3">Customer</Header>
 
         {job.customer.display_name}
       </Segment>
 
       <Segment padded>
-        <Header as="h3">Бюджет</Header>
+        <Header as="h3">Approx. budget</Header>
 
         {job.budget}
       </Segment>
 
       <Segment padded>
-        <Header as="h3">Заявок</Header>
+        <Header as="h3">Applications</Header>
 
         {job.applications_count}
-      </Segment>
-
-      <Segment padded>
-        <Header as="h3">Длительность</Header>
-
-        {job.duration}
       </Segment>
     </Segment.Group>
   )
