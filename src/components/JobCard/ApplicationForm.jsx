@@ -83,7 +83,7 @@ const ApplicationForm = ({ job }) => {
   return (
     <>
       {applicationLoadingError && (
-        <Message error header="Не удалось загрузить заявки ко проекту" />
+        <Message error header="Unable to load job applications" />
       )}
 
       {isLoading && <JustOneSecond />}
@@ -91,13 +91,14 @@ const ApplicationForm = ({ job }) => {
       {application ? (
         <Message>
           <Message.Header>
-            Ваша заявка на сумму {application.price} принята
+            Your application with a price of {application.price} has been
+            successfully published.
           </Message.Header>
           <p>{application.comment}</p>
         </Message>
       ) : (
         <>
-          <Header as="h3">Оставить заявку ко проекту</Header>
+          <Header as="h3">Apply to this job</Header>
 
           {errors && (
             <Message
@@ -110,7 +111,7 @@ const ApplicationForm = ({ job }) => {
             <Form.Field
               id="comment"
               control={TextArea}
-              label="Опишите ваш опыт и почему надо выбрать именно вас"
+              label="Leave a comment for the customer"
               rows={5}
               value={fields.comment}
               onChange={handleInputChange}
@@ -120,18 +121,13 @@ const ApplicationForm = ({ job }) => {
             <Form.Field
               id="price"
               control={Input}
-              label="Укажите стоимость ваших услуг в рамках этого проекта"
+              label="The price of your services for this job"
               value={fields.price}
               onChange={handleInputChange}
               required
             />
 
-            <Button
-              content="Оставить заявку"
-              labelPosition="left"
-              icon="edit"
-              primary
-            />
+            <Button content="Submit" labelPosition="left" icon="edit" primary />
           </Form>
         </>
       )}

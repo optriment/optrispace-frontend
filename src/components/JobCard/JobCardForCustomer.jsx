@@ -20,7 +20,7 @@ export default function JobCardForCustomer({ job }) {
           <Link href="/jobs/[id]/edit" as={`/jobs/${job.id}/edit`} passHref>
             <Button
               primary
-              content="Редактировать"
+              content="Edit"
               size="tiny"
               labelPosition="left"
               icon="pencil"

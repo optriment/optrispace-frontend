@@ -23,14 +23,14 @@ export default function JobCardForGuest({ job }) {
 
       <Grid.Row>
         <Grid.Column>
-          <Header as="h3">Оставить заявку ко проекту</Header>
+          <Header as="h3">Apply to this job</Header>
 
           <p>
-            Для отправки заявки на выполнение работы вам необходимо{' '}
+            You need to be
             <Link href="/sign_in" passHref>
-              <a>зарегистрироваться</a>
+              <a> registered </a>
             </Link>{' '}
-            в системе Optrispace
+            to access the OptriSpace
           </p>
         </Grid.Column>
       </Grid.Row>

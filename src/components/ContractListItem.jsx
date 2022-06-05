@@ -65,15 +65,6 @@ export default function ContractListItem({ person, contract }) {
               </List.Header>
             </List.Content>
           </List.Item>
-          {contract.duration && (
-            <List.Item>
-              <List.Content>
-                <List.Header>
-                  <List.Icon name="clock" /> {contract.duration} days
-                </List.Header>
-              </List.Content>
-            </List.Item>
-          )}
           <List.Item>
             <List.Content>
               <List.Header>

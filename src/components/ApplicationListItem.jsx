@@ -36,7 +36,7 @@ export default function ApplicationListItem({ application }) {
           <List.Item>
             <List.Content>
               <List.Header>
-                <List.Icon name="time" title="Дата создания заявки" />{' '}
+                <List.Icon name="time" title="Creation date" />{' '}
                 {formatDateTime(application.created_at)}
               </List.Header>
             </List.Content>
