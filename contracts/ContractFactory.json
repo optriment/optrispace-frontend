@@ -43,6 +43,19 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      }
+    ],
+    "name": "TestTokenSent",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -179,6 +192,13 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "requestTestToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]
