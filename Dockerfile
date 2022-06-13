@@ -1,5 +1,5 @@
 # Install dependencies only when needed
-FROM node:17.9-alpine AS deps
+FROM node:18.3.0-alpine AS deps
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 # hadolint ignore=DL3018
@@ -10,7 +10,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 # Rebuild the source code only when needed
-FROM node:17.9-alpine AS builder
+FROM node:18.3.0-alpine AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -26,7 +26,7 @@ ENV CONTRACT_FACTORY_ADDRESS=0x2d81444FDc06847CD883877768Aee38Ac134ecFC
 RUN npm run build
 
 # Production image, copy all the files and run next
-FROM node:17.9-alpine AS runner
+FROM node:18.3.0-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
