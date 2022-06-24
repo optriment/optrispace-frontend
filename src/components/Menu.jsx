@@ -177,9 +177,9 @@ function AuthDetails() {
 
         <Dropdown item text="Account">
           <Dropdown.Menu>
-            <Dropdown.Item icon="edit" text="Edit Profile" />
-            <Dropdown.Item icon="settings" text="Settings" />
-            <Dropdown.Item icon="money" text="Billing" />
+            <Link href="/settings" passHref>
+              <Dropdown.Item icon="settings" text="Settings" />
+            </Link>
             <Dropdown.Divider />
             <Dropdown.Item
               onClick={() => logout()}
