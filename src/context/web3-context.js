@@ -14,7 +14,8 @@ export const Web3Provider = ({ children }) => {
   const tokenSymbol = 'ALZ'
   const tokenDecimals = 6
 
-  const requiredChainId = '0x61' // Binance Smart Chain Testnet
+  const requiredChainId = publicRuntimeConfig.required_chain_id
+  const blockchainNetworkName = publicRuntimeConfig.blockchain_network_name
 
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -44,7 +45,9 @@ export const Web3Provider = ({ children }) => {
       let chainId = await wallet.request({ method: 'eth_chainId' })
 
       if (chainId !== requiredChainId) {
-        alert('You are not connected to the Binance Smart Chain – Testnet!')
+        alert(
+          `You are not connected to the ${publicRuntimeConfig.blockchain_network_name}`
+        )
 
         return
       }
@@ -188,6 +191,7 @@ export const Web3Provider = ({ children }) => {
         error,
 
         requiredChainId,
+        blockchainNetworkName,
 
         isWalletInstalled,
         isWalletConnected,

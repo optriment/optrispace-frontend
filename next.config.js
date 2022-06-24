@@ -24,6 +24,8 @@ const nextConfig = {
     api_url: process.env.API_URL,
     token_address: process.env.TOKEN_ADDRESS,
     contract_factory_address: process.env.CONTRACT_FACTORY_ADDRESS,
+    blockchain_network_name: process.env.BLOCKCHAIN_NETWORK_NAME,
+    required_chain_id: process.env.REQUIRED_CHAIN_ID,
   },
 }
 

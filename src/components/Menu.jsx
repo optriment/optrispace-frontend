@@ -50,6 +50,7 @@ function AuthDetails() {
     tokenSymbol,
     contractFactory, // FIXME: Rename to contractFactoryContract
     isWalletReady,
+    blockchainNetworkName,
   } = useContext(Web3Context)
   const router = useRouter()
 
@@ -149,7 +150,7 @@ function AuthDetails() {
                   name="warning sign"
                   size="large"
                   color="red"
-                  title="Please connect your wallet to Binance Smart Chain – Testnet"
+                  title={`Please connect your wallet to ${blockchainNetworkName}`}
                 />
               )}
             </>
