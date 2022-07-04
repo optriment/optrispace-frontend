@@ -2,7 +2,7 @@ import React from 'react'
 import getConfig from 'next/config'
 import Link from 'next/link'
 
-import { Divider, Button, Header } from 'semantic-ui-react'
+import { Grid, Divider, Button, Header } from 'semantic-ui-react'
 
 import useSWR from 'swr'
 import { fetcher } from '../../lib/fetcher'
@@ -30,11 +30,27 @@ const JobsPage = () => {
 
   return (
     <>
-      <Header as="h1">Jobs</Header>
+      <Grid>
+        <Grid.Row verticalAlign="middle">
+          <Grid.Column width={13}>
+            <Header as="h1">Jobs</Header>
+          </Grid.Column>
 
-      <Link href="/jobs/new" passHref>
-        <Button primary>New Project</Button>
-      </Link>
+          {person && (
+            <Grid.Column width={3} textAlign="right">
+              <Link href="/jobs/new" passHref>
+                <Button
+                  primary
+                  floated="right"
+                  labelPosition="left"
+                  icon="add circle"
+                  content="New Job"
+                />
+              </Link>
+            </Grid.Column>
+          )}
+        </Grid.Row>
+      </Grid>
 
       <Divider hidden />
 
@@ -50,8 +66,7 @@ const JobsPage = () => {
 JobsPage.getLayout = (page) => (
   <Layout
     meta={{
-      title: 'Jobs | Optrispace',
-      description: 'Welcome to Optrispace',
+      title: 'Jobs | OptriSpace',
     }}
   >
     {page}

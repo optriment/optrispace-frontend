@@ -3,6 +3,9 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import {
+  Segment,
+  Grid,
+  Header,
   Button,
   Form,
   Icon,
@@ -46,6 +49,7 @@ export default function NewContractForm({ job, token, application }) {
 
   const handleCreateContract = async (e) => {
     e.preventDefault()
+    setError(null)
 
     try {
       const contract = await createContract(token, {
@@ -95,9 +99,33 @@ export default function NewContractForm({ job, token, application }) {
     return <JustOneSecond />
   }
 
+  if (error) {
+    return <ErrorWrapper header="Error occured" error={error} />
+  }
+
   return (
     <>
-      {error && <ErrorWrapper header="Error occured" error={error} />}
+      <Grid>
+        <Grid.Row verticalAlign="middle">
+          <Grid.Column width={12}>
+            <Header as="h1">Add New Contract</Header>
+          </Grid.Column>
+
+          <Grid.Column width={4} textAlign="right">
+            <Button
+              primary
+              type="submit"
+              labelPosition="left"
+              icon="send"
+              content="Submit for Review"
+              disabled={isLoadingWeb3 || !formFilled}
+              onClick={(e) => handleCreateContract(e)}
+            />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+
+      <Divider hidden />
 
       {!hideNotice && (
         <Message onDismiss={() => setHideNotice(true)}>
@@ -110,58 +138,47 @@ export default function NewContractForm({ job, token, application }) {
         </Message>
       )}
 
-      <Form>
-        <Form.Input
-          id="title"
-          label="Title"
-          placeholder=""
-          value={fields.title}
-          onChange={handleInputChange}
-          required
-        />
-
-        <Form.Input
-          control={TextArea}
-          id="description"
-          label="Description"
-          placeholder=""
-          rows={10}
-          value={fields.description}
-          onChange={handleInputChange}
-          required
-        />
-
-        <Form.Group>
+      <Segment secondary padded>
+        <Form>
           <Form.Input
-            id="price"
-            label={`Price (${tokenSymbol})`}
+            id="title"
+            label="Title"
             placeholder=""
-            value={fields.price}
+            value={fields.title}
             onChange={handleInputChange}
             required
-            width={3}
           />
-        </Form.Group>
 
-        <Divider hidden />
+          <Form.Input
+            control={TextArea}
+            id="description"
+            label="Description"
+            placeholder=""
+            rows={15}
+            value={fields.description}
+            onChange={handleInputChange}
+            required
+          />
 
-        <Form.Checkbox
-          label="I agree to the Terms and Conditions"
-          checked={agreedTo}
-          onClick={() => setAgreedTo(!agreedTo)}
-        />
+          <Form.Group>
+            <Form.Input
+              id="price"
+              label={`Price (${tokenSymbol})`}
+              placeholder=""
+              value={fields.price}
+              onChange={handleInputChange}
+              required
+              width={3}
+            />
+          </Form.Group>
 
-        <Divider hidden />
-
-        <Button
-          primary
-          type="submit"
-          disabled={isLoadingWeb3 || !formFilled}
-          onClick={(e) => handleCreateContract(e)}
-        >
-          Submit
-        </Button>
-      </Form>
+          <Form.Checkbox
+            label="I agree to the Terms and Conditions"
+            checked={agreedTo}
+            onClick={() => setAgreedTo(!agreedTo)}
+          />
+        </Form>
+      </Segment>
     </>
   )
 }

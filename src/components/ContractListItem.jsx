@@ -1,8 +1,11 @@
 import React from 'react'
-import { Card, List } from 'semantic-ui-react'
+import { Button, Card, List } from 'semantic-ui-react'
 import Link from 'next/link'
+import { formatDateTime } from '../lib/formatDate'
 
 export default function ContractListItem({ person, contract }) {
+  const formattedDate = formatDateTime(contract.created_at)
+
   let statusIcon = 'hourglass'
 
   switch (contract.status) {
@@ -30,9 +33,35 @@ export default function ContractListItem({ person, contract }) {
         </Card.Header>
 
         <Card.Description>
-          {contract.description.split('\n').map((str, idx) => (
-            <p key={idx}>{str}</p>
-          ))}
+          <div style={{ textAlign: 'justify' }}>
+            {contract.description.split('\n').map((str, idx) => {
+              if (idx === 5) {
+                return (
+                  <p key={idx}>
+                    <br />
+                    <Link
+                      href="/contracts/[id]"
+                      as={`/contracts/${contract.id}`}
+                    >
+                      <a>
+                        <Button size="tiny">Read more</Button>
+                      </a>
+                    </Link>
+                  </p>
+                )
+              }
+
+              if (idx < 5) {
+                return (
+                  <div key={idx}>
+                    {str}
+
+                    <br />
+                  </div>
+                )
+              }
+            })}
+          </div>
         </Card.Description>
       </Card.Content>
 
@@ -61,7 +90,14 @@ export default function ContractListItem({ person, contract }) {
           <List.Item>
             <List.Content>
               <List.Header>
-                <List.Icon name="money" /> {contract.price}
+                <List.Icon name="money" /> {contract.price} ALZ
+              </List.Header>
+            </List.Content>
+          </List.Item>
+          <List.Item>
+            <List.Content>
+              <List.Header>
+                <List.Icon name="time" /> {formattedDate}
               </List.Header>
             </List.Content>
           </List.Item>

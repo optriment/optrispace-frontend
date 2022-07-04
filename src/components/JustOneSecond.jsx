@@ -17,7 +17,7 @@ export function JustOneSecondBlockchain({ message }) {
     <Message icon>
       <Icon name="circle notched" loading />
       <Message.Content>
-        <Message.Header>Just one second</Message.Header>
+        <Message.Header>Just one moment</Message.Header>
 
         {message ? (
           <p>{message}</p>

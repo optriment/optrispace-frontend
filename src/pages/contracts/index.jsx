@@ -1,7 +1,7 @@
 import React from 'react'
 import getConfig from 'next/config'
 
-import { Header } from 'semantic-ui-react'
+import { Grid, Divider, Header } from 'semantic-ui-react'
 
 import useSWR from 'swr'
 import { fetchWithToken } from '../../lib/fetcher'
@@ -36,7 +36,15 @@ const ContractsPage = () => {
 
   return (
     <>
-      <Header as="h1">Contracts</Header>
+      <Grid>
+        <Grid.Row verticalAlign="middle">
+          <Grid.Column>
+            <Header as="h1">Contracts</Header>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+
+      <Divider hidden />
 
       {error && (
         <ErrorWrapper header="Failed to load contracts" error={error} />
@@ -54,8 +62,7 @@ ContractsPage.requiresAuth = true
 ContractsPage.getLayout = (page) => (
   <Layout
     meta={{
-      title: 'Contracts | Optrispace',
-      description: 'Welcome to Optrispace',
+      title: 'Contracts | OptriSpace',
     }}
   >
     {page}

@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
-
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
-
 import { Tab } from 'semantic-ui-react'
-
 import ErrorWrapper from '../ErrorWrapper'
 import useSWR from 'swr'
 import { fetchWithToken } from '../../lib/fetcher'

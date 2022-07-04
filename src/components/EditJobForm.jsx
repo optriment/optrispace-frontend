@@ -1,7 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Form, Message, TextArea } from 'semantic-ui-react'
+import {
+  Grid,
+  Segment,
+  Header,
+  Divider,
+  Button,
+  Form,
+  TextArea,
+} from 'semantic-ui-react'
 import { updateJob } from '../lib/api'
+import ErrorWrapper from './ErrorWrapper'
+import { isEmptyString } from '../lib/validators'
 
 export default function EditJobForm({ job, token }) {
   const router = useRouter()
@@ -12,75 +22,105 @@ export default function EditJobForm({ job, token }) {
     budget: job.budget,
   }
   const [fields, setFields] = useState(initialFields)
-  const [errors, setErrors] = useState(undefined)
+  const [error, setError] = useState(undefined)
+  const [formFilled, setFormFilled] = useState(false)
 
-  const handleEditJob = (e) => {
-    e.preventDefault()
+  const handleEditJob = () => {
+    setError(null)
 
-    updateJob(token, job.id, { ...fields })
-      .then((job) => {
-        if (!job.id) {
-          setErrors(job.message)
+    try {
+      updateJob(token, job.id, { ...fields })
+        .then((result) => {
+          if (!result.id) {
+            setError(result.message)
 
-          return
-        }
+            return
+          }
 
-        router.push(`/jobs/${job.id}`)
-      })
-      .catch((err) => {
-        throw err
-      })
+          router.push(`/jobs/${result.id}`)
+        })
+        .catch((err) => {
+          console.error({ err })
+
+          setError(err)
+        })
+    } catch (err) {
+      console.error({ err })
+
+      setError(err.message)
+    }
   }
 
   const handleInputChange = (e) => {
     setFields({ ...fields, ...{ [e.target.id]: e.target.value } })
   }
 
+  useEffect(() => {
+    setFormFilled(
+      !isEmptyString(fields.title) &&
+        !isEmptyString(fields.description) &&
+        !isEmptyString(fields.budget)
+    )
+  }, [fields])
+
   return (
     <>
-      {errors && (
-        <Message
-          error
-          header="Errors occured"
-          list={Array.isArray(errors) ? errors : [errors]}
-        />
-      )}
+      <Grid>
+        <Grid.Row verticalAlign="middle">
+          <Grid.Column width={13}>
+            <Header as="h1">Edit Job</Header>
+          </Grid.Column>
 
-      <Form onSubmit={handleEditJob}>
-        <Form.Input
-          id="title"
-          label="Job Title"
-          placeholder=""
-          value={fields.title}
-          onChange={handleInputChange}
-          required
-        />
+          <Grid.Column width={3} textAlign="right">
+            <Button
+              content="Save"
+              labelPosition="left"
+              icon="check"
+              primary
+              onClick={handleEditJob}
+              disabled={!formFilled}
+            />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
 
-        <Form.Input
-          control={TextArea}
-          id="description"
-          label="Job Description"
-          placeholder=""
-          rows={10}
-          value={fields.description}
-          onChange={handleInputChange}
-          required
-        />
+      <Divider hidden />
 
-        <Form.Input
-          id="budget"
-          label="Approx. budget"
-          placeholder=""
-          value={fields.budget}
-          onChange={handleInputChange}
-          required
-          width={3}
-        />
+      {error && <ErrorWrapper header="Unable to update job" error={error} />}
 
-        <Button primary type="submit">
-          Save
-        </Button>
-      </Form>
+      <Segment secondary padded>
+        <Form>
+          <Form.Input
+            id="title"
+            label="Title"
+            placeholder=""
+            value={fields.title}
+            onChange={handleInputChange}
+            required
+          />
+
+          <Form.Input
+            control={TextArea}
+            id="description"
+            label="Description"
+            placeholder=""
+            rows={15}
+            value={fields.description}
+            onChange={handleInputChange}
+            required
+          />
+
+          <Form.Input
+            id="budget"
+            label="Approx. budget (ALZ)"
+            placeholder=""
+            value={fields.budget}
+            onChange={handleInputChange}
+            required
+            width={3}
+          />
+        </Form>
+      </Segment>
     </>
   )
 }

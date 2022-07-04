@@ -18,8 +18,7 @@ const SignInPage = () => (
 SignInPage.getLayout = (page) => (
   <Layout
     meta={{
-      title: 'Sign In | Optrispace',
-      description: 'Welcome to Optrispace',
+      title: 'Sign In | OptriSpace',
     }}
   >
     {page}

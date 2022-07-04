@@ -2,7 +2,11 @@ import React from 'react'
 import { Segment, Header } from 'semantic-ui-react'
 import { formatDateTime } from '../../lib/formatDate'
 
-export default function Sidebar({ contract, tokenSymbol }) {
+export default function Sidebar({
+  contract,
+  tokenSymbol,
+  blockchainViewAddressURL,
+}) {
   return (
     <Segment.Group>
       <Segment>
@@ -16,16 +20,18 @@ export default function Sidebar({ contract, tokenSymbol }) {
       <Segment>
         <Header as="h3">Contract Blockchain Address</Header>
 
-        {contract.contract_address && (
+        {contract.contract_address ? (
           <p>
             <a
-              href={`https://testnet.bscscan.com/address/${contract.contract_address}`}
+              href={`${blockchainViewAddressURL}/${contract.contract_address}`}
               target="_blank"
               rel="noreferrer"
             >
               {contract.contract_address}
             </a>
           </p>
+        ) : (
+          <p>Not deployed yet</p>
         )}
       </Segment>
 
@@ -35,7 +41,7 @@ export default function Sidebar({ contract, tokenSymbol }) {
         {contract.customer_address && (
           <p>
             <a
-              href={`https://testnet.bscscan.com/address/${contract.customer_address}`}
+              href={`${blockchainViewAddressURL}/${contract.customer_address}`}
               target="_blank"
               rel="noreferrer"
             >
@@ -51,7 +57,7 @@ export default function Sidebar({ contract, tokenSymbol }) {
         {contract.performer_address && (
           <p>
             <a
-              href={`https://testnet.bscscan.com/address/${contract.performer_address}`}
+              href={`${blockchainViewAddressURL}/${contract.performer_address}`}
               target="_blank"
               rel="noreferrer"
             >
