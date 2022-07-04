@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import {
   Loader,
@@ -12,15 +13,18 @@ import ClientOnly from './ClientOnly'
 import { useAuth } from '../hooks'
 import { useRouter } from 'next/router'
 import Web3Context from '../context/web3-context'
+import Logo from '../../public/optrispace.svg'
 
 const MenuComponent = () => {
   const router = useRouter()
 
   return (
-    <Menu style={{ marginTop: '10px' }}>
-      <Menu.Item active={router.pathname == '/'}>
-        <Link href="/">
-          <a>OPTRISPACE</a>
+    <Menu secondary borderless size="large" style={{ marginTop: '10px' }}>
+      <Menu.Item>
+        <Link href="/" passHref>
+          <a>
+            <Image src={Logo} alt="OptriSpace" width="100" height="42" />
+          </a>
         </Link>
       </Menu.Item>
 
@@ -142,7 +146,9 @@ function AuthDetails() {
                       )}
                     </>
                   ) : (
-                    <Button onClick={connectWallet}>Connect Wallet</Button>
+                    <Button color="orange" inverted onClick={connectWallet}>
+                      Connect Wallet
+                    </Button>
                   )}
                 </>
               ) : (
@@ -156,7 +162,9 @@ function AuthDetails() {
             </>
           ) : (
             <a href="https://metamask.io/" target="_blank" rel="noreferrer">
-              Install Wallet
+              <Button color="orange" inverted>
+                Install Wallet
+              </Button>
             </a>
           )}
         </Menu.Item>

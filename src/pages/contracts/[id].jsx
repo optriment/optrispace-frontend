@@ -1,6 +1,5 @@
 import React from 'react'
 import getConfig from 'next/config'
-import { Header } from 'semantic-ui-react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 
@@ -38,8 +37,6 @@ const ContractPage = () => {
 
   return (
     <>
-      <Header as="h1">Contract</Header>
-
       {error && <ErrorWrapper header="Failed to load contract" error={error} />}
 
       {isLoading && <JustOneSecond />}
@@ -56,8 +53,7 @@ ContractPage.requiresAuth = true
 ContractPage.getLayout = (page) => (
   <Layout
     meta={{
-      title: 'Contract | Optrispace',
-      description: 'Welcome to Optrispace',
+      title: 'Contract | OptriSpace',
     }}
   >
     {page}

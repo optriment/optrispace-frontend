@@ -1,20 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import useSWR from 'swr'
 import { fetchWithToken } from '../../lib/fetcher'
 import getConfig from 'next/config'
-import {
-  Button,
-  Input,
-  Form,
-  Message,
-  Header,
-  TextArea,
-} from 'semantic-ui-react'
+import { Button, Input, Form, Header, TextArea } from 'semantic-ui-react'
 import { useRouter } from 'next/router'
 import JustOneSecond from '../JustOneSecond'
 import { useAuth } from '../../hooks'
 import { createApplication } from '../../lib/api'
+import ErrorWrapper from '../ErrorWrapper'
 
 const useApplications = () => {
   const { publicRuntimeConfig } = getConfig()
@@ -52,85 +46,102 @@ const ApplicationForm = ({ job }) => {
     price: '',
   }
 
+  const [application, setApplication] = useState(null)
   const [fields, setFields] = useState(initialFields)
-  const [errors, setErrors] = useState(undefined)
+  const [error, setError] = useState(undefined)
 
   const handleCreateApplication = (e) => {
     e.preventDefault()
+    setError(null)
 
-    createApplication(token, job.id, { ...fields })
-      .then((application) => {
-        if (!application.id) {
-          setErrors(application.message)
+    try {
+      createApplication(token, job.id, { ...fields })
+        .then((result) => {
+          if (!result.id) {
+            setError(result.message)
 
-          return
-        }
+            return
+          }
 
-        router.reload()
-      })
-      .catch((err) => {
-        throw err
-      })
+          router.reload()
+        })
+        .catch((err) => {
+          console.error({ err })
+
+          setError(err)
+        })
+    } catch (err) {
+      console.error({ err })
+
+      setError(err.message)
+    }
   }
 
   const handleInputChange = (e) => {
     setFields({ ...fields, ...{ [e.target.id]: e.target.value } })
   }
 
-  const application =
-    applications && applications.length === 1 && applications[0]
+  useEffect(() => {
+    if (isLoading) return
+    if (applications.length === 0) return
+
+    setApplication(applications[0])
+    setFields({
+      comment: applications[0].comment,
+      price: applications[0].price,
+    })
+  }, [isLoading, applications])
+
+  if (applicationLoadingError) {
+    return (
+      <ErrorWrapper
+        header="Unable to load job applications"
+        error={applicationLoadingError}
+      />
+    )
+  }
+
+  if (isLoading) {
+    return <JustOneSecond />
+  }
 
   return (
     <>
-      {applicationLoadingError && (
-        <Message error header="Unable to load job applications" />
-      )}
-
-      {isLoading && <JustOneSecond />}
-
       {application ? (
-        <Message>
-          <Message.Header>
-            Your application with a price of {application.price} has been
-            successfully published.
-          </Message.Header>
-          <p>{application.comment}</p>
-        </Message>
+        <Header as="h3">Your reply has been published</Header>
       ) : (
-        <>
-          <Header as="h3">Apply to this job</Header>
-
-          {errors && (
-            <Message
-              error
-              header="Errors occured"
-              list={Array.isArray(errors) ? errors : [errors]}
-            />
-          )}
-          <Form reply onSubmit={handleCreateApplication}>
-            <Form.Field
-              id="comment"
-              control={TextArea}
-              label="Leave a comment for the customer"
-              rows={5}
-              value={fields.comment}
-              onChange={handleInputChange}
-              required
-            />
-
-            <Form.Field
-              id="price"
-              control={Input}
-              label="The price of your services for this job"
-              value={fields.price}
-              onChange={handleInputChange}
-              required
-            />
-
-            <Button content="Submit" labelPosition="left" icon="edit" primary />
-          </Form>
-        </>
+        <Header as="h3">Leave a Reply</Header>
       )}
+
+      {error && (
+        <ErrorWrapper header="Unable to post an application" error={error} />
+      )}
+
+      <Form reply onSubmit={handleCreateApplication}>
+        <Form.Field
+          id="comment"
+          control={TextArea}
+          label="Comment for the customer"
+          rows={5}
+          required
+          value={fields.comment}
+          onChange={handleInputChange}
+          readOnly={application !== null}
+        />
+
+        <Form.Field
+          id="price"
+          control={Input}
+          label="The price of your services for this job (ALZ)"
+          value={fields.price}
+          onChange={handleInputChange}
+          required
+          width={5}
+          readOnly={application !== null}
+        />
+
+        <Button content="Publish" primary disabled={application !== null} />
+      </Form>
     </>
   )
 }

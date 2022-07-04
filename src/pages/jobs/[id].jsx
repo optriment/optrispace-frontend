@@ -1,6 +1,5 @@
 import React from 'react'
 import getConfig from 'next/config'
-import { Header } from 'semantic-ui-react'
 import { useRouter } from 'next/router'
 
 import useSWR from 'swr'
@@ -31,8 +30,6 @@ const JobPage = () => {
 
   return (
     <>
-      <Header as="h1">Job</Header>
-
       {error && <ErrorWrapper header="Failed to load job" error={error} />}
 
       {isLoading && <JustOneSecond />}
@@ -45,8 +42,7 @@ const JobPage = () => {
 JobPage.getLayout = (page) => (
   <Layout
     meta={{
-      title: 'Job Card | Optrispace',
-      description: 'Welcome to Optrispace',
+      title: 'Job Card | OptriSpace',
     }}
   >
     {page}

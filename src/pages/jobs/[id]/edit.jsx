@@ -1,6 +1,5 @@
 import React from 'react'
 import getConfig from 'next/config'
-import { Header } from 'semantic-ui-react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { fetcher } from '../../../lib/fetcher'
@@ -32,8 +31,6 @@ const EditJobPage = () => {
 
   return (
     <>
-      <Header as="h1">Edit Job</Header>
-
       {error && <ErrorWrapper header="Failed to load job" error={error} />}
 
       {isLoading && <JustOneSecond />}
@@ -56,8 +53,7 @@ EditJobPage.requiresAuth = true
 EditJobPage.getLayout = (page) => (
   <Layout
     meta={{
-      title: 'Edit Job | Optrispace',
-      description: 'Welcome to Optrispace',
+      title: 'Edit Job | OptriSpace',
     }}
   >
     {page}

@@ -12,18 +12,25 @@ const Layout = ({ children, meta = {} }) => {
   return (
     <>
       <Head>
-        <title>{title || 'Optrispace'}</title>
-        <meta name="description" content={description || 'Optrispace'} />
+        <title>{title || 'OptriSpace'}</title>
+        <meta
+          name="description"
+          content={
+            description ||
+            'OptriSpace brings together digital and IT experts, founders, freelancers, stakeholders and enthusiasts ' +
+              'and provides a decentralized platform for collaboration and services exchange'
+          }
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/favicon.png"></link>
       </Head>
 
       <Container>
         <Header />
 
-        <Segment basic vertical padded>
-          <Grid container verticalAlign="top">
-            <Grid.Row>
-              <Grid.Column>{children}</Grid.Column>
-            </Grid.Row>
+        <Segment basic padded>
+          <Grid stackable verticalAlign="top">
+            <Grid.Column>{children}</Grid.Column>
           </Grid>
         </Segment>
 

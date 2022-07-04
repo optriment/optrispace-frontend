@@ -1,10 +1,17 @@
 import React, { useState, useContext } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Container, Grid, Segment, Step } from 'semantic-ui-react'
+import {
+  Divider,
+  Header,
+  Button,
+  Container,
+  Grid,
+  Segment,
+  Step,
+} from 'semantic-ui-react'
 import { acceptContract, completeContract, sendContract } from '../../lib/api'
 import ErrorWrapper from '../ErrorWrapper'
 
-import TitleDescription from './TitleDescription'
 import Sidebar from './Sidebar'
 
 import Web3Context from '../../context/web3-context'
@@ -27,6 +34,7 @@ export default function ContractCardForPerformer({ contract, token }) {
     tokenDecimals,
     tokenSymbol,
     isWalletReady,
+    blockchainViewAddressURL,
   } = useContext(Web3Context)
 
   const [error, setError] = useState(undefined)
@@ -135,111 +143,97 @@ export default function ContractCardForPerformer({ contract, token }) {
           <ConnectWallet connectWallet={connectWallet} />
         )}
 
-      <Segment basic>
-        <Step.Group ordered width={5} fluid>
-          <Step completed>
-            <Step.Content>
-              <Step.Title>
-                {currentStep > statuses['created'] ? 'Created' : 'Create'}
-              </Step.Title>
-              <Step.Description>Customer</Step.Description>
-            </Step.Content>
-          </Step>
+      <Step.Group ordered width={5} fluid>
+        <Step completed>
+          <Step.Content>
+            <Step.Title>
+              {currentStep > statuses['created'] ? 'Created' : 'Create'}
+            </Step.Title>
+            <Step.Description>Customer</Step.Description>
+          </Step.Content>
+        </Step>
 
-          <Step
-            active={contract.status === 'created'}
-            completed={currentStep > statuses['accepted']}
-            disabled={currentStep < statuses['accepted']}
-          >
-            <Step.Content>
-              <Step.Title>
-                {currentStep > statuses['accepted'] ? 'Accepted' : 'Accept'}
-              </Step.Title>
-              <Step.Description>Me</Step.Description>
-            </Step.Content>
-          </Step>
+        <Step
+          active={contract.status === 'created'}
+          completed={currentStep > statuses['accepted']}
+          disabled={currentStep < statuses['accepted']}
+        >
+          <Step.Content>
+            <Step.Title>
+              {currentStep > statuses['accepted'] ? 'Accepted' : 'Accept'}
+            </Step.Title>
+            <Step.Description>Me</Step.Description>
+          </Step.Content>
+        </Step>
 
-          <Step
-            active={contract.status === 'accepted'}
-            completed={currentStep > statuses['deployed']}
-            disabled={currentStep < statuses['deployed']}
-          >
-            <Step.Content>
-              <Step.Title>
-                {currentStep > statuses['deployed'] ? 'Funded' : 'Fund'}
-              </Step.Title>
-              <Step.Description>Customer</Step.Description>
-            </Step.Content>
-          </Step>
+        <Step
+          active={contract.status === 'accepted'}
+          completed={currentStep > statuses['deployed']}
+          disabled={currentStep < statuses['deployed']}
+        >
+          <Step.Content>
+            <Step.Title>
+              {currentStep > statuses['deployed'] ? 'Funded' : 'Fund'}
+            </Step.Title>
+            <Step.Description>Customer</Step.Description>
+          </Step.Content>
+        </Step>
 
-          <Step
-            active={contract.status === 'deployed'}
-            completed={currentStep > statuses['sent']}
-            disabled={currentStep < statuses['sent']}
-          >
-            <Step.Content>
-              <Step.Title>
-                {currentStep > statuses['sent']
-                  ? 'Review Requested'
-                  : 'In Progress'}
-              </Step.Title>
-              <Step.Description>Me</Step.Description>
-            </Step.Content>
-          </Step>
+        <Step
+          active={contract.status === 'deployed'}
+          completed={currentStep > statuses['sent']}
+          disabled={currentStep < statuses['sent']}
+        >
+          <Step.Content>
+            <Step.Title>
+              {currentStep > statuses['sent']
+                ? 'Review Requested'
+                : 'In Progress'}
+            </Step.Title>
+            <Step.Description>Me</Step.Description>
+          </Step.Content>
+        </Step>
 
-          <Step
-            active={contract.status === 'sent'}
-            completed={currentStep > statuses['approved']}
-            disabled={currentStep < statuses['approved']}
-          >
-            <Step.Content>
-              <Step.Title>
-                {currentStep > statuses['approved'] ? 'Approved' : 'Review'}
-              </Step.Title>
-              <Step.Description>Customer</Step.Description>
-            </Step.Content>
-          </Step>
-        </Step.Group>
-      </Segment>
+        <Step
+          active={contract.status === 'sent'}
+          completed={currentStep > statuses['approved']}
+          disabled={currentStep < statuses['approved']}
+        >
+          <Step.Content>
+            <Step.Title>
+              {currentStep > statuses['approved'] ? 'Approved' : 'Review'}
+            </Step.Title>
+            <Step.Description>Customer</Step.Description>
+          </Step.Content>
+        </Step>
+      </Step.Group>
 
-      <Grid container stackable verticalAlign="top">
-        <Grid.Row>
-          <Grid.Column>
-            {error && (
-              <ErrorWrapper header="Failed to perform action" error={error} />
-            )}
-          </Grid.Column>
-        </Grid.Row>
+      <Divider hidden />
 
-        <Grid.Row>
+      <Grid padded="vertically">
+        <Grid.Row verticalAlign="middle">
           <Grid.Column width={10}>
-            <TitleDescription job={contract} />
+            <Header as="h2">{contract.title}</Header>
           </Grid.Column>
 
-          <Grid.Column width={6}>
-            {contract.status === 'created' && (
-              <>
-                {isLoadingWeb3 ? (
-                  <JustOneSecondBlockchain />
-                ) : (
-                  <Container textAlign="right">
-                    <Button
-                      primary
-                      content="Accept contract"
-                      labelPosition="left"
-                      icon="check"
-                      disabled={!walletReady}
-                      onClick={accept}
-                    />
-                  </Container>
-                )}
-              </>
+          <Grid.Column width={6} textAlign="right">
+            {contract.status === 'created' && !isLoadingWeb3 && !txLoading && (
+              <Container textAlign="right">
+                <Button
+                  primary
+                  content="Accept contract"
+                  labelPosition="left"
+                  icon="handshake"
+                  disabled={!walletReady}
+                  onClick={accept}
+                />
+              </Container>
             )}
 
             {contract.status === 'deployed' && (
               <Container textAlign="right">
                 <a
-                  href={`https://testnet.bscscan.com/address/${contract.contract_address}`}
+                  href={`${blockchainViewAddressURL}/${contract.contract_address}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -256,28 +250,56 @@ export default function ContractCardForPerformer({ contract, token }) {
               </Container>
             )}
 
-            {contract.status === 'approved' && (
-              <>
-                {isLoadingWeb3 || txLoading ? (
-                  <JustOneSecondBlockchain
-                    message={txStatus !== '' && txStatus}
-                  />
-                ) : (
-                  <Container textAlign="right">
-                    <Button
-                      primary
-                      content="Request Money"
-                      labelPosition="left"
-                      icon="money"
-                      disabled={!walletReady}
-                      onClick={requestMoney}
-                    />
-                  </Container>
-                )}
-              </>
+            {contract.status === 'approved' && !isLoadingWeb3 && !txLoading && (
+              <Container textAlign="right">
+                <Button
+                  primary
+                  content="Request Money"
+                  labelPosition="left"
+                  icon="money"
+                  disabled={!walletReady}
+                  onClick={requestMoney}
+                />
+              </Container>
             )}
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
 
-            <Sidebar contract={contract} tokenSymbol={tokenSymbol} />
+      {(isLoadingWeb3 || txLoading) && (
+        <JustOneSecondBlockchain message={txStatus !== '' && txStatus} />
+      )}
+
+      <Grid stackable verticalAlign="top">
+        {error && (
+          <Grid.Row>
+            <Grid.Column>
+              <ErrorWrapper header="Failed to perform action" error={error} />
+            </Grid.Column>
+          </Grid.Row>
+        )}
+
+        <Grid.Row>
+          <Grid.Column width={10}>
+            <Segment>
+              <Container text fluid textAlign="justified">
+                {contract.description.split('\n').map((str, idx) => (
+                  <div key={idx}>
+                    {str}
+
+                    <br />
+                  </div>
+                ))}
+              </Container>
+            </Segment>
+          </Grid.Column>
+
+          <Grid.Column width={6}>
+            <Sidebar
+              contract={contract}
+              tokenSymbol={tokenSymbol}
+              blockchainViewAddressURL={blockchainViewAddressURL}
+            />
           </Grid.Column>
         </Grid.Row>
       </Grid>

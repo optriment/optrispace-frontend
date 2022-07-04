@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Label, Item } from 'semantic-ui-react'
+import { Button, Item } from 'semantic-ui-react'
 import Link from 'next/link'
 
 export default function ApplicationListItem({ job, application }) {
@@ -9,7 +9,8 @@ export default function ApplicationListItem({ job, application }) {
     <Item>
       <Item.Image
         size="tiny"
-        src="https://react.semantic-ui.com/images/wireframe/image.png"
+        avatar
+        src="https://react.semantic-ui.com/images/avatar/large/justen.jpg"
       />
 
       <Item.Content>
@@ -19,7 +20,7 @@ export default function ApplicationListItem({ job, application }) {
             as={`/contracts/${contract.id}`}
             passHref
           >
-            <Button primary size="tiny" floated="right">
+            <Button primary floated="right">
               Open contract
             </Button>
           </Link>
@@ -31,16 +32,21 @@ export default function ApplicationListItem({ job, application }) {
             }}
             passHref
           >
-            <Button color="green" size="tiny" floated="right">
+            <Button color="green" floated="right">
               Make a job offer
             </Button>
           </Link>
         )}
+
         <Item.Header>{applicant?.display_name || applicant.login}</Item.Header>
+
+        <Item.Meta>
+          {application.price && (
+            <span className="price">{application.price} ALZ</span>
+          )}
+        </Item.Meta>
+
         <Item.Description>{application.comment}</Item.Description>
-        <Item.Extra>
-          {application.price && <Label>Price: {application.price} ALZ</Label>}
-        </Item.Extra>
       </Item.Content>
     </Item>
   )

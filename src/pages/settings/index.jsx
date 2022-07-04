@@ -23,8 +23,7 @@ SettingsPage.requiresAuth = true
 SettingsPage.getLayout = (page) => (
   <Layout
     meta={{
-      title: 'Settings | Optrispace',
-      description: 'My Description',
+      title: 'Settings | OptriSpace',
     }}
   >
     {page}

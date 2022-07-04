@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Label, Item } from 'semantic-ui-react'
+import { Tab, Menu, Label, Item } from 'semantic-ui-react'
 import ApplicationListItem from './ApplicationListItem'
 
 function ApplicationsGroup(job, label, applications, key) {
@@ -11,15 +11,17 @@ function ApplicationsGroup(job, label, applications, key) {
       </Menu.Item>
     ),
     render: () => (
-      <Item.Group relaxed>
-        {applications.map((application) => (
-          <ApplicationListItem
-            key={application.id}
-            job={job}
-            application={application}
-          />
-        ))}
-      </Item.Group>
+      <Tab.Pane>
+        <Item.Group relaxed>
+          {applications.map((application) => (
+            <ApplicationListItem
+              key={application.id}
+              job={job}
+              application={application}
+            />
+          ))}
+        </Item.Group>
+      </Tab.Pane>
     ),
   }
 }

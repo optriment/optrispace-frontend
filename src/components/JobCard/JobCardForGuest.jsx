@@ -1,37 +1,57 @@
 import React from 'react'
-
-import { Grid, Divider, Header } from 'semantic-ui-react'
-
+import { Grid, Segment, Header } from 'semantic-ui-react'
 import Link from 'next/link'
-import Statistics from './Statistics'
-import TitleDescription from './TitleDescription'
+import JobTitle from './JobTitle'
+import JobBudget from './JobBudget'
+import CustomerCard from './CustomerCard'
+import JobDescription from './JobDescription'
 
 export default function JobCardForGuest({ job }) {
   return (
-    <Grid container stackable verticalAlign="top">
+    <Grid padded stackable>
       <Grid.Row>
-        <Grid.Column width={10}>
-          <TitleDescription job={job} />
-        </Grid.Column>
-
-        <Grid.Column width={6}>
-          <Statistics job={job} />
+        <Grid.Column>
+          <Segment>
+            <Segment basic>
+              <JobTitle title={job.title} />
+              <JobBudget budget={job.budget} />
+            </Segment>
+          </Segment>
         </Grid.Column>
       </Grid.Row>
 
-      <Divider />
+      <Grid.Row>
+        <Grid.Column>
+          <Segment>
+            <Segment basic>
+              <CustomerCard customer={job.customer} />
+            </Segment>
+            <Segment basic>
+              <JobDescription description={job.description} />
+            </Segment>
+          </Segment>
+        </Grid.Column>
+      </Grid.Row>
 
       <Grid.Row>
         <Grid.Column>
-          <Header as="h3">Apply to this job</Header>
+          <Segment>
+            <Segment basic>
+              <Header as="h3">Leave a Reply</Header>
 
-          <p>
-            You need to be
-            <Link href="/sign_in" passHref>
-              <a> registered </a>
-            </Link>{' '}
-            to access the OptriSpace
-          </p>
+              <p>
+                Please
+                <Link href="/sign_up" passHref>
+                  <a> sign up </a>
+                </Link>
+                or
+                <Link href="/sign_in" passHref>
+                  <a> log in </a>
+                </Link>{' '}
+                to access the OptriSpace.
+              </p>
+            </Segment>
+          </Segment>
         </Grid.Column>
       </Grid.Row>
     </Grid>

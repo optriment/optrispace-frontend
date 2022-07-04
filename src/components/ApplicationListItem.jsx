@@ -1,10 +1,11 @@
 import React from 'react'
-import { Card, List } from 'semantic-ui-react'
+import { Button, Card, List } from 'semantic-ui-react'
 import Link from 'next/link'
 import { formatDateTime } from '../lib/formatDate'
-import { truncateString } from '../lib/helpers'
 
 export default function ApplicationListItem({ application }) {
+  const formattedDate = formatDateTime(application.created_at)
+
   return (
     <Card fluid>
       <Card.Content>
@@ -15,11 +16,32 @@ export default function ApplicationListItem({ application }) {
         </Card.Header>
 
         <Card.Description>
-          {truncateString(application.job.description, 300)
-            .split('\n')
-            .map((str, idx) => (
-              <p key={idx}>{str}</p>
-            ))}
+          <div style={{ textAlign: 'justify' }}>
+            {application.job.description.split('\n').map((str, idx) => {
+              if (idx === 5) {
+                return (
+                  <p key={idx}>
+                    <br />
+                    <Link href="/jobs/[id]" as={`/jobs/${application.job.id}`}>
+                      <a>
+                        <Button size="tiny">Read more</Button>
+                      </a>
+                    </Link>
+                  </p>
+                )
+              }
+
+              if (idx < 5) {
+                return (
+                  <div key={idx}>
+                    {str}
+
+                    <br />
+                  </div>
+                )
+              }
+            })}
+          </div>
         </Card.Description>
       </Card.Content>
 
@@ -28,7 +50,7 @@ export default function ApplicationListItem({ application }) {
           <List.Item>
             <List.Content>
               <List.Header>
-                <List.Icon name="money" /> {application.price}
+                <List.Icon name="money" /> {application.price} ALZ
               </List.Header>
             </List.Content>
           </List.Item>
@@ -36,8 +58,7 @@ export default function ApplicationListItem({ application }) {
           <List.Item>
             <List.Content>
               <List.Header>
-                <List.Icon name="time" title="Creation date" />{' '}
-                {formatDateTime(application.created_at)}
+                <List.Icon name="clock" title="Created at" /> {formattedDate}
               </List.Header>
             </List.Content>
           </List.Item>

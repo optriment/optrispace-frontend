@@ -16,6 +16,8 @@ export const Web3Provider = ({ children }) => {
 
   const requiredChainId = publicRuntimeConfig.required_chain_id
   const blockchainNetworkName = publicRuntimeConfig.blockchain_network_name
+  const blockchainViewAddressURL =
+    publicRuntimeConfig.blockchain_view_address_url
 
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -109,7 +111,7 @@ export const Web3Provider = ({ children }) => {
     }
 
     perform()
-  }, [wallet])
+  }, [wallet, requiredChainId])
 
   // Set web3 provider
   useEffect(() => {
@@ -192,6 +194,7 @@ export const Web3Provider = ({ children }) => {
 
         requiredChainId,
         blockchainNetworkName,
+        blockchainViewAddressURL,
 
         isWalletInstalled,
         isWalletConnected,

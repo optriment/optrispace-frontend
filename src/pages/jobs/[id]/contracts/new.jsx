@@ -1,7 +1,5 @@
 import React from 'react'
 import getConfig from 'next/config'
-import { Header } from 'semantic-ui-react'
-
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import isJobOwner from '../../../../lib/job'
@@ -55,43 +53,33 @@ const NewContractPage = () => {
     error: applicationError,
   } = useApplication()
 
+  if (error) {
+    return <ErrorWrapper header="Failed to load job" error={error} />
+  }
+
+  if (applicationError) {
+    return (
+      <ErrorWrapper
+        header="Failed to load application"
+        error={applicationError}
+      />
+    )
+  }
+
+  if (isLoading || isApplicationLoading) {
+    return <JustOneSecond />
+  }
+
+  if (!isJobOwner(job, person)) {
+    return <ErrorWrapper header="You don't have access to this action" />
+  }
+
   return (
     <>
-      <Header as="h1">Add New Contract</Header>
-
-      {error && <ErrorWrapper header="Failed to load job" error={error} />}
-
-      {isLoading && <JustOneSecond />}
-
-      {job && (
-        <>
-          {!isJobOwner(job, person) && (
-            <ErrorWrapper header="You don't have access to this action" />
-          )}
-
-          {applicationError && (
-            <ErrorWrapper
-              header="Failed to load application"
-              error={applicationError}
-            />
-          )}
-
-          {isApplicationLoading && <JustOneSecond />}
-
-          {application && (
-            <>
-              {application.job.id !== job.id ? (
-                <ErrorWrapper header="You don't have access to this action" />
-              ) : (
-                <NewContractForm
-                  job={job}
-                  token={token}
-                  application={application}
-                />
-              )}
-            </>
-          )}
-        </>
+      {application.job.id !== job.id ? (
+        <ErrorWrapper header="You don't have access to this action" />
+      ) : (
+        <NewContractForm job={job} token={token} application={application} />
       )}
     </>
   )
@@ -102,8 +90,7 @@ NewContractPage.requiresAuth = true
 NewContractPage.getLayout = (page) => (
   <Layout
     meta={{
-      title: 'New Contract | Optrispace',
-      description: 'Welcome to Optrispace',
+      title: 'New Contract | OptriSpace',
     }}
   >
     {page}

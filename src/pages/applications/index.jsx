@@ -1,7 +1,7 @@
 import React from 'react'
 import getConfig from 'next/config'
 
-import { Header } from 'semantic-ui-react'
+import { Grid, Divider, Header } from 'semantic-ui-react'
 
 import useSWR from 'swr'
 import { fetchWithToken } from '../../lib/fetcher'
@@ -37,7 +37,15 @@ const ApplicationsPage = () => {
 
   return (
     <>
-      <Header as="h1">Applications</Header>
+      <Grid>
+        <Grid.Row verticalAlign="middle">
+          <Grid.Column>
+            <Header as="h1">Applications</Header>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+
+      <Divider hidden />
 
       {error && (
         <ErrorWrapper header="Failed to load applications" error={error} />
@@ -57,8 +65,7 @@ ApplicationsPage.requiresAuth = true
 ApplicationsPage.getLayout = (page) => (
   <Layout
     meta={{
-      title: 'Applications | Optrispace',
-      description: 'Welcome to Optrispace',
+      title: 'Applications | OptriSpace',
     }}
   >
     {page}
