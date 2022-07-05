@@ -18,7 +18,7 @@ export default function Sidebar({
       </Segment>
 
       <Segment>
-        <Header as="h3">Contract Blockchain Address</Header>
+        <Header as="h3">Contract Wallet Address</Header>
 
         {contract.contract_address ? (
           <p>
@@ -36,7 +36,7 @@ export default function Sidebar({
       </Segment>
 
       <Segment>
-        <Header as="h3">Customer Blockchain Address</Header>
+        <Header as="h3">Customer Wallet Address</Header>
 
         {contract.customer_address && (
           <p>
@@ -52,7 +52,7 @@ export default function Sidebar({
       </Segment>
 
       <Segment>
-        <Header as="h3">Performer Blockchain Address</Header>
+        <Header as="h3">Performer Wallet Address</Header>
 
         {contract.performer_address && (
           <p>
