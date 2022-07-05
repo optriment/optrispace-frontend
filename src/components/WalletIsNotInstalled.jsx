@@ -8,7 +8,7 @@ const WalletIsNotInstalled = () => (
         We can&apos;t find installed MetaMask extension in your browser.
       </Message.Header>
       <p>
-        MetaMask is used to get your blockchain address. So, please{' '}
+        MetaMask is used to get your wallet address. So, please{' '}
         <a
           href="https://metamask.io/"
           target="_blank"

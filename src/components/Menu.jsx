@@ -131,7 +131,7 @@ function AuthDetails() {
                           name="warning sign"
                           size="large"
                           color="orange"
-                          title="Unable to get your blockchain address"
+                          title="Unable to get your wallet address"
                         />
                       ) : (
                         <>
