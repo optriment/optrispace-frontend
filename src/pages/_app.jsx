@@ -2,12 +2,17 @@ import React from 'react'
 import { AuthProvider } from '../hooks'
 import Head from 'next/head'
 import { Web3Provider } from '../context/web3-context'
+import { GoogleAnalytics, usePageViews } from 'nextjs-google-analytics'
 
 function MyApp({ Component, pageProps }) {
+  usePageViews()
+
   const getLayout = Component.getLayout ?? ((page) => page)
 
   return (
     <>
+      <GoogleAnalytics />
+
       {Component.requiresAuth && (
         <Head>
           <script
