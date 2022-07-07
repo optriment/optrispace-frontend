@@ -136,7 +136,7 @@ const ApplicationForm = ({ job }) => {
           value={fields.price}
           onChange={handleInputChange}
           required
-          width={5}
+          width={8}
           readOnly={application !== null}
         />
 
