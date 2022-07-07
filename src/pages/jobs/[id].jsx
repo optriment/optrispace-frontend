@@ -1,14 +1,14 @@
 import React from 'react'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
-
+import { Grid } from 'semantic-ui-react'
 import useSWR from 'swr'
 import { fetcher } from '../../lib/fetcher'
-
 import Layout from '../../components/Layout'
 import JobCard from '../../components/JobCard/JobCard'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import JustOneSecond from '../../components/JustOneSecond'
+import Sidebar from '../../components/Sidebar'
 
 const useJob = () => {
   const { publicRuntimeConfig } = getConfig()
@@ -34,7 +34,14 @@ const JobPage = () => {
 
       {isLoading && <JustOneSecond />}
 
-      {job && <JobCard job={job} />}
+      <Grid stackable>
+        <Grid.Row>
+          <Grid.Column width={11}>{job && <JobCard job={job} />}</Grid.Column>
+          <Grid.Column width={5}>
+            <Sidebar />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </>
   )
 }

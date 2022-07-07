@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Segment } from 'semantic-ui-react'
+import { Container, Grid, Segment } from 'semantic-ui-react'
 import JobTitle from './JobTitle'
 import JobBudget from './JobBudget'
 import CustomerCard from './CustomerCard'
@@ -8,26 +8,19 @@ import ApplicationForm from './ApplicationForm'
 
 export default function JobCardForApplicant({ job }) {
   return (
-    <Grid padded stackable>
-      <Grid.Row>
-        <Grid.Column>
-          <Segment>
-            <Segment basic>
-              <JobTitle title={job.title} />
-              <JobBudget budget={job.budget} />
-            </Segment>
-          </Segment>
-        </Grid.Column>
-      </Grid.Row>
-
+    <Grid stackable>
       <Grid.Row>
         <Grid.Column>
           <Segment>
             <Segment basic>
               <CustomerCard customer={job.customer} />
+              <JobTitle title={job.title} />
+              <JobBudget budget={job.budget} />
             </Segment>
             <Segment basic>
-              <JobDescription description={job.description} />
+              <Container text fluid>
+                <JobDescription description={job.description} />
+              </Container>
             </Segment>
           </Segment>
         </Grid.Column>
