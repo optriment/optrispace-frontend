@@ -61,6 +61,7 @@ const Sidebar = () => {
           href="https://www.linkedin.com/company/optrispace"
           target="_blank"
           rel="noreferrer noopener nofollow"
+          title="LinkedIn"
         />
 
         <Button
@@ -71,6 +72,7 @@ const Sidebar = () => {
           href="https://twitter.com/optrispace"
           target="_blank"
           rel="noreferrer noopener nofollow"
+          title="Twitter"
         />
 
         <Button
@@ -81,6 +83,18 @@ const Sidebar = () => {
           href="https://www.youtube.com/channel/UC0f2btvaHq6nB6MrIB2N5DA"
           target="_blank"
           rel="noreferrer noopener nofollow"
+          title="YouTube"
+        />
+
+        <Button
+          as="a"
+          circular
+          color="violet"
+          icon="discord"
+          href="https://discord.gg/dXCC3PGSdM"
+          target="_blank"
+          rel="noreferrer noopener nofollow"
+          title="Discord"
         />
 
         <Button
@@ -90,6 +104,7 @@ const Sidebar = () => {
           href="mailto:office@optriment.com"
           target="_blank"
           rel="noreferrer noopener nofollow"
+          title="Email"
         />
       </Segment>
     </>
