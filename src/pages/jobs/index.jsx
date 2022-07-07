@@ -2,7 +2,14 @@ import React from 'react'
 import getConfig from 'next/config'
 import Link from 'next/link'
 
-import { Container, Segment, Divider, Button, Header } from 'semantic-ui-react'
+import {
+  Grid,
+  Container,
+  Segment,
+  Divider,
+  Button,
+  Header,
+} from 'semantic-ui-react'
 
 import useSWR from 'swr'
 import { fetcher } from '../../lib/fetcher'
@@ -11,6 +18,7 @@ import Layout from '../../components/Layout'
 import JobsList from '../../components/JobsList'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import JustOneSecond from '../../components/JustOneSecond'
+import Sidebar from '../../components/Sidebar'
 import { useAuth } from '../../hooks'
 
 const useJobs = () => {
@@ -53,7 +61,16 @@ const JobsPage = () => {
 
       {isLoading && <JustOneSecond />}
 
-      {jobs && <JobsList jobs={jobs} person={person} />}
+      <Grid stackable>
+        <Grid.Row>
+          <Grid.Column width={11}>
+            {jobs && <JobsList jobs={jobs} person={person} />}
+          </Grid.Column>
+          <Grid.Column width={5}>
+            <Sidebar />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </>
   )
 }
