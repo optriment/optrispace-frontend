@@ -5,7 +5,7 @@ import isJobOwner from '../lib/job'
 import JobsSubscriptionForm from '../forms/Marketing/JobsSubscriptionForm'
 
 export default function JobsList({ jobs, person }) {
-  const DISPLAY_SUBSCRIPTION_FORM_AFTER_LINE_NUMBER = 3
+  const DISPLAY_SUBSCRIPTION_FORM_AFTER_LINE_NUMBER = 7
 
   return (
     <Card.Group>
