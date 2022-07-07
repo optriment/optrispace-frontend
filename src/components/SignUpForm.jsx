@@ -48,7 +48,7 @@ export default function SignUpForm() {
       {errors && (
         <Message
           error
-          header="Unable to sign un"
+          header="Unable to sign up"
           list={Array.isArray(errors) ? errors : [errors]}
         />
       )}
@@ -59,6 +59,7 @@ export default function SignUpForm() {
             id="login"
             fluid
             icon="user"
+            required
             iconPosition="left"
             placeholder="Login"
             value={fields.login}
