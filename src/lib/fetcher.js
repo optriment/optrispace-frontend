@@ -74,6 +74,32 @@ export const postWithToken = async (url, token, body = {}) => {
   return res.json()
 }
 
+export const postWithoutToken = async (url, body = {}) => {
+  const headers = {
+    'Content-Type': 'application/json',
+  }
+
+  const payload = {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+  }
+
+  const res = await fetch(url, payload)
+
+  if (!res.ok) {
+    const error = new Error('An error occured while sending the data')
+
+    // Attach extra info to the error object.
+    error.info = await res.json()
+    error.status = res.status
+
+    throw error
+  }
+
+  return res.json()
+}
+
 export const putWithToken = async (url, token, body = {}) => {
   const headers = {
     'Content-Type': 'application/json',

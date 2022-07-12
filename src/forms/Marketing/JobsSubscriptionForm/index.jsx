@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Message, Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../../components/ErrorWrapper'
+import { sendMarketingForm } from '../../../lib/marketing'
 import { isEmptyString } from '../../../lib/validators'
 
 export default function JobsSubscriptionForm() {
@@ -17,7 +18,7 @@ export default function JobsSubscriptionForm() {
     setFields({ ...fields, ...{ [e.target.id]: e.target.value } })
   }
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault()
 
     if (isEmptyString(fields.email)) {
@@ -29,12 +30,17 @@ export default function JobsSubscriptionForm() {
     setIsSubscribed(false)
 
     try {
-      alert('We will do it together')
-
-      setIsSubscribed(true)
-    } catch (error) {
-      console.error({ error })
-      setError(error)
+      sendMarketingForm('subscription_form_between_jobs', fields)
+        .then(() => {
+          setIsSubscribed(true)
+        })
+        .catch((err) => {
+          console.error({ err })
+          setError(err)
+        })
+    } catch (err) {
+      console.error({ err })
+      setError(err.message)
     }
   }
 
