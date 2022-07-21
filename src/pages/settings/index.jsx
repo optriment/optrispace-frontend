@@ -1,33 +1,37 @@
 import React from 'react'
-import { Header } from 'semantic-ui-react'
-import Layout from '../../components/Layout'
+import ErrorWrapper from '../../components/ErrorWrapper'
+import JustOneSecond from '../../components/JustOneSecond'
 import { useAuth } from '../../hooks'
-import ChangePassword from '../../forms/ChangePassword'
+import { LandingLayout } from '../../layouts/Landing'
+import { UsersLayout } from '../../layouts/Users'
+import { SettingsScreen } from '../../screens/users/settings'
 
-const SettingsPage = () => {
-  const { token, authenticate } = useAuth()
+const Page = () => {
+  const { isLoading: personLoading, isAuthenticated } = useAuth()
+
+  if (personLoading) {
+    return (
+      <LandingLayout>
+        <JustOneSecond title="Loading profile..." />
+      </LandingLayout>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <LandingLayout>
+        <ErrorWrapper header="Please sign in" />
+      </LandingLayout>
+    )
+  }
 
   return (
-    <>
-      <Header as="h1">Settings</Header>
-
-      <Header as="h3">Change Password</Header>
-
-      <ChangePassword token={token} authenticate={authenticate} />
-    </>
+    <UsersLayout meta={{ title: 'Settings' }}>
+      <SettingsScreen />
+    </UsersLayout>
   )
 }
 
-SettingsPage.requiresAuth = true
+Page.requiresAuth = true
 
-SettingsPage.getLayout = (page) => (
-  <Layout
-    meta={{
-      title: 'Settings | OptriSpace',
-    }}
-  >
-    {page}
-  </Layout>
-)
-
-export default SettingsPage
+export default Page

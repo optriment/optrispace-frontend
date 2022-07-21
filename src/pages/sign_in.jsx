@@ -1,28 +1,20 @@
-import React from 'react'
-import { Grid, Header } from 'semantic-ui-react'
-import Layout from '../components/Layout'
-import LoginForm from '../components/LoginForm'
+import React, { useEffect, useContext } from 'react'
+import { LandingLayout } from '../layouts/Landing'
+import { SignInScreen } from '../screens/auth/sign-in'
+import DisplayContext from '../context/display-context'
 
-const SignInPage = () => (
-  <Grid textAlign="center" style={{ marginTop: '1em' }}>
-    <Grid.Column style={{ maxWidth: 450 }}>
-      <Header as="h2" textAlign="center">
-        Log In
-      </Header>
+const Page = () => {
+  const { setSmallScreen } = useContext(DisplayContext)
 
-      <LoginForm />
-    </Grid.Column>
-  </Grid>
-)
+  useEffect(() => {
+    setSmallScreen(window.matchMedia('(max-width: 700px)').matches)
+  }, [])
 
-SignInPage.getLayout = (page) => (
-  <Layout
-    meta={{
-      title: 'Sign In | OptriSpace',
-    }}
-  >
-    {page}
-  </Layout>
-)
+  return (
+    <LandingLayout meta={{ title: 'Sign In' }}>
+      <SignInScreen />
+    </LandingLayout>
+  )
+}
 
-export default SignInPage
+export default Page

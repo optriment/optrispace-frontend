@@ -1,100 +1,99 @@
 import React from 'react'
-import getConfig from 'next/config'
 import { useRouter } from 'next/router'
-import useSWR from 'swr'
 import isJobOwner from '../../../../lib/job'
-import Layout from '../../../../components/Layout'
-import NewContractForm from '../../../../components/NewContractForm'
 import JustOneSecond from '../../../../components/JustOneSecond'
-import { fetcher, fetchWithToken } from '../../../../lib/fetcher'
 import { useAuth } from '../../../../hooks'
 import ErrorWrapper from '../../../../components/ErrorWrapper'
+import { useJob } from '../../../../hooks/useJob'
+import { useApplication } from '../../../../hooks/useApplication'
+import { UsersLayout } from '../../../../layouts/Users'
+import { NewContractScreen } from '../../../../screens/users/contracts/new'
+import { LandingLayout } from '../../../../layouts/Landing'
 
-const { publicRuntimeConfig } = getConfig()
-
-const useJob = () => {
+const Page = () => {
   const { query } = useRouter()
-  const { data: job, error } = useSWR(
-    () => query.id && `${publicRuntimeConfig.api_url}/jobs/${query.id}`,
-    fetcher
-  )
-
-  if (error) return { error }
-  if (!job) return { isLoading: true }
-
-  return { job }
-}
-
-const useApplication = () => {
-  const { query } = useRouter()
-  const { token } = useAuth()
-  const { data: application, error } = useSWR(
-    () =>
-      token &&
-      query.application_id && [
-        `${publicRuntimeConfig.api_url}/applications/${query.application_id}`,
-        token,
-      ],
-    fetchWithToken
-  )
-
-  if (error) return { error }
-  if (!application) return { isLoading: true }
-
-  return { application }
-}
-
-const NewContractPage = () => {
-  const { person, token } = useAuth()
-  const { job, isLoading, error } = useJob()
+  const { isLoading: personLoading, isAuthenticated, person, token } = useAuth()
+  const { job, isLoading: jobLoading, error: jobError } = useJob(query.id)
   const {
     application,
-    isLoading: isApplicationLoading,
+    isLoading: applicationLoading,
     error: applicationError,
-  } = useApplication()
+  } = useApplication(token, query.application_id)
 
-  if (error) {
-    return <ErrorWrapper header="Failed to load job" error={error} />
+  if (personLoading) {
+    return (
+      <LandingLayout>
+        <JustOneSecond title="Loading profile..." />
+      </LandingLayout>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <LandingLayout>
+        <ErrorWrapper header="Please sign in" />
+      </LandingLayout>
+    )
+  }
+
+  if (jobLoading) {
+    return (
+      <UsersLayout>
+        <JustOneSecond title="Loading job..." />
+      </UsersLayout>
+    )
+  }
+
+  if (jobError) {
+    return (
+      <UsersLayout>
+        <ErrorWrapper header="Unable to load job" error={jobError} />
+      </UsersLayout>
+    )
+  }
+
+  if (!isJobOwner(job, person)) {
+    return (
+      <UsersLayout>
+        <ErrorWrapper header="You don't have access to this action" />
+      </UsersLayout>
+    )
+  }
+
+  if (applicationLoading) {
+    return (
+      <UsersLayout>
+        <JustOneSecond title="Loading application..." />
+      </UsersLayout>
+    )
   }
 
   if (applicationError) {
     return (
-      <ErrorWrapper
-        header="Failed to load application"
-        error={applicationError}
-      />
+      <UsersLayout>
+        <ErrorWrapper
+          header="Unable to load application"
+          error={applicationError}
+        />
+      </UsersLayout>
     )
   }
 
-  if (isLoading || isApplicationLoading) {
-    return <JustOneSecond />
-  }
-
-  if (!isJobOwner(job, person)) {
-    return <ErrorWrapper header="You don't have access to this action" />
+  if (application.job.id !== job.id) {
+    return (
+      <UsersLayout>
+        <ErrorWrapper header="You don't have access to this action" />
+      </UsersLayout>
+    )
   }
 
   return (
-    <>
-      {application.job.id !== job.id ? (
-        <ErrorWrapper header="You don't have access to this action" />
-      ) : (
-        <NewContractForm job={job} token={token} application={application} />
-      )}
-    </>
+    <UsersLayout meta={{ title: 'New Contract' }}>
+      <NewContractScreen job={job} application={application} token={token} />
+    </UsersLayout>
   )
 }
 
-NewContractPage.requiresAuth = true
+Page.requiresAuth = true
 
-NewContractPage.getLayout = (page) => (
-  <Layout
-    meta={{
-      title: 'New Contract | OptriSpace',
-    }}
-  >
-    {page}
-  </Layout>
-)
-
-export default NewContractPage
+export default Page

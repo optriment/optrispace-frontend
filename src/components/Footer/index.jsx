@@ -15,7 +15,9 @@ const Footer = () => {
 
   return (
     <>
-      <Segment basic padded>
+      <Divider />
+
+      <Segment basic>
         <Segment basic textAlign="center">
           <Header as="h2">
             If you have any questions please click the button below

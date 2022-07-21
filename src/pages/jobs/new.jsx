@@ -1,25 +1,37 @@
 import React from 'react'
-
-import Layout from '../../components/Layout'
-import NewJobForm from '../../components/NewJobForm'
+import { UsersLayout } from '../../layouts/Users'
+import { NewJobScreen } from '../../screens/users/jobs/new'
 import { useAuth } from '../../hooks'
+import JustOneSecond from '../../components/JustOneSecond'
+import { LandingLayout } from '../../layouts/Landing'
+import ErrorWrapper from '../../components/ErrorWrapper'
 
-const NewJobPage = () => {
-  const { token } = useAuth()
+const Page = () => {
+  const { isLoading: personLoading, isAuthenticated } = useAuth()
 
-  return <NewJobForm token={token} />
+  if (personLoading) {
+    return (
+      <LandingLayout>
+        <JustOneSecond title="Loading profile..." />
+      </LandingLayout>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <LandingLayout>
+        <ErrorWrapper header="Please sign in" />
+      </LandingLayout>
+    )
+  }
+
+  return (
+    <UsersLayout meta={{ title: 'New Job' }}>
+      <NewJobScreen />
+    </UsersLayout>
+  )
 }
 
-NewJobPage.requiresAuth = true
+Page.requiresAuth = true
 
-NewJobPage.getLayout = (page) => (
-  <Layout
-    meta={{
-      title: 'New Job | OptriSpace',
-    }}
-  >
-    {page}
-  </Layout>
-)
-
-export default NewJobPage
+export default Page

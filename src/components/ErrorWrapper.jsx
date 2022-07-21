@@ -5,7 +5,7 @@ export default function ErrorWrapper({ header, error }) {
   return (
     <Message negative>
       <Message.Header>{header}</Message.Header>
-      {error && <p>{error.info?.message || error}</p>}
+      {error && <p>{error.info?.message || error.message}</p>}
     </Message>
   )
 }

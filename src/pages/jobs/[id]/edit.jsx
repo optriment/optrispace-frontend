@@ -1,63 +1,72 @@
-import React from 'react'
-import getConfig from 'next/config'
+import React, { useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
-import useSWR from 'swr'
-import { fetcher } from '../../../lib/fetcher'
-import Layout from '../../../components/Layout'
-import EditJobForm from '../../../components/EditJobForm'
+import { UsersLayout } from '../../../layouts/Users'
 import isJobOwner from '../../../lib/job'
 import { useAuth } from '../../../hooks'
 import JustOneSecond from '../../../components/JustOneSecond'
 import ErrorWrapper from '../../../components/ErrorWrapper'
+import { EditJobScreen } from '../../../screens/users/jobs/edit'
+import { useJob } from '../../../hooks/useJob'
+import DisplayContext from '../../../context/display-context'
+import { LandingLayout } from '../../../layouts/Landing'
 
-const useJob = () => {
-  const { publicRuntimeConfig } = getConfig()
+const Page = () => {
   const { query } = useRouter()
+  const { person, isLoading: personLoading, isAuthenticated } = useAuth()
+  const { job, isLoading: jobLoading, error: jobError } = useJob(query.id)
+  const { setSmallScreen } = useContext(DisplayContext)
 
-  const { data: job, error } = useSWR(
-    () => query.id && `${publicRuntimeConfig.api_url}/jobs/${query.id}`,
-    fetcher
-  )
+  useEffect(() => {
+    setSmallScreen(window.matchMedia('(max-width: 700px)').matches)
+  }, [])
 
-  if (error) return { error }
-  if (!job) return { isLoading: true }
+  if (personLoading) {
+    return (
+      <LandingLayout>
+        <JustOneSecond title="Loading profile..." />
+      </LandingLayout>
+    )
+  }
 
-  return { job }
-}
+  if (!isAuthenticated) {
+    return (
+      <LandingLayout>
+        <ErrorWrapper header="Please sign in" />
+      </LandingLayout>
+    )
+  }
 
-const EditJobPage = () => {
-  const { job, isLoading, error } = useJob()
-  const { person, token } = useAuth()
+  if (jobLoading) {
+    return (
+      <UsersLayout>
+        <JustOneSecond title="Loading job..." />
+      </UsersLayout>
+    )
+  }
+
+  if (jobError) {
+    return (
+      <UsersLayout>
+        <ErrorWrapper header="Unable to load job" error={jobError} />
+      </UsersLayout>
+    )
+  }
+
+  if (!isJobOwner(job, person)) {
+    return (
+      <UsersLayout>
+        <ErrorWrapper header="You don't have access to this action" />
+      </UsersLayout>
+    )
+  }
 
   return (
-    <>
-      {error && <ErrorWrapper header="Failed to load job" error={error} />}
-
-      {isLoading && <JustOneSecond />}
-
-      {job && (
-        <>
-          {!isJobOwner(job, person) && (
-            <ErrorWrapper header="You don't have access to this action" />
-          )}
-
-          <EditJobForm job={job} token={token} />
-        </>
-      )}
-    </>
+    <UsersLayout meta={{ title: 'Edit Job' }}>
+      <EditJobScreen job={job} />
+    </UsersLayout>
   )
 }
 
-EditJobPage.requiresAuth = true
+Page.requiresAuth = true
 
-EditJobPage.getLayout = (page) => (
-  <Layout
-    meta={{
-      title: 'Edit Job | OptriSpace',
-    }}
-  >
-    {page}
-  </Layout>
-)
-
-export default EditJobPage
+export default Page
