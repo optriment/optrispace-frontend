@@ -1,8 +1,8 @@
 import React from 'react'
 import { Segment, Button, Header } from 'semantic-ui-react'
-import SidebarRegistrationForm from '../../forms/Marketing/SidebarRegistrationForm'
+import { SidebarRegistrationForm } from '../../forms/Marketing/SidebarRegistrationForm'
 
-const Sidebar = () => {
+export const Sidebar = () => {
   return (
     <>
       <Segment>
@@ -78,5 +78,3 @@ const Sidebar = () => {
     </>
   )
 }
-
-export default Sidebar

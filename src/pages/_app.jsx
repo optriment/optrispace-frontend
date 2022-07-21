@@ -2,12 +2,11 @@ import React from 'react'
 import { AuthProvider } from '../hooks'
 import Head from 'next/head'
 import { Web3Provider } from '../context/web3-context'
+import { DisplayProvider } from '../context/display-context'
 import { GoogleAnalytics, usePageViews } from 'nextjs-google-analytics'
 
 function MyApp({ Component, pageProps }) {
   usePageViews()
-
-  const getLayout = Component.getLayout ?? ((page) => page)
 
   return (
     <>
@@ -28,7 +27,11 @@ function MyApp({ Component, pageProps }) {
       )}
 
       <AuthProvider>
-        <Web3Provider>{getLayout(<Component {...pageProps} />)}</Web3Provider>
+        <Web3Provider>
+          <DisplayProvider>
+            <Component {...pageProps} />
+          </DisplayProvider>
+        </Web3Provider>
       </AuthProvider>
     </>
   )

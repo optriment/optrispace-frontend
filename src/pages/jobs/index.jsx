@@ -1,88 +1,34 @@
 import React from 'react'
-import getConfig from 'next/config'
-import Link from 'next/link'
-
-import {
-  Grid,
-  Container,
-  Segment,
-  Divider,
-  Button,
-  Header,
-} from 'semantic-ui-react'
-
-import useSWR from 'swr'
-import { fetcher } from '../../lib/fetcher'
-
-import Layout from '../../components/Layout'
-import JobsList from '../../components/JobsList'
-import ErrorWrapper from '../../components/ErrorWrapper'
 import JustOneSecond from '../../components/JustOneSecond'
-import Sidebar from '../../components/Sidebar'
 import { useAuth } from '../../hooks'
+import { LandingLayout } from '../../layouts/Landing'
+import { UsersLayout } from '../../layouts/Users'
+import { JobsScreen } from '../../screens/users/jobs/index'
 
-const useJobs = () => {
-  const { publicRuntimeConfig } = getConfig()
+const Page = () => {
+  const { isLoading: personLoading, isAuthenticated } = useAuth()
 
-  const { data, error } = useSWR(`${publicRuntimeConfig.api_url}/jobs`, fetcher)
+  if (personLoading) {
+    return (
+      <LandingLayout>
+        <JustOneSecond title="Loading profile..." />
+      </LandingLayout>
+    )
+  }
 
-  if (error) return { error }
-  if (!data) return { isLoading: true }
-
-  return { jobs: data }
-}
-
-const JobsPage = () => {
-  const { jobs, isLoading, error } = useJobs()
-  const { person } = useAuth()
+  if (!isAuthenticated) {
+    return (
+      <LandingLayout meta={{ title: 'Jobs' }}>
+        <JobsScreen />
+      </LandingLayout>
+    )
+  }
 
   return (
-    <>
-      <Segment basic padded textAlign="center">
-        <Header as="h1">Find a Job. Find a Pro</Header>
-      </Segment>
-
-      {person && (
-        <Container textAlign="right">
-          <Link href="/jobs/new" passHref>
-            <Button
-              primary
-              labelPosition="left"
-              icon="add circle"
-              content="New Job"
-            />
-          </Link>
-        </Container>
-      )}
-
-      <Divider hidden />
-
-      {error && <ErrorWrapper header="Failed to load jobs" error={error} />}
-
-      {isLoading && <JustOneSecond />}
-
-      <Grid stackable>
-        <Grid.Row>
-          <Grid.Column width={11}>
-            {jobs && <JobsList jobs={jobs} person={person} />}
-          </Grid.Column>
-          <Grid.Column width={5}>
-            <Sidebar />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </>
+    <UsersLayout meta={{ title: 'Jobs' }}>
+      <JobsScreen />
+    </UsersLayout>
   )
 }
 
-JobsPage.getLayout = (page) => (
-  <Layout
-    meta={{
-      title: 'Jobs | OptriSpace',
-    }}
-  >
-    {page}
-  </Layout>
-)
-
-export default JobsPage
+export default Page

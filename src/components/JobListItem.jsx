@@ -19,30 +19,33 @@ export default function JobListItem({ job, isOwner }) {
 
         <Card.Description>
           <div style={{ textAlign: 'justify' }}>
-            {job.description.split('\n').map((str, idx) => {
-              if (idx === 5) {
-                return (
-                  <p key={idx}>
-                    <br />
-                    <Link href="/jobs/[id]" as={`/jobs/${job.id}`}>
-                      <a>
-                        <Button size="tiny">Read more</Button>
-                      </a>
-                    </Link>
-                  </p>
-                )
-              }
+            {job.description
+              .trim()
+              .split('\n')
+              .map((str, idx) => {
+                if (idx === 5) {
+                  return (
+                    <p key={idx}>
+                      <br />
+                      <Link href="/jobs/[id]" as={`/jobs/${job.id}`}>
+                        <a>
+                          <Button size="tiny">Read more</Button>
+                        </a>
+                      </Link>
+                    </p>
+                  )
+                }
 
-              if (idx < 5) {
-                return (
-                  <div key={idx}>
-                    {str}
+                if (idx < 5) {
+                  return (
+                    <div key={idx}>
+                      {str}
 
-                    <br />
-                  </div>
-                )
-              }
-            })}
+                      <br />
+                    </div>
+                  )
+                }
+              })}
           </div>
         </Card.Description>
       </Card.Content>

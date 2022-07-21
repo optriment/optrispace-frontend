@@ -4,7 +4,7 @@ import ErrorWrapper from '../../../components/ErrorWrapper'
 import { sendMarketingForm } from '../../../lib/marketing'
 import { isEmptyString } from '../../../lib/validators'
 
-export default function JobsSubscriptionForm() {
+export const JobsSubscriptionForm = () => {
   const initialFields = {
     email: '',
     messenger: '',

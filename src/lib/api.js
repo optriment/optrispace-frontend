@@ -5,9 +5,9 @@ const { publicRuntimeConfig } = getConfig()
 
 export async function createJob(token, { title, description, budget }) {
   return await postWithToken(`${publicRuntimeConfig.api_url}/jobs`, token, {
-    title,
-    description,
-    budget: budget.toString(),
+    title: title.trim(),
+    description: description.trim(),
+    budget: Math.abs(parseFloat(budget)).toString(),
   })
 }
 
@@ -16,9 +16,9 @@ export async function updateJob(token, jobId, { title, description, budget }) {
     `${publicRuntimeConfig.api_url}/jobs/${jobId}`,
     token,
     {
-      title,
-      description,
-      budget: budget.toString(),
+      title: title.trim(),
+      description: description.trim(),
+      budget: Math.abs(parseFloat(budget)).toString(),
     }
   )
 }
@@ -28,8 +28,8 @@ export async function createApplication(token, jobId, { comment, price }) {
     `${publicRuntimeConfig.api_url}/jobs/${jobId}/applications`,
     token,
     {
-      comment,
-      price,
+      comment: comment.trim(),
+      price: Math.abs(parseFloat(price)).toString(),
     }
   )
 }
@@ -45,9 +45,9 @@ export async function createContract(
       application_id: applicationId,
       performer_id: performerId,
       customer_address: customerAddress,
-      title,
-      description,
-      price: price.toString(),
+      title: title.trim(),
+      description: description.trim(),
+      price: Math.abs(parseFloat(price)).toString(),
     }
   )
 }
