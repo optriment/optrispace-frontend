@@ -76,7 +76,7 @@ export default function ContractListItem({ person, contract, currencyLabel }) {
                 <List.Icon name="user" /> Customer:{' '}
                 {person && contract.customer.id === person.id
                   ? 'Me'
-                  : contract.customer.id}
+                  : contract.customer.display_name || contract.customer.id}
               </List.Header>
             </List.Content>
           </List.Item>
@@ -86,7 +86,7 @@ export default function ContractListItem({ person, contract, currencyLabel }) {
                 <List.Icon name="user" /> Performer:{' '}
                 {person && contract.performer.id === person.id
                   ? 'Me'
-                  : contract.performer.id}
+                  : contract.performer.display_name || contract.performer.id}
               </List.Header>
             </List.Content>
           </List.Item>
