@@ -31,7 +31,7 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
   }
 
   const [fields, setFields] = useState(initialFields)
-  const [error, setError] = useState(undefined)
+  const [error, setError] = useState('')
   const [hideNotice, setHideNotice] = useState(false)
   const [agreedTo, setAgreedTo] = useState(false)
   const [formFilled, setFormFilled] = useState(false)
@@ -45,7 +45,7 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
   } = useContext(Web3Context)
 
   const handleCreateContract = async () => {
-    setError(null)
+    setError('')
 
     try {
       const contract = await createContract(token, {
