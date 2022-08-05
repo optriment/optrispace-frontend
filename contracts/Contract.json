@@ -2,11 +2,6 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_tokenAddress",
-        "type": "address"
-      },
-      {
         "internalType": "string",
         "name": "_contractId",
         "type": "string"
@@ -85,7 +80,7 @@
         "type": "address"
       }
     ],
-    "name": "ContractCreated",
+    "name": "ContractDeployed",
     "type": "event"
   },
   {
@@ -118,7 +113,7 @@
     "inputs": [],
     "name": "fund",
     "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -253,6 +248,19 @@
   },
   {
     "inputs": [],
+    "name": "isClosed",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "isFunded",
     "outputs": [
       {
@@ -262,6 +270,13 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -52,33 +52,9 @@ function AuthDetails() {
     accountBalance,
     accountBalanceLoading,
     tokenSymbol,
-    contractFactory, // FIXME: Rename to contractFactoryContract
-    isWalletReady,
     blockchainNetworkName,
   } = useContext(Web3Context)
   const router = useRouter()
-
-  const [isTokenRequesting, setIsTokenRequesting] = useState(false)
-
-  const handleRequestTestTokens = async () => {
-    if (!isWalletReady) {
-      return
-    }
-
-    setIsTokenRequesting(true)
-
-    try {
-      let tx = await contractFactory.requestTestToken()
-
-      await tx.wait()
-
-      router.reload()
-    } catch (err) {
-      console.error({ err })
-    } finally {
-      setIsTokenRequesting(false)
-    }
-  }
 
   if (isLoading) {
     return <Loader size="tiny" active inline />
@@ -168,21 +144,6 @@ function AuthDetails() {
             </a>
           )}
         </Menu.Item>
-
-        {isWalletInstalled &&
-          isCorrectNetwork &&
-          isWalletConnected &&
-          currentAccount !== '' && (
-            <Menu.Item>
-              <Button
-                onClick={handleRequestTestTokens}
-                icon="gem"
-                color="purple"
-                disabled={!isWalletReady || isTokenRequesting}
-                loading={isTokenRequesting}
-              />
-            </Menu.Item>
-          )}
 
         <Dropdown item text="Account">
           <Dropdown.Menu>

@@ -6,7 +6,7 @@ import ContractListItem from './ContractListItem'
 import ErrorWrapper from './ErrorWrapper'
 import JustOneSecond from './JustOneSecond'
 
-export default function ContractsList() {
+export default function ContractsList({ currencyLabel }) {
   const { isLoading: personLoading, person, token } = useAuth()
   const {
     contracts,
@@ -35,6 +35,7 @@ export default function ContractsList() {
           key={contract.id}
           contract={contract}
           person={person}
+          currencyLabel={currencyLabel}
         />
       ))}
     </Card.Group>

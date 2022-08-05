@@ -13,7 +13,7 @@ import { updateJob } from '../../lib/api'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { isEmptyString } from '../../lib/validators'
 
-export const EditJobForm = ({ job, token }) => {
+export const EditJobForm = ({ job, token, currencyLabel }) => {
   const router = useRouter()
 
   const initialFields = {
@@ -112,7 +112,7 @@ export const EditJobForm = ({ job, token }) => {
 
           <Form.Input
             id="budget"
-            label="Approx. budget (ALZ)"
+            label={`Approx. budget (${currencyLabel})`}
             placeholder=""
             value={fields.budget}
             onChange={handleInputChange}

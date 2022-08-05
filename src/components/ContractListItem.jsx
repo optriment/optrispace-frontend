@@ -3,7 +3,7 @@ import { Button, Card, List } from 'semantic-ui-react'
 import Link from 'next/link'
 import { formatDateTime } from '../lib/formatDate'
 
-export default function ContractListItem({ person, contract }) {
+export default function ContractListItem({ person, contract, currencyLabel }) {
   const formattedDate = formatDateTime(contract.created_at)
 
   let statusIcon = 'hourglass'
@@ -93,7 +93,7 @@ export default function ContractListItem({ person, contract }) {
           <List.Item>
             <List.Content>
               <List.Header>
-                <List.Icon name="money" /> {contract.price} ALZ
+                <List.Icon name="money" /> {contract.price} {currencyLabel}
               </List.Header>
             </List.Content>
           </List.Item>

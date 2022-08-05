@@ -1,12 +1,6 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_tokenAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -39,20 +33,7 @@
         "type": "string"
       }
     ],
-    "name": "ContractCreated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      }
-    ],
-    "name": "TestTokenSent",
+    "name": "ContractDeployed",
     "type": "event"
   },
   {
@@ -192,13 +173,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "requestTestToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

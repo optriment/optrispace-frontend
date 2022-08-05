@@ -21,7 +21,7 @@ import JustOneSecond from '../../components/JustOneSecond'
 import ConnectWallet from '../../components/ConnectWallet'
 import WrongBlockchainNetwork from '../../components/WrongBlockchainNetwork'
 
-export const NewContractForm = ({ job, application, token }) => {
+export const NewContractForm = ({ job, application, token, currencyLabel }) => {
   const router = useRouter()
 
   const initialFields = {
@@ -42,7 +42,6 @@ export const NewContractForm = ({ job, application, token }) => {
     isCorrectNetwork,
     connectWallet,
     currentAccount,
-    tokenSymbol,
   } = useContext(Web3Context)
 
   const handleCreateContract = async () => {
@@ -160,7 +159,7 @@ export const NewContractForm = ({ job, application, token }) => {
           <Form.Group>
             <Form.Input
               id="price"
-              label={`Price (${tokenSymbol})`}
+              label={`Price (${currencyLabel})`}
               placeholder=""
               value={fields.price}
               onChange={handleInputChange}

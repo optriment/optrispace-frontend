@@ -2,7 +2,6 @@ import React, { useState, useEffect, createContext } from 'react'
 import getConfig from 'next/config'
 
 import { ethers } from 'ethers'
-import tokenABI from '../../contracts/token.json'
 import contractFactoryABI from '../../contracts/ContractFactory.json'
 
 const { publicRuntimeConfig } = getConfig()
@@ -11,8 +10,8 @@ const Web3Context = createContext({})
 export default Web3Context
 
 export const Web3Provider = ({ children }) => {
-  const tokenSymbol = 'ALZ'
-  const tokenDecimals = 6
+  const tokenSymbol = publicRuntimeConfig.token_symbol
+  const tokenDecimals = publicRuntimeConfig.token_decimals
 
   const requiredChainId = publicRuntimeConfig.required_chain_id
   const blockchainNetworkName = publicRuntimeConfig.blockchain_network_name
@@ -25,18 +24,17 @@ export const Web3Provider = ({ children }) => {
   const [isWalletInstalled, setIsWalletInstalled] = useState(false)
   const [isWalletConnected, setIsWalletConnected] = useState(false)
   const [wallet, setWallet] = useState(undefined)
+  const [provider, setProvider] = useState(undefined)
   const [signer, setSigner] = useState(undefined)
   const [currentChainId, setCurrentChainId] = useState(undefined)
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(false)
   const [currentAccount, setCurrentAccount] = useState('')
   const [accountBalance, setAccountBalance] = useState(null)
-  const [accountBalanceLoading, setAccountBalanceLoading] = useState(true)
-  const [token, setToken] = useState(undefined)
+  const [accountBalanceLoading, setAccountBalanceLoading] = useState(false)
   const [contractFactory, setContractFactory] = useState(undefined)
   const [isWalletReady, setIsWalletReady] = useState(false)
 
   const contractFactoryAddress = publicRuntimeConfig.contract_factory_address
-  const tokenAddress = publicRuntimeConfig.token_address
 
   const connectWallet = async () => {
     if (!wallet) {
@@ -122,9 +120,13 @@ export const Web3Provider = ({ children }) => {
     try {
       const _provider = new ethers.providers.Web3Provider(wallet)
 
+      setProvider(_provider)
       setSigner(_provider.getSigner())
     } catch (err) {
+      console.error('Unable to set web3 provider')
       console.error({ err })
+
+      setError(err.message)
     }
   }, [isCorrectNetwork, wallet])
 
@@ -135,9 +137,6 @@ export const Web3Provider = ({ children }) => {
     }
 
     try {
-      const _token = new ethers.Contract(tokenAddress, tokenABI, signer)
-      setToken(_token)
-
       const _contractFactory = new ethers.Contract(
         contractFactoryAddress,
         contractFactoryABI,
@@ -145,46 +144,58 @@ export const Web3Provider = ({ children }) => {
       )
       setContractFactory(_contractFactory)
     } catch (err) {
+      console.error('Unable to connect to ContractFactory')
       console.error({ err })
-    }
-  }, [signer, contractFactoryAddress, tokenAddress])
 
-  // Update account balance
+      setError(err.message)
+    }
+  }, [signer, contractFactoryAddress])
+
+  // Get account balance
   useEffect(() => {
     if (currentAccount === '') {
       return
     }
 
-    if (!token) {
+    if (!provider) {
       return
     }
 
     const perform = async () => {
       try {
-        const balance = await token.balanceOf(currentAccount)
-
-        setAccountBalance(parseFloat(balance) / 10 ** tokenDecimals)
-        setAccountBalanceLoading(false)
+        const balance = await provider.getBalance(currentAccount)
+        const balanceInEth = ethers.utils.formatEther(balance)
+        setAccountBalance(balanceInEth)
       } catch (err) {
-        console.error(err)
+        console.error('Unable to get balance')
+        console.error({ err })
 
-        throw err
+        setError(err.message)
       }
     }
 
+    setAccountBalanceLoading(true)
     perform()
-  }, [currentAccount, token])
+    setAccountBalanceLoading(false)
+  }, [provider, currentAccount])
 
   useEffect(() => {
-    setIsLoading(false)
-
     setIsWalletReady(
       isWalletInstalled &&
         isCorrectNetwork &&
         isWalletConnected &&
-        currentAccount !== ''
+        currentAccount !== '' &&
+        accountBalance !== ''
     )
-  }, [isWalletInstalled, isCorrectNetwork, isWalletConnected, currentAccount])
+
+    setIsLoading(false)
+  }, [
+    isWalletInstalled,
+    isCorrectNetwork,
+    isWalletConnected,
+    currentAccount,
+    accountBalance,
+  ])
 
   return (
     <Web3Context.Provider
@@ -212,7 +223,6 @@ export const Web3Provider = ({ children }) => {
         connectWallet,
 
         contractFactory,
-        token,
         signer,
 
         isWalletReady,
