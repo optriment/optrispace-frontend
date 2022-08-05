@@ -248,9 +248,7 @@ export const ContractCardForCustomer = ({ contract, token, currencyLabel }) => {
       <Header as="h1">{contract.title}</Header>
 
       {isWalletInstalled && isCorrectNetwork && currentAccount === '' && (
-        <Segment>
-          <ConnectWallet connectWallet={connectWallet} />
-        </Segment>
+        <ConnectWallet connectWallet={connectWallet} />
       )}
 
       <Step.Group ordered width={5} fluid>
