@@ -95,10 +95,6 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
     return <JustOneSecond />
   }
 
-  if (error) {
-    return <ErrorWrapper header="Error occured" error={error} />
-  }
-
   return (
     <>
       <Grid>
@@ -123,6 +119,10 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
 
       <Divider hidden />
 
+      {error !== '' && (
+        <ErrorWrapper header="Unable to create contract" error={error} />
+      )}
+
       {!hideNotice && (
         <Message onDismiss={() => setHideNotice(true)}>
           <Icon name="info" />
@@ -130,7 +130,7 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
           <Link href="/jobs/[id]" as={`/jobs/${job.id}`} passHref>
             <a>job offer</a>
           </Link>
-          {' and'} performer&apos;s application
+          {' and'} contractor&apos;s application
         </Message>
       )}
 

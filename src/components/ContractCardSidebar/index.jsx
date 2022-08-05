@@ -34,7 +34,7 @@ export const ContractCardSidebar = ({
       </Segment>
 
       <Segment>
-        <Header as="h3">Performer Wallet Address</Header>
+        <Header as="h3">Contractor Wallet Address</Header>
 
         {contract.performer_address ? (
           <p>

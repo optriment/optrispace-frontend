@@ -268,7 +268,7 @@ export const ContractCardForCustomer = ({ contract, token, currencyLabel }) => {
             <Step.Title>
               {currentStep > statuses['accepted'] ? 'Accepted' : 'Accept'}
             </Step.Title>
-            <Step.Description>Performer</Step.Description>
+            <Step.Description>Contractor</Step.Description>
           </Step.Content>
         </Step>
 
@@ -296,7 +296,7 @@ export const ContractCardForCustomer = ({ contract, token, currencyLabel }) => {
                 ? 'Review Requested'
                 : 'In Progress'}
             </Step.Title>
-            <Step.Description>Performer</Step.Description>
+            <Step.Description>Contractor</Step.Description>
           </Step.Content>
         </Step>
 
