@@ -83,7 +83,7 @@ export default function ContractListItem({ person, contract, currencyLabel }) {
           <List.Item>
             <List.Content>
               <List.Header>
-                <List.Icon name="user" /> Performer:{' '}
+                <List.Icon name="user" /> Contractor:{' '}
                 {person && contract.performer.id === person.id
                   ? 'Me'
                   : contract.performer.id}
