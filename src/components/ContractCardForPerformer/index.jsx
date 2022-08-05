@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import {
   Header,
@@ -11,6 +11,8 @@ import {
 import { acceptContract, completeContract, sendContract } from '../../lib/api'
 import ErrorWrapper from '../ErrorWrapper'
 import { ContractCardSidebar } from '../ContractCardSidebar'
+import { ethers } from 'ethers'
+import contractABI from '../../../contracts/Contract.json'
 import Web3Context from '../../context/web3-context'
 import WalletIsNotInstalled from '../WalletIsNotInstalled'
 import { JustOneSecondBlockchain } from '../JustOneSecond'
@@ -18,19 +20,20 @@ import WrongBlockchainNetwork from '../WrongBlockchainNetwork'
 import ConnectWallet from '../ConnectWallet'
 import { FormattedDescription } from '../FormattedDescription'
 
-export const ContractCardForPerformer = ({ contract, token }) => {
+export const ContractCardForPerformer = ({
+  contract,
+  token,
+  currencyLabel,
+}) => {
   const router = useRouter()
 
   const {
     isLoading: isLoadingWeb3,
     isWalletInstalled,
-    isWalletConnected,
     isCorrectNetwork,
     connectWallet,
     currentAccount,
-    token: tokenContract,
-    tokenDecimals,
-    tokenSymbol,
+    signer,
     isWalletReady,
     blockchainViewAddressURL,
   } = useContext(Web3Context)
@@ -39,20 +42,11 @@ export const ContractCardForPerformer = ({ contract, token }) => {
 
   const [txLoading, setTxLoading] = useState(false)
   const [txStatus, setTxStatus] = useState('')
+  const [allowedToWithdraw, setAllowedToWithdraw] = useState(false)
 
   const isWalletRequired = ['created', 'approved'].includes(contract.status)
 
   const walletReady = isWalletRequired && isWalletReady
-
-  console.log({
-    isWalletRequired,
-    isWalletInstalled,
-    isWalletConnected,
-    isCorrectNetwork,
-    currentAccount,
-    isWalletReady,
-    walletReady,
-  })
 
   const accept = async () => {
     if (!walletReady) {
@@ -87,19 +81,22 @@ export const ContractCardForPerformer = ({ contract, token }) => {
     setTxStatus('Requesting money from Smart Contract...')
     setError(null)
 
-    const price = parseFloat(contract.price) * 10 ** tokenDecimals
-
     try {
-      let transferFromTx = await tokenContract.transferFrom(
+      const _contract = new ethers.Contract(
         contract.contract_address,
-        currentAccount,
-        price
+        contractABI,
+        signer
       )
 
-      await transferFromTx.wait()
+      let withdrawTx = await _contract.withdraw()
+      await withdrawTx.wait()
 
-      await completeContract(token, contract.id)
-      router.reload()
+      const _contractBalance = await _contract.getBalance()
+
+      if (_contractBalance === 0) {
+        await completeContract(token, contract.id)
+        router.reload()
+      }
     } catch (err) {
       console.error({ err })
       setError(
@@ -110,6 +107,39 @@ export const ContractCardForPerformer = ({ contract, token }) => {
       setTxLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (!walletReady) {
+      return
+    }
+
+    if (contract.status !== 'approved') {
+      return
+    }
+
+    try {
+      const checkIsWithdrawable = async () => {
+        const _contract = new ethers.Contract(
+          contract.contract_address,
+          contractABI,
+          signer
+        )
+
+        try {
+          const isClosed = await _contract.isClosed()
+          setAllowedToWithdraw(!isClosed)
+        } catch (err) {
+          console.error({ err })
+          setError(err)
+        }
+      }
+
+      checkIsWithdrawable()
+    } catch (err) {
+      console.error({ err })
+      setError(err.message)
+    }
+  }, [walletReady, contract, signer])
 
   const statuses = {
     created: 1,
@@ -241,18 +271,21 @@ export const ContractCardForPerformer = ({ contract, token }) => {
         </Segment>
       )}
 
-      {contract.status === 'approved' && !isLoadingWeb3 && !txLoading && (
-        <Segment basic textAlign="right">
-          <Button
-            primary
-            content="Request Money"
-            labelPosition="left"
-            icon="money"
-            disabled={!walletReady}
-            onClick={requestMoney}
-          />
-        </Segment>
-      )}
+      {contract.status === 'approved' &&
+        allowedToWithdraw &&
+        !isLoadingWeb3 &&
+        !txLoading && (
+          <Segment basic textAlign="right">
+            <Button
+              primary
+              content="Request Money"
+              labelPosition="left"
+              icon="money"
+              disabled={!walletReady}
+              onClick={requestMoney}
+            />
+          </Segment>
+        )}
 
       {(isLoadingWeb3 || txLoading) && (
         <JustOneSecondBlockchain message={txStatus !== '' && txStatus} />
@@ -279,7 +312,7 @@ export const ContractCardForPerformer = ({ contract, token }) => {
           <Grid.Column width={6}>
             <ContractCardSidebar
               contract={contract}
-              tokenSymbol={tokenSymbol}
+              currencyLabel={currencyLabel}
               blockchainViewAddressURL={blockchainViewAddressURL}
             />
           </Grid.Column>

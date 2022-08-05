@@ -4,7 +4,7 @@ import { TextArea, Input, Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { createApplication } from '../../lib/api'
 
-export const ApplicationForm = ({ job, application, token }) => {
+export const ApplicationForm = ({ job, application, token, currencyLabel }) => {
   const router = useRouter()
 
   const initialFields = {
@@ -63,12 +63,13 @@ export const ApplicationForm = ({ job, application, token }) => {
         <Form.Field
           id="price"
           control={Input}
-          label="The price of your services for this job (ALZ)"
+          label={`The price of your services for this job (${currencyLabel})`}
           value={fields.price}
           required
           width={8}
           onChange={handleInputChange}
           readOnly={application !== null}
+          autoComplete="off"
         />
 
         <Button content="Publish" primary disabled={application !== null} />

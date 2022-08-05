@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Tab } from 'semantic-ui-react'
 import ApplicationsGroup from './ApplicationsGroup'
 
-const Applications = ({ job, applications }) => {
+const Applications = ({ job, applications, currencyLabel }) => {
   const [panes, setPanes] = useState(undefined)
 
   useEffect(() => {
@@ -24,23 +24,26 @@ const Applications = ({ job, applications }) => {
           job,
           'New applications',
           applicationsWithoutContracts,
-          'applications'
+          'applications',
+          currencyLabel
         ),
         ApplicationsGroup(
           job,
           'Discussions',
           applicationsWithNotAcceptedContracts,
-          'discussions'
+          'discussions',
+          currencyLabel
         ),
         ApplicationsGroup(
           job,
           'Contract accepted',
           applicationsWithAcceptedContracts,
-          'accepted'
+          'accepted',
+          currencyLabel
         ),
       ])
     }
-  }, [job, applications, panes])
+  }, [job, applications, panes, currencyLabel])
 
   return <Tab panes={panes} />
 }

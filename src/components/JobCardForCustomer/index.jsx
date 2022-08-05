@@ -11,7 +11,7 @@ import JustOneSecond from '../JustOneSecond'
 import ErrorWrapper from '../ErrorWrapper'
 import isJobOwner from '../../lib/job'
 
-export const JobCardForCustomer = ({ job }) => {
+export const JobCardForCustomer = ({ job, currencyLabel }) => {
   const { isLoading: personLoading, token, person } = useAuth()
   const {
     applications,
@@ -47,7 +47,7 @@ export const JobCardForCustomer = ({ job }) => {
           <Segment>
             <Segment basic>
               <CustomerCard customer={job.customer} />
-              <BudgetLabel value={job.budget} />
+              <BudgetLabel value={job.budget} currencyLabel={currencyLabel} />
             </Segment>
             <Segment basic>
               <Container text fluid>
@@ -69,7 +69,11 @@ export const JobCardForCustomer = ({ job }) => {
       <Grid.Row>
         <Grid.Column>
           {job.applications_count > 0 && (
-            <Applications job={job} applications={applications} />
+            <Applications
+              job={job}
+              applications={applications}
+              currencyLabel={currencyLabel}
+            />
           )}
         </Grid.Column>
       </Grid.Row>

@@ -9,7 +9,7 @@ import { useAuth } from '../../hooks'
 import JustOneSecond from '../JustOneSecond'
 import ErrorWrapper from '../ErrorWrapper'
 
-export const JobCardForApplicant = ({ job }) => {
+export const JobCardForApplicant = ({ job, currencyLabel }) => {
   const { isLoading: personLoading, token } = useAuth()
   const {
     applications,
@@ -44,7 +44,7 @@ export const JobCardForApplicant = ({ job }) => {
           <Segment>
             <Segment basic>
               <CustomerCard customer={job.customer} />
-              <BudgetLabel value={job.budget} />
+              <BudgetLabel value={job.budget} currencyLabel={currencyLabel} />
             </Segment>
             <Segment basic>
               <Container text fluid>
@@ -69,6 +69,7 @@ export const JobCardForApplicant = ({ job }) => {
                 job={job}
                 application={application}
                 token={token}
+                currencyLabel={currencyLabel}
               />
             </Segment>
           </Segment>

@@ -6,7 +6,7 @@ import ApplicationListItem from './ApplicationListItem'
 import ErrorWrapper from './ErrorWrapper'
 import JustOneSecond from './JustOneSecond'
 
-export default function ApplicationsList() {
+export default function ApplicationsList({ currencyLabel }) {
   const { isLoading: personLoading, person, token } = useAuth()
   const {
     applications,
@@ -38,6 +38,7 @@ export default function ApplicationsList() {
           key={application.id}
           application={application}
           person={person}
+          currencyLabel={currencyLabel}
         />
       ))}
     </Card.Group>

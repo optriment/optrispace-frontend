@@ -1,11 +1,11 @@
 import React from 'react'
 import { Segment, Header } from 'semantic-ui-react'
-import { formatDateTime } from '../../lib/formatDate'
 
 export const ContractCardSidebar = ({
   contract,
-  tokenSymbol,
+  currencyLabel,
   blockchainViewAddressURL,
+  contractBalance = '',
 }) => {
   return (
     <Segment.Group>
@@ -13,26 +13,8 @@ export const ContractCardSidebar = ({
         <Header as="h3">Price</Header>
 
         <p>
-          {contract.price} {tokenSymbol}
+          {contract.price} {currencyLabel}
         </p>
-      </Segment>
-
-      <Segment>
-        <Header as="h3">Contract Wallet Address</Header>
-
-        {contract.contract_address ? (
-          <p>
-            <a
-              href={`${blockchainViewAddressURL}/${contract.contract_address}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {contract.contract_address}
-            </a>
-          </p>
-        ) : (
-          <p>Not deployed yet</p>
-        )}
       </Segment>
 
       <Segment>
@@ -54,7 +36,7 @@ export const ContractCardSidebar = ({
       <Segment>
         <Header as="h3">Performer Wallet Address</Header>
 
-        {contract.performer_address && (
+        {contract.performer_address ? (
           <p>
             <a
               href={`${blockchainViewAddressURL}/${contract.performer_address}`}
@@ -64,13 +46,37 @@ export const ContractCardSidebar = ({
               {contract.performer_address}
             </a>
           </p>
+        ) : (
+          <p>Not accepted yet</p>
         )}
       </Segment>
 
       <Segment>
-        <Header as="h3">Updated At</Header>
+        <Header as="h3">Contract Address</Header>
 
-        <p>{formatDateTime(contract.updated_at)}</p>
+        {contract.contract_address ? (
+          <p>
+            <a
+              href={`${blockchainViewAddressURL}/${contract.contract_address}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {contract.contract_address}
+            </a>
+          </p>
+        ) : (
+          <p>Not deployed yet</p>
+        )}
+      </Segment>
+
+      <Segment>
+        <Header as="h3">Contract Balance</Header>
+
+        {contract.contract_address ? (
+          <p>{contractBalance}</p>
+        ) : (
+          <p>Not funded yet</p>
+        )}
       </Segment>
     </Segment.Group>
   )

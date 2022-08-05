@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Header, Grid } from 'semantic-ui-react'
 import { JobCardForApplicant } from '../../../../components/JobCardForApplicant'
 import { JobCardForCustomer } from '../../../../components/JobCardForCustomer'
 import { JobCardForGuest } from '../../../../components/JobCardForGuest'
 import { Sidebar } from '../../../../components/Sidebar'
+import Web3Context from '../../../../context/web3-context'
 import { useAuth } from '../../../../hooks'
 
 const Wrapper = ({ title, children }) => {
@@ -25,11 +26,12 @@ const Wrapper = ({ title, children }) => {
 
 export const JobScreen = ({ job }) => {
   const { isAuthenticated, person } = useAuth()
+  const { tokenSymbol } = useContext(Web3Context)
 
   if (!isAuthenticated) {
     return (
       <Wrapper title={job.title}>
-        <JobCardForGuest job={job} />
+        <JobCardForGuest job={job} currencyLabel={tokenSymbol} />
       </Wrapper>
     )
   }
@@ -37,9 +39,9 @@ export const JobScreen = ({ job }) => {
   return (
     <Wrapper title={job.title}>
       {job.created_by === person.id ? (
-        <JobCardForCustomer job={job} />
+        <JobCardForCustomer job={job} currencyLabel={tokenSymbol} />
       ) : (
-        <JobCardForApplicant job={job} />
+        <JobCardForApplicant job={job} currencyLabel={tokenSymbol} />
       )}
     </Wrapper>
   )

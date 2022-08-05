@@ -5,7 +5,7 @@ import { BudgetLabel } from '../BudgetLabel'
 import { CustomerCard } from '../CustomerCard'
 import { FormattedDescription } from '../FormattedDescription'
 
-export const JobCardForGuest = ({ job }) => {
+export const JobCardForGuest = ({ job, currencyLabel }) => {
   return (
     <Grid stackable>
       <Grid.Row>
@@ -13,7 +13,7 @@ export const JobCardForGuest = ({ job }) => {
           <Segment>
             <Segment basic>
               <CustomerCard customer={job.customer} />
-              <BudgetLabel value={job.budget} />
+              <BudgetLabel value={job.budget} currencyLabel={currencyLabel} />
             </Segment>
             <Segment basic>
               <Container text fluid>
