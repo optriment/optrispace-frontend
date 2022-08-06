@@ -50,7 +50,7 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
     try {
       const contract = await createContract(token, {
         applicationId: application.id,
-        performerId: application.applicant.id,
+        contractorId: application.applicant.id,
         customerAddress: currentAccount,
         ...fields,
       })

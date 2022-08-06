@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { ContractCardForCustomer } from '../../../../components/ContractCardForCustomer'
-import { ContractCardForPerformer } from '../../../../components/ContractCardForPerformer'
+import { ContractCardForContractor } from '../../../../components/ContractCardForContractor'
 import JustOneSecond from '../../../../components/JustOneSecond'
 import Web3Context from '../../../../context/web3-context'
 import { useAuth } from '../../../../hooks'
@@ -25,7 +25,7 @@ export const ContractScreen = ({ contract }) => {
   }
 
   return (
-    <ContractCardForPerformer
+    <ContractCardForContractor
       contract={contract}
       person={person}
       token={token}

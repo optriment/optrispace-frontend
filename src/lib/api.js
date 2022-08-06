@@ -36,14 +36,14 @@ export async function createApplication(token, jobId, { comment, price }) {
 
 export async function createContract(
   token,
-  { applicationId, performerId, customerAddress, title, description, price }
+  { applicationId, contractorId, customerAddress, title, description, price }
 ) {
   return await postWithToken(
     `${publicRuntimeConfig.api_url}/contracts`,
     token,
     {
       application_id: applicationId,
-      performer_id: performerId,
+      performer_id: contractorId,
       customer_address: customerAddress,
       title: title.trim(),
       description: description.trim(),
@@ -52,12 +52,12 @@ export async function createContract(
   )
 }
 
-export async function acceptContract(token, contractId, performerAddress) {
+export async function acceptContract(token, contractId, contractorAddress) {
   return await postWithToken(
     `${publicRuntimeConfig.api_url}/contracts/${contractId}/accept`,
     token,
     {
-      performer_address: performerAddress,
+      performer_address: contractorAddress,
     }
   )
 }
