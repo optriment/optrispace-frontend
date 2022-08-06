@@ -20,7 +20,7 @@ import WrongBlockchainNetwork from '../WrongBlockchainNetwork'
 import ConnectWallet from '../ConnectWallet'
 import { FormattedDescription } from '../FormattedDescription'
 
-export const ContractCardForPerformer = ({
+export const ContractCardForContractor = ({
   contract,
   token,
   currencyLabel,
