@@ -1,27 +1,25 @@
-# Optrispace Frontend
+# OptriSpace Web
 
-## Development
+![OptriSpace](./public/optrispace.png)
 
-Copy example config:
+## Getting Started
 
-```sh
-cp .env.local.example .env.local
-```
+Visit [https://optrispace.com/](https://optrispace.com/) to learn more about us.
 
-In the project directory, you can run:
+## Community
 
-### `make setup`
+Our community can be found on [Twitter](https://twitter.com/optrispace),
+where you can ask questions, voice ideas, and get support.
 
-Will install dependencies.
+## Code of Conduct
 
-### `make run`
+Please see our [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Contributing
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Please see our [CONTRIBUTING.md](./CONTRIBUTING.md)
 
-### `make lint`
+## Authors
 
-Runs linter.
+* Maxim Kovrov ([@almaz-uno](https://github.com/almaz-uno))
+* Alexander Kadyrov ([@gruz0](https://github.com/gruz0))
