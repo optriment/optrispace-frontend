@@ -1,17 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Head from 'next/head'
-import { Container, Segment } from 'semantic-ui-react'
+import { Button, Container, Segment } from 'semantic-ui-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { Web3Debug } from '../../components/Web3Debug'
+import DisplayContext from '../../context/display-context'
 
 import 'semantic-ui-css/semantic.min.css'
 
 export const UsersLayout = ({ children, meta = {} }) => {
+  const { isWeb3DebugMode, setIsWeb3DebugMode } = useContext(DisplayContext)
   const { title } = meta
 
   const productTitle = 'OptriSpace'
   const pageTitle = title ? `${title} | ${productTitle}` : productTitle
+
+  const onToggleWeb3Debug = () => {
+    setIsWeb3DebugMode(!isWeb3DebugMode)
+  }
 
   return (
     <>
@@ -24,13 +30,24 @@ export const UsersLayout = ({ children, meta = {} }) => {
       <Container>
         <Header />
 
-        {/*
-        <Segment secondary size="large">
-          <Web3Debug />
-        </Segment>
-        */}
+        <Segment basic>
+          <Container textAlign="right">
+            <Button
+              onClick={onToggleWeb3Debug}
+              content="Toggle Web3 Debug"
+              size="tiny"
+              secondary
+            />
+          </Container>
 
-        <Segment basic>{children}</Segment>
+          {isWeb3DebugMode && (
+            <Segment secondary>
+              <Web3Debug />
+            </Segment>
+          )}
+
+          {children}
+        </Segment>
 
         <Footer />
       </Container>
