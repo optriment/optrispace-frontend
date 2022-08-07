@@ -73,7 +73,9 @@ export const ContractCardSidebar = ({
         <Header as="h3">Contract Balance</Header>
 
         {contract.contract_address ? (
-          <p>{contractBalance}</p>
+          <p>
+            {parseFloat(+contractBalance)} {currencyLabel}
+          </p>
         ) : (
           <p>Not funded yet</p>
         )}
