@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from 'react'
 
 export const defaultDisplayContext = {
   isSmallScreen: false,
-  isWeb3DebugMode: true,
+  isWeb3DebugMode: false,
   dispatch: () => {},
 }
 
