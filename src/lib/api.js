@@ -3,11 +3,15 @@ import { postWithToken, putWithToken } from './fetcher'
 
 const { publicRuntimeConfig } = getConfig()
 
+const convertToPositiveFloat = (value) => {
+  return Math.abs(parseFloat(value)).toString()
+}
+
 export async function createJob(token, { title, description, budget }) {
   return await postWithToken(`${publicRuntimeConfig.api_url}/jobs`, token, {
     title: title.trim(),
     description: description.trim(),
-    budget: Math.abs(parseFloat(budget)).toString(),
+    budget: convertToPositiveFloat(budget),
   })
 }
 
@@ -18,7 +22,7 @@ export async function updateJob(token, jobId, { title, description, budget }) {
     {
       title: title.trim(),
       description: description.trim(),
-      budget: Math.abs(parseFloat(budget)).toString(),
+      budget: convertToPositiveFloat(budget),
     }
   )
 }
@@ -29,7 +33,7 @@ export async function createApplication(token, jobId, { comment, price }) {
     token,
     {
       comment: comment.trim(),
-      price: Math.abs(parseFloat(price)).toString(),
+      price: convertToPositiveFloat(price),
     }
   )
 }
@@ -47,7 +51,7 @@ export async function createContract(
       customer_address: customerAddress,
       title: title.trim(),
       description: description.trim(),
-      price: Math.abs(parseFloat(price)).toString(),
+      price: convertToPositiveFloat(price),
     }
   )
 }

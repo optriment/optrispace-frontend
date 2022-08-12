@@ -63,32 +63,13 @@ export const EditJobForm = ({ job, token, currencyLabel }) => {
 
   return (
     <>
-      <Grid>
-        <Grid.Row verticalAlign="middle">
-          <Grid.Column width={13}>
-            <Header as="h1">Edit Job</Header>
-          </Grid.Column>
-
-          <Grid.Column width={3} textAlign="right">
-            <Button
-              content="Save"
-              labelPosition="left"
-              icon="check"
-              primary
-              onClick={handleEditJob}
-              disabled={!formFilled}
-            />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-
-      <Divider hidden />
+      <Header as="h1">Edit Job</Header>
 
       {error !== '' && (
         <ErrorWrapper header="Unable to update job" error={error} />
       )}
 
-      <Segment secondary padded>
+      <Segment padded>
         <Form>
           <Form.Input
             id="title"
@@ -112,12 +93,22 @@ export const EditJobForm = ({ job, token, currencyLabel }) => {
 
           <Form.Input
             id="budget"
+            type="number"
+            min={0.0}
+            step={0.01}
             label={`Approx. budget (${currencyLabel})`}
             placeholder=""
             value={fields.budget}
             onChange={handleInputChange}
             required
             width={3}
+          />
+
+          <Button
+            content="Save"
+            primary
+            onClick={handleEditJob}
+            disabled={!formFilled}
           />
         </Form>
       </Segment>

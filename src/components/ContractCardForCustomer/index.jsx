@@ -338,16 +338,12 @@ export const ContractCardForCustomer = ({ contract, token, currencyLabel }) => {
                     <Button
                       primary
                       content="Set as funded"
-                      labelPosition="left"
-                      icon="ship"
                       onClick={deployToBackend}
                     />
                   ) : (
                     <Button
                       primary
                       content="Fund Smart Contract"
-                      labelPosition="left"
-                      icon="money"
                       onClick={fundContract}
                       disabled={accountBalance < contract.price}
                     />
@@ -358,8 +354,6 @@ export const ContractCardForCustomer = ({ contract, token, currencyLabel }) => {
                   <Button
                     primary
                     content="Deploy to blockchain"
-                    labelPosition="left"
-                    icon="ship"
                     onClick={deployToBlockchain}
                   />
                 </Segment>
@@ -372,8 +366,6 @@ export const ContractCardForCustomer = ({ contract, token, currencyLabel }) => {
               <Button
                 primary
                 content="Confirm & Complete Contract"
-                labelPosition="left"
-                icon="check"
                 onClick={approve}
               />
             </Segment>

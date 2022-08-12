@@ -66,32 +66,13 @@ export const NewJobForm = ({ token, currencyLabel }) => {
 
   return (
     <>
-      <Grid>
-        <Grid.Row verticalAlign="middle">
-          <Grid.Column width={12}>
-            <Header as="h1">Add New Job</Header>
-          </Grid.Column>
-
-          <Grid.Column width={4} textAlign="right">
-            <Button
-              content="Publish"
-              labelPosition="left"
-              icon="check"
-              primary
-              onClick={handleCreateJob}
-              disabled={!formFilled}
-            />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-
-      <Divider hidden />
+      <Header as="h1">Add New Job</Header>
 
       {error !== '' && (
         <ErrorWrapper header="Unable to create job" error={error} />
       )}
 
-      <Segment secondary padded>
+      <Segment padded>
         <Form>
           <Form.Input
             id="title"
@@ -115,12 +96,22 @@ export const NewJobForm = ({ token, currencyLabel }) => {
 
           <Form.Input
             id="budget"
+            type="number"
+            min={0.0}
+            step={0.01}
             label={`Approx. budget (${currencyLabel})`}
             placeholder=""
             value={fields.budget}
             onChange={handleInputChange}
             required
             width={3}
+          />
+
+          <Button
+            content="Publish"
+            primary
+            onClick={handleCreateJob}
+            disabled={!formFilled}
           />
         </Form>
       </Segment>
