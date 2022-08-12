@@ -97,27 +97,7 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
 
   return (
     <>
-      <Grid>
-        <Grid.Row verticalAlign="middle">
-          <Grid.Column width={12}>
-            <Header as="h1">Add New Contract</Header>
-          </Grid.Column>
-
-          <Grid.Column width={4} textAlign="right">
-            <Button
-              primary
-              type="submit"
-              labelPosition="left"
-              icon="send"
-              content="Submit for Review"
-              disabled={isLoadingWeb3 || !formFilled}
-              onClick={handleCreateContract}
-            />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-
-      <Divider hidden />
+      <Header as="h1">Add New Contract</Header>
 
       {error !== '' && (
         <ErrorWrapper header="Unable to create contract" error={error} />
@@ -134,7 +114,7 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
         </Message>
       )}
 
-      <Segment secondary padded>
+      <Segment padded>
         <Form>
           <Form.Input
             id="title"
@@ -156,22 +136,31 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
             required
           />
 
-          <Form.Group>
-            <Form.Input
-              id="price"
-              label={`Price (${currencyLabel})`}
-              placeholder=""
-              value={fields.price}
-              onChange={handleInputChange}
-              required
-              width={3}
-            />
-          </Form.Group>
+          <Form.Input
+            id="price"
+            type="number"
+            min={0.0}
+            step={0.01}
+            label={`Price (${currencyLabel})`}
+            placeholder=""
+            value={fields.price}
+            onChange={handleInputChange}
+            required
+            width={3}
+          />
 
           <Form.Checkbox
             label="I agree to the Terms and Conditions"
             checked={agreedTo}
             onClick={() => setAgreedTo(!agreedTo)}
+          />
+
+          <Button
+            primary
+            type="submit"
+            content="Submit for Review"
+            disabled={isLoadingWeb3 || !formFilled}
+            onClick={handleCreateContract}
           />
         </Form>
       </Segment>

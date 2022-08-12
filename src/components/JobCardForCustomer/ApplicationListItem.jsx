@@ -36,14 +36,7 @@ export default function ApplicationListItem({
             }}
             passHref
           >
-            <Button
-              as="a"
-              content="Hire"
-              primary
-              size="tiny"
-              floated="right"
-              icon="check"
-            />
+            <Button as="a" content="Hire" primary size="tiny" floated="right" />
           </Link>
         )}
 

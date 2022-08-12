@@ -17,12 +17,7 @@ export const JobsScreen = () => {
       {person && (
         <Container textAlign="right">
           <Link href="/jobs/new" passHref>
-            <Button
-              primary
-              labelPosition="left"
-              icon="add circle"
-              content="New Job"
-            />
+            <Button primary content="Add New Job" />
           </Link>
         </Container>
       )}

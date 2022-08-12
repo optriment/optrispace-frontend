@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { TextArea, Input, Button, Form } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { createApplication } from '../../lib/api'
 
@@ -48,10 +48,9 @@ export const ApplicationForm = ({ job, application, token, currencyLabel }) => {
         <ErrorWrapper header="Unable to post an application" error={error} />
       )}
 
-      <Form reply onSubmit={handleCreateApplication}>
-        <Form.Field
+      <Form onSubmit={handleCreateApplication}>
+        <Form.TextArea
           id="comment"
-          control={TextArea}
           label="Comment for the customer"
           rows={5}
           required
@@ -60,13 +59,15 @@ export const ApplicationForm = ({ job, application, token, currencyLabel }) => {
           readOnly={application !== null}
         />
 
-        <Form.Field
+        <Form.Input
           id="price"
-          control={Input}
-          label={`The price of your services for this job (${currencyLabel})`}
+          type="number"
+          min={0.0}
+          step={0.01}
+          label={`Your price (${currencyLabel})`}
           value={fields.price}
           required
-          width={8}
+          width={4}
           onChange={handleInputChange}
           readOnly={application !== null}
           autoComplete="off"

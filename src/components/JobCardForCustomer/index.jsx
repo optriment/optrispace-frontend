@@ -61,7 +61,7 @@ export const JobCardForCustomer = ({ job, currencyLabel }) => {
       <Grid.Row>
         <Grid.Column>
           <Link href="/jobs/[id]/edit" as={`/jobs/${job.id}/edit`} passHref>
-            <Button primary content="Edit" labelPosition="left" icon="pencil" />
+            <Button primary content="Edit" />
           </Link>
         </Grid.Column>
       </Grid.Row>

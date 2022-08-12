@@ -243,8 +243,6 @@ export const ContractCardForContractor = ({
           <Button
             primary
             content="Accept contract"
-            labelPosition="left"
-            icon="handshake"
             disabled={!walletReady}
             onClick={accept}
           />
@@ -261,13 +259,7 @@ export const ContractCardForContractor = ({
             <Button>Open contract…</Button>
           </a>
 
-          <Button
-            primary
-            content="Request Review"
-            labelPosition="left"
-            icon="ship"
-            onClick={send}
-          />
+          <Button primary content="Request Review" onClick={send} />
         </Segment>
       )}
 
@@ -279,8 +271,6 @@ export const ContractCardForContractor = ({
             <Button
               primary
               content="Request Money"
-              labelPosition="left"
-              icon="money"
               disabled={!walletReady}
               onClick={requestMoney}
             />
