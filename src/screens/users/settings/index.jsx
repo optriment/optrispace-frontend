@@ -1,14 +1,25 @@
 import React from 'react'
-import { Segment, Grid, Header } from 'semantic-ui-react'
+import { Input, Segment, Grid, Header } from 'semantic-ui-react'
 import JustOneSecond from '../../../components/JustOneSecond'
+import ErrorWrapper from '../../../components/ErrorWrapper'
 import { ChangePasswordForm } from '../../../forms/ChangePassword'
 import { useAuth } from '../../../hooks'
 
 export const SettingsScreen = () => {
-  const { isLoading: personLoading, token, authenticate } = useAuth()
+  const {
+    isLoading: personLoading,
+    isAuthenticated,
+    person,
+    token,
+    authenticate,
+  } = useAuth()
 
   if (personLoading) {
     return <JustOneSecond title="Loading profile..." />
+  }
+
+  if (!isAuthenticated) {
+    return <ErrorWrapper header="Please, sign in" />
   }
 
   return (
@@ -18,11 +29,19 @@ export const SettingsScreen = () => {
       <Grid padded stackable>
         <Grid.Row>
           <Grid.Column width={8}>
-            <Header as="h3">Change Password</Header>
+            <Header as="h3">Your ID (for bug reports)</Header>
 
             <Segment>
-              <ChangePasswordForm token={token} authenticate={authenticate} />
+              <Input value={person.id} readOnly fluid />
             </Segment>
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <Grid.Column width={8}>
+            <Header as="h3">Change Password</Header>
+
+            <ChangePasswordForm token={token} authenticate={authenticate} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
