@@ -12,7 +12,7 @@ function ApplicationsGroup(job, label, applications, key, currencyLabel) {
     ),
     render: () => (
       <Tab.Pane>
-        <Item.Group relaxed>
+        <Item.Group relaxed divided>
           {applications.map((application) => (
             <ApplicationListItem
               key={application.id}

@@ -1,6 +1,7 @@
 import React from 'react'
-import { Button, Item } from 'semantic-ui-react'
 import Link from 'next/link'
+import { Button, Item } from 'semantic-ui-react'
+import { FormattedDescription } from '../FormattedDescription'
 
 export default function ApplicationListItem({
   job,
@@ -50,7 +51,9 @@ export default function ApplicationListItem({
           )}
         </Item.Meta>
 
-        <Item.Description>{application.comment}</Item.Description>
+        <Item.Description>
+          <FormattedDescription description={application.comment} />
+        </Item.Description>
       </Item.Content>
     </Item>
   )
