@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Form } from 'semantic-ui-react'
+import { Message, Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { createApplication } from '../../lib/api'
 
@@ -46,6 +46,30 @@ export const ApplicationForm = ({ job, application, token, currencyLabel }) => {
     <>
       {error !== '' && (
         <ErrorWrapper header="Unable to post an application" error={error} />
+      )}
+
+      {!application && (
+        <Message>
+          <Message.Header>Please do not forget:</Message.Header>
+          <Message.List>
+            <Message.Item>
+              Leave your contacts (Telegram, Skype or email) for the customer
+            </Message.Item>
+            <Message.Item>
+              Write descriptive comment about your relevant experience
+            </Message.Item>
+            <Message.Item>
+              The cost of your services must be in{' '}
+              <a
+                href="https://coinmarketcap.com/currencies/bnb/"
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+              >
+                BNB
+              </a>
+            </Message.Item>
+          </Message.List>
+        </Message>
       )}
 
       <Form onSubmit={handleCreateApplication}>
