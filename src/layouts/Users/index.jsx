@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import Head from 'next/head'
-import { Button, Container, Segment } from 'semantic-ui-react'
+import { Divider, Button, Container, Segment } from 'semantic-ui-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { Web3Debug } from '../../components/Web3Debug'
@@ -30,26 +30,24 @@ export const UsersLayout = ({ children, meta = {} }) => {
       <Container>
         <Header />
 
-        <Segment basic>
-          <Container textAlign="right">
-            <Button
-              onClick={onToggleWeb3Debug}
-              content="Toggle Web3 Debug"
-              size="tiny"
-              secondary
-            />
-          </Container>
+        <Segment basic>{children}</Segment>
+
+        <Footer />
+
+        <Segment basic textAlign="center">
+          <Button
+            compact
+            onClick={onToggleWeb3Debug}
+            content="Toggle Web3 Debug"
+            size="mini"
+          />
 
           {isWeb3DebugMode && (
-            <Segment secondary>
+            <Segment basic>
               <Web3Debug />
             </Segment>
           )}
-
-          {children}
         </Segment>
-
-        <Footer />
       </Container>
     </>
   )
