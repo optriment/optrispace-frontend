@@ -7,7 +7,7 @@ const getNextURLToRedirect = ({ query }) => {
   const isNextURLValid =
     query.next && query.next.startsWith('/') && !query.next.startsWith('//')
 
-  return isNextURLValid ? query.next : '/jobs'
+  return isNextURLValid ? query.next : '/'
 }
 
 export const SignInForm = () => {

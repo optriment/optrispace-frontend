@@ -27,7 +27,7 @@ export const SignUpForm = () => {
       if (response.ok) {
         await authenticate(json.token)
 
-        router.push('/jobs')
+        router.push('/')
       } else {
         setErrors(json.message)
       }
