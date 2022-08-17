@@ -5,7 +5,7 @@
   "dependencies": {
     "@next/bundle-analyzer": "^12.2.5",
     "@sentry/nextjs": "^7.10.0",
-    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^14.4.2",
     "cross-env": "^7.0.3",
