@@ -9,8 +9,8 @@ export const Sidebar = () => {
         <Header as="h3">Join our newsletter!</Header>
 
         <p>
-          Want to be notified when new jobs and tasks comes out? Simply drop
-          your email in the form below.
+          Want to be notified when new jobs and tasks come out? Simply drop your
+          email in the form below.
         </p>
 
         <p>We will not spam you. Unsubscribe any time.</p>

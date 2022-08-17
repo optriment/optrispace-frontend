@@ -59,7 +59,7 @@ export const ApplicationForm = ({ job, application, token, currencyLabel }) => {
               Write descriptive comment about your relevant experience
             </Message.Item>
             <Message.Item>
-              The cost of your services must be in{' '}
+              The price of your services must be in{' '}
               <a
                 href="https://coinmarketcap.com/currencies/bnb/"
                 target="_blank"
@@ -88,7 +88,7 @@ export const ApplicationForm = ({ job, application, token, currencyLabel }) => {
           type="number"
           min={0.0}
           step={0.01}
-          label={`Your price (${currencyLabel})`}
+          label={`Your expected service price (${currencyLabel})`}
           value={fields.price}
           required
           width={4}
