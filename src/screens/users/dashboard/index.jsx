@@ -11,7 +11,7 @@ export const DashboardScreen = () => {
       <p>
         In this tutorial you will learn how to get started on OptriSpace.
         <br />
-        All parts of this tutorial are crucial important.
+        All parts of this tutorial are crucial.
       </p>
 
       <Divider hidden />
@@ -20,20 +20,14 @@ export const DashboardScreen = () => {
 
       <List ordered>
         <List.Item>
-          Apply to jobs interesting for you (fill in the application form)
+          Apply for jobs interesting for you (fill in the application form)
         </List.Item>
+        <List.Item>Wait for the contract draft from the customer</List.Item>
+        <List.Item>Accept contract terms for the specific work</List.Item>
+        <List.Item>Do your job and send the result to the customer</List.Item>
         <List.Item>
-          Wait for the contract&apos;s draft from the customer
-        </List.Item>
-        <List.Item>
-          Accept contract&apos;s conditions for the specific work
-        </List.Item>
-        <List.Item>Do your job and send result to the customer</List.Item>
-        <List.Item>
-          All payments will be processed via Binance Testnet
-        </List.Item>
-        <List.Item>
-          Real BNB will send to your wallet after job&apos;s completion
+          Receive your payment and get your BNB into your wallet after
+          completing the job
         </List.Item>
       </List>
 
@@ -50,7 +44,7 @@ export const DashboardScreen = () => {
         <List.Item>Installed MetaMask Extension</List.Item>
         <List.Item>Added Binance Smart Chain Testnet</List.Item>
         <List.Item>
-          Some Binance&apos;s test tokens to pay for transactions (gas) fee
+          Some Binance test tokens to pay for transactions (gas) fee
         </List.Item>
       </List>
 
@@ -81,8 +75,8 @@ export const DashboardScreen = () => {
       <Header as="h2" content="How to add Binance Smart Chain Testnet" />
 
       <p>
-        In alpha and beta we use Testnet to get rid of payments with real money
-        for the transactions.
+        In Alpha and Beta we use Testnet to process transactions not involving
+        real money
       </p>
 
       <List ordered>
@@ -121,7 +115,7 @@ export const DashboardScreen = () => {
         content="How to get test BNB Tokens from Binance Faucet"
       />
 
-      <p>Test tokens used to pay for gas fees (transactions).</p>
+      <p>Test tokens are used to pay for gas fees (transactions).</p>
 
       <List ordered>
         <List.Item>
