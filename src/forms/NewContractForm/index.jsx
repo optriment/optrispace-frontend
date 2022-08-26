@@ -3,12 +3,10 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import {
   Segment,
-  Grid,
   Header,
   Button,
   Form,
   Icon,
-  Divider,
   TextArea,
   Message,
 } from 'semantic-ui-react'

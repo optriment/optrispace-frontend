@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import {
-  Grid,
-  Segment,
-  Header,
-  Divider,
-  Button,
-  Form,
-  TextArea,
-} from 'semantic-ui-react'
+import { Segment, Header, Button, Form, TextArea } from 'semantic-ui-react'
 import { updateJob } from '../../lib/api'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { isEmptyString } from '../../lib/validators'

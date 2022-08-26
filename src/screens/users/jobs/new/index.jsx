@@ -12,5 +12,5 @@ export const NewJobScreen = () => {
     return <JustOneSecond title="Loading profile..." />
   }
 
-  return <NewJobForm token={token} currencyLabel={tokenSymbol}/>
+  return <NewJobForm token={token} currencyLabel={tokenSymbol} />
 }
