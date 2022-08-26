@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import Head from 'next/head'
-import { Divider, Button, Container, Segment } from 'semantic-ui-react'
+import { Button, Container, Segment } from 'semantic-ui-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { Web3Debug } from '../../components/Web3Debug'
