@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <>
       <Segment basic padded textAlign="center">
-        &copy; 2022 Optriment
+        &copy; 2022 Optriment LLC
       </Segment>
     </>
   )

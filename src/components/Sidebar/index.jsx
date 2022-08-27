@@ -13,7 +13,7 @@ export const Sidebar = () => {
           email in the form below.
         </p>
 
-        <p>We will not spam you. Unsubscribe any time.</p>
+        <p>We will not spam you. Unsubscribe at any time.</p>
 
         <SidebarRegistrationForm />
       </Segment>
