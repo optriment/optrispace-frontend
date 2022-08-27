@@ -12,7 +12,7 @@ export const JobsScreen = () => {
 
   return (
     <>
-      <Header as="h1">Find a Job. Find a Pro</Header>
+      <Header as="h1">Find a Job. Find a Pro.</Header>
 
       {person && (
         <Container textAlign="right">

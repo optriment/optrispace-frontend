@@ -16,11 +16,11 @@ export const DashboardScreen = () => {
 
       <Divider hidden />
 
-      <Header as="h2" content="How we work in alpha version" />
+      <Header as="h2" content="How do we work in the alpha version?" />
 
       <List ordered>
         <List.Item>
-          Apply for jobs interesting for you (fill in the application form)
+          Apply for jobs interesting to you (fill in the application form)
         </List.Item>
         <List.Item>Wait for the contract draft from the customer</List.Item>
         <List.Item>Accept contract terms for the specific work</List.Item>
@@ -33,7 +33,7 @@ export const DashboardScreen = () => {
 
       <Divider hidden />
 
-      <Header as="h2" content="Requirements" />
+      <Header as="h2" content="Requirements:" />
 
       <p>To get started with OptriSpace you need to have:</p>
 
@@ -50,7 +50,7 @@ export const DashboardScreen = () => {
 
       <Divider hidden />
 
-      <Header as="h2" content="How to install MetaMask Wallet" />
+      <Header as="h2" content="How to install MetaMask Wallet?" />
 
       <p>MetaMask is a crypto wallet & gateway to blockchain apps.</p>
 
@@ -72,7 +72,7 @@ export const DashboardScreen = () => {
 
       <Divider hidden />
 
-      <Header as="h2" content="How to add Binance Smart Chain Testnet" />
+      <Header as="h2" content="How to add Binance Smart Chain Testnet?" />
 
       <p>
         In Alpha and Beta we use Testnet to process transactions not involving
@@ -91,7 +91,9 @@ export const DashboardScreen = () => {
           </a>
           in your browser
         </List.Item>
-        <List.Item>Toggle &quot;Testnets&quot; checkbox on top menu</List.Item>
+        <List.Item>
+          Toggle &quot;Testnets&quot; checkbox on the top menu
+        </List.Item>
         <List.Item>Type &quot;bnb&quot; in the search field</List.Item>
         <List.Item>
           Find &quot;Binance Smart Chain&quot; with ChainId 97
@@ -112,7 +114,7 @@ export const DashboardScreen = () => {
 
       <Header
         as="h2"
-        content="How to get test BNB Tokens from Binance Faucet"
+        content="How to get test BNB Tokens from Binance Faucet?"
       />
 
       <p>Test tokens are used to pay for gas fees (transactions).</p>
