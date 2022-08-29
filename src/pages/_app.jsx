@@ -45,6 +45,30 @@ function MyApp({ Component, pageProps }) {
         }}
       />
 
+      <Script
+        id="chatwoot-widget"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.chatwootSettings = {"position":"right","type":"standard","launcherTitle":"Chat with us"};
+            (function(d,t) {
+              var BASE_URL="https://app.chatwoot.com";
+              var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+              g.src=BASE_URL+"/packs/js/sdk.js";
+              g.defer = true;
+              g.async = true;
+              s.parentNode.insertBefore(g,s);
+              g.onload=function(){
+                window.chatwootSDK.run({
+                  websiteToken: 'Zc4rg3cr8GSbRAywQCcxiJZt',
+                  baseUrl: BASE_URL
+                })
+              }
+            })(document,"script");
+          `,
+        }}
+      />
+
       <AuthProvider>
         <Web3Provider>
           <DisplayProvider>
