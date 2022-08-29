@@ -28,24 +28,6 @@ function MyApp({ Component, pageProps }) {
       )}
 
       <Script
-        id="usersnap-widget1"
-        strategy="afterInteractive"
-        defer
-        src="https://widget.usersnap.com/global/load/4d0133ee-9af8-4c58-97a3-5f4ebba13a23?onload=onUsersnapCXLoad"
-      />
-
-      <Script
-        id="usersnap-widget2"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.onUsersnapCXLoad = function(api) {
-              api.init()
-            }
-          `,
-        }}
-      />
-
-      <Script
         id="chatwoot-widget"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
