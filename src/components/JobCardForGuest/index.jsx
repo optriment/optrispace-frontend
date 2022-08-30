@@ -1,5 +1,5 @@
 import React from 'react'
-import {Container, Grid, Segment, Header} from 'semantic-ui-react'
+import { Container, Grid, Segment, Header } from 'semantic-ui-react'
 import Link from 'next/link'
 import { BudgetLabel } from '../BudgetLabel'
 import { CustomerCard } from '../CustomerCard'
@@ -7,7 +7,6 @@ import { FormattedDescription } from '../FormattedDescription'
 import { ShareButtons } from '../ShareButtons/ShareButtons'
 
 export const JobCardForGuest = ({ job, currencyLabel, domain }) => {
-
   return (
     <Grid stackable>
       <Grid.Row>
