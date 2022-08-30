@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header, Container, Grid, Segment } from 'semantic-ui-react'
+import {Header, Container, Grid, Segment, Button, Icon} from 'semantic-ui-react'
 import { BudgetLabel } from '../BudgetLabel'
 import { CustomerCard } from '../CustomerCard'
 import { FormattedDescription } from '../FormattedDescription'
@@ -8,8 +8,9 @@ import { useApplications } from '../../hooks/useApplications'
 import { useAuth } from '../../hooks'
 import JustOneSecond from '../JustOneSecond'
 import ErrorWrapper from '../ErrorWrapper'
+import {ShareButtons} from "../ShareButtons/ShareButtons";
 
-export const JobCardForApplicant = ({ job, currencyLabel }) => {
+export const JobCardForApplicant = ({ job, currencyLabel, domain }) => {
   const { isLoading: personLoading, token } = useAuth()
   const {
     applications,
@@ -52,6 +53,7 @@ export const JobCardForApplicant = ({ job, currencyLabel }) => {
               </Container>
             </Segment>
           </Segment>
+          <ShareButtons domain={domain} job={job} />
         </Grid.Column>
       </Grid.Row>
 

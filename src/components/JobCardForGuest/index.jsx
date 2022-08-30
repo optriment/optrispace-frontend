@@ -1,11 +1,13 @@
 import React from 'react'
-import { Container, Grid, Segment, Header } from 'semantic-ui-react'
+import {Container, Grid, Segment, Header} from 'semantic-ui-react'
 import Link from 'next/link'
 import { BudgetLabel } from '../BudgetLabel'
 import { CustomerCard } from '../CustomerCard'
 import { FormattedDescription } from '../FormattedDescription'
+import { ShareButtons } from '../ShareButtons/ShareButtons'
 
-export const JobCardForGuest = ({ job, currencyLabel }) => {
+export const JobCardForGuest = ({ job, currencyLabel, domain }) => {
+
   return (
     <Grid stackable>
       <Grid.Row>
@@ -21,6 +23,7 @@ export const JobCardForGuest = ({ job, currencyLabel }) => {
               </Container>
             </Segment>
           </Segment>
+          <ShareButtons domain={domain} job={job} />
         </Grid.Column>
       </Grid.Row>
 
