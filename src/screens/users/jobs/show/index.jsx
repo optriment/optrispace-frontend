@@ -29,12 +29,12 @@ export const JobScreen = ({ job }) => {
   const { isAuthenticated, person } = useAuth()
   const { tokenSymbol } = useContext(Web3Context)
   const { publicRuntimeConfig } = getConfig()
-  const testDomain = publicRuntimeConfig.domain
+  const domain = publicRuntimeConfig.domain
 
   if (!isAuthenticated) {
     return (
       <Wrapper title={job.title}>
-        <JobCardForGuest job={job} currencyLabel={tokenSymbol} domain={testDomain} />
+        <JobCardForGuest job={job} currencyLabel={tokenSymbol} domain={domain} />
       </Wrapper>
     )
   }
@@ -42,9 +42,9 @@ export const JobScreen = ({ job }) => {
   return (
     <Wrapper title={job.title}>
       {job.created_by === person.id ? (
-        <JobCardForCustomer job={job} currencyLabel={tokenSymbol} domain={testDomain} />
+        <JobCardForCustomer job={job} currencyLabel={tokenSymbol} domain={domain} />
       ) : (
-        <JobCardForApplicant job={job} currencyLabel={tokenSymbol} domain={testDomain} />
+        <JobCardForApplicant job={job} currencyLabel={tokenSymbol} domain={domain} />
       )}
     </Wrapper>
   )
