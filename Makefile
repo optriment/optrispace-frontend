@@ -2,6 +2,7 @@
 
 NPM := npm
 NPM_RUN := ${NPM} run
+NPX := npx
 IMAGE_NAME := optrispace-web
 
 help: # Show this help
@@ -9,6 +10,7 @@ help: # Show this help
 
 setup: # Setup project
 	@${NPM} install
+	@${NPX} husky install
 
 run: # Run dev server
 	@${NPM_RUN} dev

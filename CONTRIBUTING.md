@@ -5,7 +5,7 @@ This is the default branch that all Pull Requests (PR) should be made against.
 
 Requirements:
 
-* [Node.js](https://nodejs.org/en/) version 16 or 17
+- [Node.js](https://nodejs.org/en/) version 16 or 17
 
 ## Developing locally with remote backend
 
@@ -19,27 +19,27 @@ Please follow instructions below to install frontend locally.
 
 3. Create a new branch:
 
-    ```sh
-    git checkout -b YOUR_BRANCH_NAME
-    ```
+   ```sh
+   git checkout -b YOUR_BRANCH_NAME
+   ```
 
 4. Install the dependencies with:
 
-    ```sh
-    make setup
-    ```
+   ```sh
+   make setup
+   ```
 
 5. Copy the environment variables:
 
-    ```sh
-    cp .env.local.example .env.local
-    ```
+   ```sh
+   cp .env.local.example .env.local
+   ```
 
 6. Run the web server:
 
-    ```sh
-    make run
-    ```
+   ```sh
+   make run
+   ```
 
 The last command will start the web server on
 [http://localhost:3000/](http://localhost:3000/),
