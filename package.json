@@ -27,7 +27,7 @@
     "start": "next start",
     "test": "next test",
     "build-production": "next build && next export",
-    "lint": "next lint --no-cache",
+    "lint": "next lint --no-cache && npx eslint '**/*.jsx' '**/*.js' && npx prettier --check .",
     "lint-fix": "next lint --fix",
     "analyze": "cross-env ANALYZE=true npm run-script build"
   },
@@ -54,6 +54,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.4.0",
+    "husky": "^8.0.1",
     "prettier": "^2.7.1"
   }
 }

@@ -21,5 +21,5 @@ Please see our [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ## Authors
 
-* Maxim Kovrov ([@almaz-uno](https://github.com/almaz-uno))
-* Alexander Kadyrov ([@gruz0](https://github.com/gruz0))
+- Maxim Kovrov ([@almaz-uno](https://github.com/almaz-uno))
+- Alexander Kadyrov ([@gruz0](https://github.com/gruz0))

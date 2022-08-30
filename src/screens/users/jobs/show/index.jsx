@@ -6,7 +6,7 @@ import { JobCardForGuest } from '../../../../components/JobCardForGuest'
 import { Sidebar } from '../../../../components/Sidebar'
 import Web3Context from '../../../../context/web3-context'
 import { useAuth } from '../../../../hooks'
-import getConfig from "next/config";
+import getConfig from 'next/config'
 
 const Wrapper = ({ title, children }) => {
   return (
@@ -34,7 +34,11 @@ export const JobScreen = ({ job }) => {
   if (!isAuthenticated) {
     return (
       <Wrapper title={job.title}>
-        <JobCardForGuest job={job} currencyLabel={tokenSymbol} domain={domain} />
+        <JobCardForGuest
+          job={job}
+          currencyLabel={tokenSymbol}
+          domain={domain}
+        />
       </Wrapper>
     )
   }
@@ -42,9 +46,17 @@ export const JobScreen = ({ job }) => {
   return (
     <Wrapper title={job.title}>
       {job.created_by === person.id ? (
-        <JobCardForCustomer job={job} currencyLabel={tokenSymbol} domain={domain} />
+        <JobCardForCustomer
+          job={job}
+          currencyLabel={tokenSymbol}
+          domain={domain}
+        />
       ) : (
-        <JobCardForApplicant job={job} currencyLabel={tokenSymbol} domain={domain} />
+        <JobCardForApplicant
+          job={job}
+          currencyLabel={tokenSymbol}
+          domain={domain}
+        />
       )}
     </Wrapper>
   )
