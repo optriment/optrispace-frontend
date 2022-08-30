@@ -30,6 +30,7 @@ const nextConfig = {
     blockchain_network_name: process.env.BLOCKCHAIN_NETWORK_NAME,
     blockchain_view_address_url: process.env.BLOCKCHAIN_VIEW_ADDRESS_URL,
     required_chain_id: process.env.REQUIRED_CHAIN_ID,
+    domain: process.env.DOMAIN,
   },
 
   sentry: {
