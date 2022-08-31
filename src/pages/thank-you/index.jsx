@@ -17,4 +17,6 @@ const Page = () => {
   )
 }
 
+Page.useTwitterPixel = true
+
 export default Page
