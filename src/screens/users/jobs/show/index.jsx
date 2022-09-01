@@ -1,17 +1,55 @@
 import React, { useContext } from 'react'
-import { Header, Grid } from 'semantic-ui-react'
+import { useRouter } from 'next/router'
+import getConfig from 'next/config'
+import { Button, Segment, Divider, Header, Grid } from 'semantic-ui-react'
 import { JobCardForApplicant } from '../../../../components/JobCardForApplicant'
 import { JobCardForCustomer } from '../../../../components/JobCardForCustomer'
 import { JobCardForGuest } from '../../../../components/JobCardForGuest'
 import { Sidebar } from '../../../../components/Sidebar'
 import Web3Context from '../../../../context/web3-context'
 import { useAuth } from '../../../../hooks'
-import getConfig from 'next/config'
+import { blockJob } from '../../../../lib/api'
 
-const Wrapper = ({ title, children }) => {
+const Wrapper = ({ jobId, token, title, children, isAdmin }) => {
+  const router = useRouter()
+
+  const handleBlockJob = () => {
+    if (!isAdmin) {
+      return
+    }
+
+    if (!window.confirm('Are you sure?')) {
+      return
+    }
+
+    try {
+      blockJob(token, jobId)
+        .then(() => {
+          router.push(`/jobs`)
+        })
+        .catch((err) => {
+          console.error({ err })
+        })
+    } catch (err) {
+      console.error({ err })
+    }
+  }
+
   return (
     <>
       <Header as="h1">{title}</Header>
+
+      {isAdmin && (
+        <Grid.Row>
+          <Grid.Column>
+            <Segment color="red">
+              <Button negative content="Block" onClick={handleBlockJob} />
+            </Segment>
+
+            <Divider hidden />
+          </Grid.Column>
+        </Grid.Row>
+      )}
 
       <Grid stackable>
         <Grid.Row>
@@ -26,7 +64,7 @@ const Wrapper = ({ title, children }) => {
 }
 
 export const JobScreen = ({ job }) => {
-  const { isAuthenticated, person } = useAuth()
+  const { isAuthenticated, person, token } = useAuth()
   const { tokenSymbol } = useContext(Web3Context)
   const { publicRuntimeConfig } = getConfig()
   const domain = publicRuntimeConfig.domain
@@ -44,7 +82,12 @@ export const JobScreen = ({ job }) => {
   }
 
   return (
-    <Wrapper title={job.title}>
+    <Wrapper
+      token={token}
+      jobId={job.id}
+      title={job.title}
+      isAdmin={person.is_admin}
+    >
       {job.created_by === person.id ? (
         <JobCardForCustomer
           job={job}

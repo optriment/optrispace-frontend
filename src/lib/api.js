@@ -27,6 +27,13 @@ export async function updateJob(token, jobId, { title, description, budget }) {
   )
 }
 
+export async function blockJob(token, jobId) {
+  return await postWithToken(
+    `${publicRuntimeConfig.api_url}/jobs/${jobId}/block`,
+    token
+  )
+}
+
 export async function createApplication(token, jobId, { comment, price }) {
   return await postWithToken(
     `${publicRuntimeConfig.api_url}/jobs/${jobId}/applications`,
