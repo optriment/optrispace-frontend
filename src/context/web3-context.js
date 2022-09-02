@@ -165,7 +165,10 @@ export const Web3Provider = ({ children }) => {
       try {
         const balance = await provider.getBalance(currentAccount)
         const balanceInEth = ethers.utils.formatEther(balance)
-        setAccountBalance(balanceInEth)
+
+        const formattedBalance =
+          +balanceInEth > 0 ? (+balanceInEth).toFixed(6) : balanceInEth
+        setAccountBalance(formattedBalance)
       } catch (err) {
         console.error('Unable to get balance')
         console.error({ err })
