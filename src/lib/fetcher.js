@@ -9,7 +9,7 @@ export const fetcher = async (url) => {
   const res = await fetch(url, payload)
 
   if (!res.ok) {
-    const error = new Error('An error occured while fetching the data')
+    const error = new Error('An error occurred while fetching the data')
 
     // Attach extra info to the error object.
     error.info = await res.json()
@@ -35,7 +35,7 @@ export const fetchWithToken = async (url, token) => {
   const res = await fetch(url, payload)
 
   if (!res.ok) {
-    const error = new Error('An error occured while fetching the data')
+    const error = new Error('An error occurred while fetching the data')
 
     // Attach extra info to the error object.
     error.info = await res.json()
@@ -62,7 +62,7 @@ export const postWithToken = async (url, token, body = {}) => {
   const res = await fetch(url, payload)
 
   if (!res.ok) {
-    const error = new Error('An error occured while sending the data')
+    const error = new Error('An error occurred while sending the data')
 
     // Attach extra info to the error object.
     error.info = await res.json()
@@ -88,7 +88,7 @@ export const postWithoutToken = async (url, body = {}) => {
   const res = await fetch(url, payload)
 
   if (!res.ok) {
-    const error = new Error('An error occured while sending the data')
+    const error = new Error('An error occurred while sending the data')
 
     // Attach extra info to the error object.
     error.info = await res.json()
@@ -115,7 +115,7 @@ export const putWithToken = async (url, token, body = {}) => {
   const res = await fetch(url, payload)
 
   if (!res.ok) {
-    const error = new Error('An error occured while sending the data')
+    const error = new Error('An error occurred while sending the data')
 
     // Attach extra info to the error object.
     error.info = await res.json()
