@@ -7,6 +7,22 @@ Requirements:
 
 - [Node.js](https://nodejs.org/en/) version 16 or 17
 
+## For Windows users
+
+We highly recommend to install EditorConfig extension to your editor to have consistent settings with our codebase.
+
+Please make sure that you've valid settings for Git:
+
+```sh
+git config --global core.autocrlf
+```
+
+If the result is `true`, you need to change it to `false`:
+
+```sh
+git config --global core.autocrlf false
+```
+
 ## Developing locally with remote backend
 
 Please follow instructions below to install frontend locally.
