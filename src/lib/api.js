@@ -103,3 +103,13 @@ export async function completeContract(token, contractId) {
     token
   )
 }
+
+export async function updateDisplayName(token, personId, displayName) {
+  return await putWithToken(
+    `${publicRuntimeConfig.api_url}/persons/${personId}`,
+    token,
+    {
+      display_name: displayName.trim(),
+    }
+  )
+}

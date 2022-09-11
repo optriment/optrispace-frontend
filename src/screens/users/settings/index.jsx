@@ -3,6 +3,7 @@ import { Input, Segment, Grid, Header } from 'semantic-ui-react'
 import JustOneSecond from '../../../components/JustOneSecond'
 import ErrorWrapper from '../../../components/ErrorWrapper'
 import { ChangePasswordForm } from '../../../forms/ChangePassword'
+import { ChangeDisplayName } from '../../../forms/ChangeDisplayName'
 import { useAuth } from '../../../hooks'
 
 export const SettingsScreen = () => {
@@ -33,6 +34,20 @@ export const SettingsScreen = () => {
 
             <Segment>
               <Input value={person.id} readOnly fluid />
+            </Segment>
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <Grid.Column width={8}>
+            <Header as="h3">Change Display Name</Header>
+
+            <Segment>
+              <ChangeDisplayName
+                token={token}
+                id={person.id}
+                displayName={person.display_name}
+              />
             </Segment>
           </Grid.Column>
         </Grid.Row>

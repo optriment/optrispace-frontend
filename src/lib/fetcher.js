@@ -124,5 +124,7 @@ export const putWithToken = async (url, token, body = {}) => {
     throw error
   }
 
-  return res.json()
+  return res.json().catch(() => {
+    return { result: 'ok' }
+  })
 }
