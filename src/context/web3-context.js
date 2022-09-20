@@ -19,7 +19,7 @@ export const Web3Provider = ({ children }) => {
     publicRuntimeConfig.blockchain_view_address_url
 
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState('')
 
   const [isWalletInstalled, setIsWalletInstalled] = useState(false)
   const [isWalletConnected, setIsWalletConnected] = useState(false)

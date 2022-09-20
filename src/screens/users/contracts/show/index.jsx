@@ -1,25 +1,21 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { ContractCardForCustomer } from '../../../../components/ContractCardForCustomer'
 import { ContractCardForContractor } from '../../../../components/ContractCardForContractor'
-import JustOneSecond from '../../../../components/JustOneSecond'
-import Web3Context from '../../../../context/web3-context'
-import { useAuth } from '../../../../hooks'
+import { ProfileIsNotConfigured } from '../../../../components/ProfileIsNotConfigured'
+import { isEmptyString } from '../../../../lib/validators'
 
-export const ContractScreen = ({ contract }) => {
-  const { isLoading: personLoading, person, token } = useAuth()
-  const { tokenSymbol } = useContext(Web3Context)
-
-  if (personLoading) {
-    return <JustOneSecond title="Loading profile..." />
+export const ContractScreen = ({ contract, person, token, tokenSymbol }) => {
+  if (isEmptyString(person.ethereum_address)) {
+    return <ProfileIsNotConfigured />
   }
 
-  if (contract.customer.id === person.id) {
+  if (contract.customer_id === person.id) {
     return (
       <ContractCardForCustomer
         contract={contract}
         person={person}
         token={token}
-        currencyLabel={tokenSymbol}
+        tokenSymbol={tokenSymbol}
       />
     )
   }
@@ -29,7 +25,7 @@ export const ContractScreen = ({ contract }) => {
       contract={contract}
       person={person}
       token={token}
-      currencyLabel={tokenSymbol}
+      tokenSymbol={tokenSymbol}
     />
   )
 }

@@ -9,17 +9,16 @@ import { useAuth } from '../../hooks'
 import JustOneSecond from '../JustOneSecond'
 import ErrorWrapper from '../ErrorWrapper'
 import { ShareButtons } from '../ShareButtons/ShareButtons'
+import { isEmptyString } from '../../lib/validators'
+import { ProfileIsNotConfigured } from '../ProfileIsNotConfigured'
 
-export const JobCardForApplicant = ({ job, currencyLabel, domain }) => {
+export const JobCardForApplicant = ({ job, person, tokenSymbol, domain }) => {
   const { isLoading: personLoading, token } = useAuth()
   const {
     applications,
     isLoading: applicationsLoading,
     error: applicationsError,
   } = useApplications(token, job.id)
-
-  const application =
-    applications && applications.length > 0 ? applications[0] : null
 
   if (personLoading) {
     return <JustOneSecond title="Loading profile..." />
@@ -38,6 +37,9 @@ export const JobCardForApplicant = ({ job, currencyLabel, domain }) => {
     )
   }
 
+  const application =
+    applications && applications.length > 0 ? applications[0] : null
+
   return (
     <Grid stackable>
       <Grid.Row>
@@ -45,7 +47,7 @@ export const JobCardForApplicant = ({ job, currencyLabel, domain }) => {
           <Segment>
             <Segment basic>
               <CustomerCard customer={job.customer} />
-              <BudgetLabel value={job.budget} currencyLabel={currencyLabel} />
+              <BudgetLabel value={job.budget} tokenSymbol={tokenSymbol} />
             </Segment>
             <Segment basic>
               <Container text fluid>
@@ -67,12 +69,16 @@ export const JobCardForApplicant = ({ job, currencyLabel, domain }) => {
                 <Header as="h3">Leave a Reply</Header>
               )}
 
-              <ApplicationForm
-                job={job}
-                application={application}
-                token={token}
-                currencyLabel={currencyLabel}
-              />
+              {isEmptyString(person.ethereum_address) ? (
+                <ProfileIsNotConfigured />
+              ) : (
+                <ApplicationForm
+                  job={job}
+                  application={application}
+                  token={token}
+                  tokenSymbol={tokenSymbol}
+                />
+              )}
             </Segment>
           </Segment>
         </Grid.Column>

@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { Tab } from 'semantic-ui-react'
 import ApplicationsGroup from './ApplicationsGroup'
 
-const Applications = ({ job, applications, currencyLabel }) => {
+const Applications = ({
+  job,
+  applications,
+  blockchainViewAddressURL,
+  tokenSymbol,
+}) => {
   const [panes, setPanes] = useState(undefined)
 
   useEffect(() => {
@@ -25,25 +30,28 @@ const Applications = ({ job, applications, currencyLabel }) => {
           'New applications',
           applicationsWithoutContracts,
           'applications',
-          currencyLabel
+          blockchainViewAddressURL,
+          tokenSymbol
         ),
         ApplicationsGroup(
           job,
           'Discussions',
           applicationsWithNotAcceptedContracts,
           'discussions',
-          currencyLabel
+          blockchainViewAddressURL,
+          tokenSymbol
         ),
         ApplicationsGroup(
           job,
           'Contract accepted',
           applicationsWithAcceptedContracts,
           'accepted',
-          currencyLabel
+          blockchainViewAddressURL,
+          tokenSymbol
         ),
       ])
     }
-  }, [job, applications, panes, currencyLabel])
+  }, [job, applications, panes, blockchainViewAddressURL, tokenSymbol])
 
   return <Tab panes={panes} />
 }

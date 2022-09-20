@@ -1,7 +1,9 @@
+import * as Sentry from '@sentry/nextjs'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Form, Message, Segment } from 'semantic-ui-react'
+import { Button, Form, Segment } from 'semantic-ui-react'
 import { useAuth } from '../../hooks'
+import ErrorWrapper from '../../components/ErrorWrapper'
 
 const getNextURLToRedirect = ({ query }) => {
   const isNextURLValid =
@@ -20,11 +22,11 @@ export const SignInForm = () => {
     password: '',
   }
   const [fields, setFields] = useState(initialFields)
-  const [errors, setErrors] = useState(undefined)
+  const [error, setError] = useState('')
 
   const handleSignIn = async (e) => {
     e.preventDefault()
-    setErrors(null)
+    setError('')
     setIsSubmitting(true)
 
     try {
@@ -36,10 +38,23 @@ export const SignInForm = () => {
 
         router.push(getNextURLToRedirect(router))
       } else {
-        setErrors(json.message)
+        // We use this condition below because in backend we don't have descriptive messages right now
+        if (json.message.match(/unable to login/i)) {
+          setError('Invalid credentials')
+        } else {
+          setError(json.message)
+        }
       }
-    } catch (error) {
-      setErrors(error)
+    } catch (err) {
+      console.error({ err })
+
+      if (err.message.match(/failed to fetch/i)) {
+        Sentry.captureMessage('Server is not available')
+        setError('Server is not available')
+      } else {
+        Sentry.captureException(err)
+        setError(err.message)
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -51,12 +66,8 @@ export const SignInForm = () => {
 
   return (
     <>
-      {errors && (
-        <Message
-          error
-          header="Unable to sign in"
-          list={Array.isArray(errors) ? errors : [errors]}
-        />
+      {error !== '' && (
+        <ErrorWrapper header="Unable to sign in" error={error} />
       )}
 
       <Form size="large" onSubmit={handleSignIn}>

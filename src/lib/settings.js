@@ -11,3 +11,13 @@ export async function changeUserPassword(
     new_password,
   })
 }
+
+export async function changeWallet(token, personId, { walletAddress }) {
+  return await putWithToken(
+    `${publicRuntimeConfig.api_url}/persons/${personId}`,
+    token,
+    {
+      ethereum_address: walletAddress,
+    }
+  )
+}

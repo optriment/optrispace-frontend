@@ -1,21 +1,8 @@
 [
   {
     "inputs": [],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "newAdmin",
-        "type": "address"
-      }
-    ],
-    "name": "AdminAdded",
-    "type": "event"
+    "name": "Unauthorized",
+    "type": "error"
   },
   {
     "anonymous": false,
@@ -37,16 +24,16 @@
     "type": "event"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "VERSION",
+    "outputs": [
       {
-        "internalType": "address",
-        "name": "newAdmin",
-        "type": "address"
+        "internalType": "string",
+        "name": "",
+        "type": "string"
       }
     ],
-    "name": "addAdmin",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -58,7 +45,7 @@
       },
       {
         "internalType": "address",
-        "name": "performer",
+        "name": "contractor",
         "type": "address"
       },
       {
@@ -73,17 +60,7 @@
       },
       {
         "internalType": "string",
-        "name": "performerId",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "title",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "description",
+        "name": "contractorId",
         "type": "string"
       }
     ],
@@ -96,19 +73,6 @@
       }
     ],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getAdmins",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -138,7 +102,7 @@
       },
       {
         "internalType": "address",
-        "name": "_performer",
+        "name": "_contractor",
         "type": "address"
       },
       {
@@ -158,18 +122,26 @@
       },
       {
         "internalType": "string",
-        "name": "_performerId",
+        "name": "_contractorId",
         "type": "string"
       },
       {
         "internalType": "string",
-        "name": "_title",
+        "name": "_state",
         "type": "string"
-      },
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
       {
-        "internalType": "string",
-        "name": "_description",
-        "type": "string"
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

@@ -6,7 +6,7 @@ import { CustomerCard } from '../CustomerCard'
 import { FormattedDescription } from '../FormattedDescription'
 import { ShareButtons } from '../ShareButtons/ShareButtons'
 
-export const JobCardForGuest = ({ job, currencyLabel, domain }) => {
+export const JobCardForGuest = ({ job, tokenSymbol, domain }) => {
   return (
     <Grid stackable>
       <Grid.Row>
@@ -14,7 +14,7 @@ export const JobCardForGuest = ({ job, currencyLabel, domain }) => {
           <Segment>
             <Segment basic>
               <CustomerCard customer={job.customer} />
-              <BudgetLabel value={job.budget} currencyLabel={currencyLabel} />
+              <BudgetLabel value={job.budget} tokenSymbol={tokenSymbol} />
             </Segment>
             <Segment basic>
               <Container text fluid>

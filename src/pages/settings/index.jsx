@@ -7,12 +7,27 @@ import { UsersLayout } from '../../layouts/Users'
 import { SettingsScreen } from '../../screens/users/settings'
 
 const Page = () => {
-  const { isLoading: personLoading, isAuthenticated } = useAuth()
+  const {
+    isLoading: personLoading,
+    error: personError,
+    isAuthenticated,
+    person,
+    token,
+    authenticate,
+  } = useAuth()
 
   if (personLoading) {
     return (
       <LandingLayout>
         <JustOneSecond title="Loading profile..." />
+      </LandingLayout>
+    )
+  }
+
+  if (personError) {
+    return (
+      <LandingLayout>
+        <ErrorWrapper header="Internal Server Error" error={personError} />
       </LandingLayout>
     )
   }
@@ -27,7 +42,11 @@ const Page = () => {
 
   return (
     <UsersLayout meta={{ title: 'Settings' }}>
-      <SettingsScreen />
+      <SettingsScreen
+        person={person}
+        token={token}
+        authenticate={authenticate}
+      />
     </UsersLayout>
   )
 }

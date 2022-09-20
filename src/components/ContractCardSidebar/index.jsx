@@ -3,7 +3,7 @@ import { Segment, Header } from 'semantic-ui-react'
 
 export const ContractCardSidebar = ({
   contract,
-  currencyLabel,
+  tokenSymbol,
   blockchainViewAddressURL,
   contractBalance = '',
 }) => {
@@ -13,7 +13,7 @@ export const ContractCardSidebar = ({
         <Header as="h3">Price</Header>
 
         <p>
-          {contract.price} {currencyLabel}
+          {contract.price} {tokenSymbol}
         </p>
       </Segment>
 
@@ -74,7 +74,7 @@ export const ContractCardSidebar = ({
 
         {contract.contract_address ? (
           <p>
-            {parseFloat(+contractBalance)} {currencyLabel}
+            {parseFloat(+contractBalance)} {tokenSymbol}
           </p>
         ) : (
           <p>Not funded yet</p>

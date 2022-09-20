@@ -9,11 +9,19 @@ import { EditJobScreen } from '../../../screens/users/jobs/edit'
 import { useJob } from '../../../hooks/useJob'
 import DisplayContext from '../../../context/display-context'
 import { LandingLayout } from '../../../layouts/Landing'
+import Web3Context from '../../../context/web3-context'
 
 const Page = () => {
   const { query } = useRouter()
-  const { person, isLoading: personLoading, isAuthenticated } = useAuth()
+  const {
+    isLoading: personLoading,
+    error: personError,
+    isAuthenticated,
+    person,
+    token,
+  } = useAuth()
   const { job, isLoading: jobLoading, error: jobError } = useJob(query.id)
+  const { tokenSymbol } = useContext(Web3Context)
   const { setSmallScreen } = useContext(DisplayContext)
 
   useEffect(() => {
@@ -24,6 +32,14 @@ const Page = () => {
     return (
       <LandingLayout>
         <JustOneSecond title="Loading profile..." />
+      </LandingLayout>
+    )
+  }
+
+  if (personError) {
+    return (
+      <LandingLayout>
+        <ErrorWrapper header="Internal Server Error" error={personError} />
       </LandingLayout>
     )
   }
@@ -62,7 +78,12 @@ const Page = () => {
 
   return (
     <UsersLayout meta={{ title: 'Edit Job' }}>
-      <EditJobScreen job={job} />
+      <EditJobScreen
+        job={job}
+        person={person}
+        token={token}
+        tokenSymbol={tokenSymbol}
+      />
     </UsersLayout>
   )
 }

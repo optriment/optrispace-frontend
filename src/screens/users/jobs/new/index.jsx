@@ -1,16 +1,12 @@
-import React, { useContext } from 'react'
-import JustOneSecond from '../../../../components/JustOneSecond'
-import Web3Context from '../../../../context/web3-context'
+import React from 'react'
+import { ProfileIsNotConfigured } from '../../../../components/ProfileIsNotConfigured'
 import { NewJobForm } from '../../../../forms/NewJobForm'
-import { useAuth } from '../../../../hooks'
+import { isEmptyString } from '../../../../lib/validators'
 
-export const NewJobScreen = () => {
-  const { isLoading: personLoading, token } = useAuth()
-  const { tokenSymbol } = useContext(Web3Context)
-
-  if (personLoading) {
-    return <JustOneSecond title="Loading profile..." />
+export const NewJobScreen = ({ person, token, tokenSymbol }) => {
+  if (isEmptyString(person.ethereum_address)) {
+    return <ProfileIsNotConfigured />
   }
 
-  return <NewJobForm token={token} currencyLabel={tokenSymbol} />
+  return <NewJobForm person={person} token={token} tokenSymbol={tokenSymbol} />
 }

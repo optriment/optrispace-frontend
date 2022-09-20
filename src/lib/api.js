@@ -63,13 +63,10 @@ export async function createContract(
   )
 }
 
-export async function acceptContract(token, contractId, contractorAddress) {
+export async function acceptContract(token, contractId) {
   return await postWithToken(
     `${publicRuntimeConfig.api_url}/contracts/${contractId}/accept`,
-    token,
-    {
-      performer_address: contractorAddress,
-    }
+    token
   )
 }
 
@@ -83,9 +80,16 @@ export async function deployContract(token, contractId, contractAddress) {
   )
 }
 
-export async function sendContract(token, contractId) {
+export async function signContract(token, contractId) {
   return await postWithToken(
-    `${publicRuntimeConfig.api_url}/contracts/${contractId}/send`,
+    `${publicRuntimeConfig.api_url}/contracts/${contractId}/sign`,
+    token
+  )
+}
+
+export async function fundContract(token, contractId) {
+  return await postWithToken(
+    `${publicRuntimeConfig.api_url}/contracts/${contractId}/fund`,
     token
   )
 }

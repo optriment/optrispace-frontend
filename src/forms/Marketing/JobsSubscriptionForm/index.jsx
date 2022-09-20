@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import React, { useState } from 'react'
 import { Message, Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../../components/ErrorWrapper'
@@ -10,7 +11,7 @@ export const JobsSubscriptionForm = () => {
     messenger: '',
   }
   const [fields, setFields] = useState(initialFields)
-  const [error, setError] = useState(undefined)
+  const [error, setError] = useState('')
 
   const [isSubscribed, setIsSubscribed] = useState(false)
 
@@ -26,7 +27,7 @@ export const JobsSubscriptionForm = () => {
       return
     }
 
-    setError(null)
+    setError('')
     setIsSubscribed(false)
 
     try {
@@ -36,17 +37,21 @@ export const JobsSubscriptionForm = () => {
         })
         .catch((err) => {
           console.error({ err })
-          setError(err)
+          Sentry.captureException(err)
+          setError(err.message)
         })
     } catch (err) {
       console.error({ err })
+      Sentry.captureException(err)
       setError(err.message)
     }
   }
 
   return (
     <>
-      {error && <ErrorWrapper header="Unable to subscribe" error={error} />}
+      {error !== '' && (
+        <ErrorWrapper header="Unable to subscribe" error={error} />
+      )}
 
       <Form size="large" onSubmit={handleFormSubmit} success={isSubscribed}>
         <Form.Input

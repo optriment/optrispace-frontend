@@ -1,7 +1,9 @@
+import * as Sentry from '@sentry/nextjs'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Form, Message, Segment } from 'semantic-ui-react'
+import { Button, Form, Segment } from 'semantic-ui-react'
 import { useAuth } from '../../hooks'
+import ErrorWrapper from '../../components/ErrorWrapper'
 
 export const SignUpForm = () => {
   const { signUp, authenticate } = useAuth()
@@ -11,17 +13,19 @@ export const SignUpForm = () => {
   const initialFields = {
     login: '',
     password: '',
+    email: '',
+    display_name: '',
   }
   const [fields, setFields] = useState(initialFields)
-  const [errors, setErrors] = useState(undefined)
+  const [error, setError] = useState('')
 
   const handleSignUp = async (e) => {
     e.preventDefault()
-    setErrors(null)
+    setError('')
     setIsSubmitting(true)
 
     try {
-      const response = await signUp(fields.login, fields.password)
+      const response = await signUp(fields)
       const json = await response.json()
 
       if (response.ok) {
@@ -29,10 +33,23 @@ export const SignUpForm = () => {
 
         router.push('/')
       } else {
-        setErrors(json.message)
+        // We use this condition below because in backend we don't have descriptive messages right now
+        if (json.message.match(/duplication/i)) {
+          setError('Login already exists')
+        } else {
+          setError(json.message)
+        }
       }
-    } catch (error) {
-      setErrors(error)
+    } catch (err) {
+      console.error({ err })
+
+      if (err.message.match(/failed to fetch/i)) {
+        Sentry.captureMessage('Server is not available')
+        setError('Server is not available')
+      } else {
+        Sentry.captureException(err)
+        setError(err.message)
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -44,12 +61,8 @@ export const SignUpForm = () => {
 
   return (
     <>
-      {errors && (
-        <Message
-          error
-          header="Unable to sign up"
-          list={Array.isArray(errors) ? errors : [errors]}
-        />
+      {error !== '' && (
+        <ErrorWrapper header="Unable to sign up" error={error} />
       )}
 
       <Form size="large" onSubmit={handleSignUp}>
@@ -78,6 +91,30 @@ export const SignUpForm = () => {
             autoComplete="new-password"
             onChange={handleInputChange}
           />
+
+          {/*
+          <Form.Input
+            id="email"
+            fluid
+            icon="mail"
+            iconPosition="left"
+            placeholder="Email"
+            value={fields.email}
+            autoComplete="email"
+            onChange={handleInputChange}
+          />
+
+          <Form.Input
+            id="display_name"
+            fluid
+            icon="user"
+            iconPosition="left"
+            placeholder="Display Name"
+            value={fields.display_name}
+            autoComplete="name"
+            onChange={handleInputChange}
+          />
+          */}
 
           <Button primary fluid size="large" disabled={isSubmitting}>
             Sign Up
