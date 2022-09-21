@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useRouter } from 'next/router'
 import isJobOwner from '../../../../lib/job'
 import JustOneSecond from '../../../../components/JustOneSecond'
@@ -9,21 +9,37 @@ import { useApplication } from '../../../../hooks/useApplication'
 import { UsersLayout } from '../../../../layouts/Users'
 import { NewContractScreen } from '../../../../screens/users/contracts/new'
 import { LandingLayout } from '../../../../layouts/Landing'
+import Web3Context from '../../../../context/web3-context'
 
 const Page = () => {
   const { query } = useRouter()
-  const { isLoading: personLoading, isAuthenticated, person, token } = useAuth()
+  const {
+    isLoading: personLoading,
+    error: personError,
+    isAuthenticated,
+    person,
+    token,
+  } = useAuth()
   const { job, isLoading: jobLoading, error: jobError } = useJob(query.id)
   const {
     application,
     isLoading: applicationLoading,
     error: applicationError,
   } = useApplication(token, query.application_id)
+  const { tokenSymbol } = useContext(Web3Context)
 
   if (personLoading) {
     return (
       <LandingLayout>
         <JustOneSecond title="Loading profile..." />
+      </LandingLayout>
+    )
+  }
+
+  if (personError) {
+    return (
+      <LandingLayout>
+        <ErrorWrapper header="Internal Server Error" error={personError} />
       </LandingLayout>
     )
   }
@@ -89,7 +105,13 @@ const Page = () => {
 
   return (
     <UsersLayout meta={{ title: 'New Contract' }}>
-      <NewContractScreen job={job} application={application} token={token} />
+      <NewContractScreen
+        job={job}
+        application={application}
+        person={person}
+        token={token}
+        tokenSymbol={tokenSymbol}
+      />
     </UsersLayout>
   )
 }

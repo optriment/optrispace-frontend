@@ -1,15 +1,29 @@
-import React, { useContext } from 'react'
-import JustOneSecond from '../../../../components/JustOneSecond'
-import Web3Context from '../../../../context/web3-context'
+import React from 'react'
+import ErrorWrapper from '../../../../components/ErrorWrapper'
+import { ProfileIsNotConfigured } from '../../../../components/ProfileIsNotConfigured'
 import { NewContractForm } from '../../../../forms/NewContractForm'
-import { useAuth } from '../../../../hooks'
+import { isEmptyString } from '../../../../lib/validators'
 
-export const NewContractScreen = ({ job, application }) => {
-  const { isLoading: personLoading, token } = useAuth()
-  const { tokenSymbol } = useContext(Web3Context)
+export const NewContractScreen = ({
+  job,
+  application,
+  person,
+  token,
+  tokenSymbol,
+}) => {
+  if (isEmptyString(person.ethereum_address)) {
+    return <ProfileIsNotConfigured />
+  }
 
-  if (personLoading) {
-    return <JustOneSecond title="Loading profile..." />
+  const { applicant } = application
+
+  if (isEmptyString(applicant.ethereum_address)) {
+    return (
+      <ErrorWrapper
+        header="You can not create contract right now"
+        error="Applicant does not have configured wallet address"
+      />
+    )
   }
 
   return (
@@ -17,7 +31,7 @@ export const NewContractScreen = ({ job, application }) => {
       job={job}
       application={application}
       token={token}
-      currencyLabel={tokenSymbol}
+      tokenSymbol={tokenSymbol}
     />
   )
 }

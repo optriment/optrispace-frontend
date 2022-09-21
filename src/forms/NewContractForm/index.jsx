@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import React, { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -19,7 +20,7 @@ import JustOneSecond from '../../components/JustOneSecond'
 import ConnectWallet from '../../components/ConnectWallet'
 import WrongBlockchainNetwork from '../../components/WrongBlockchainNetwork'
 
-export const NewContractForm = ({ job, application, token, currencyLabel }) => {
+export const NewContractForm = ({ job, application, token, tokenSymbol }) => {
   const router = useRouter()
 
   const initialFields = {
@@ -42,6 +43,8 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
     currentAccount,
   } = useContext(Web3Context)
 
+  const { applicant } = application
+
   const handleCreateContract = async () => {
     setError('')
 
@@ -60,7 +63,8 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
       }
     } catch (err) {
       console.error({ err })
-      setError(err)
+      Sentry.captureException(err)
+      setError(err?.info?.message || err.message)
     }
   }
 
@@ -104,9 +108,9 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
       {!hideNotice && (
         <Message onDismiss={() => setHideNotice(true)}>
           <Icon name="info" />
-          Several fields on this form were auto-filled from the{' '}
+          Several fields in this form were auto-filled from the{' '}
           <Link href="/jobs/[id]" as={`/jobs/${job.id}`} passHref>
-            <a>job offer</a>
+            <a>job card</a>
           </Link>
           {' and'} contractor&apos;s application
         </Message>
@@ -122,6 +126,24 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
             onChange={handleInputChange}
             required
           />
+
+          <Form.Group>
+            <Form.Input
+              label="Contractor"
+              placeholder=""
+              value={applicant.display_name}
+              readOnly
+              width={4}
+            />
+
+            <Form.Input
+              label="Wallet Address"
+              placeholder=""
+              value={applicant.ethereum_address}
+              readOnly
+              width={6}
+            />
+          </Form.Group>
 
           <Form.Input
             control={TextArea}
@@ -139,7 +161,7 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
             type="number"
             min={0.0}
             step={0.01}
-            label={`Price (${currencyLabel})`}
+            label={`Price (${tokenSymbol})`}
             placeholder=""
             value={fields.price}
             onChange={handleInputChange}
@@ -156,7 +178,7 @@ export const NewContractForm = ({ job, application, token, currencyLabel }) => {
           <Button
             primary
             type="submit"
-            content="Submit for Review"
+            content="Create"
             disabled={isLoadingWeb3 || !formFilled}
             onClick={handleCreateContract}
           />

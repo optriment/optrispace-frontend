@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Button, Form, Segment } from 'semantic-ui-react'
@@ -14,12 +15,12 @@ export const ChangePasswordForm = ({ token, authenticate }) => {
   }
 
   const [fields, setFields] = useState(initialFields)
-  const [error, setError] = useState(undefined)
+  const [error, setError] = useState('')
 
   const handleChangePassword = async (e) => {
     e.preventDefault()
 
-    setError(null)
+    setError('')
     setIsSubmitting(true)
 
     try {
@@ -31,9 +32,10 @@ export const ChangePasswordForm = ({ token, authenticate }) => {
       await authenticate(json.token)
 
       router.reload()
-    } catch (error) {
-      console.error({ error })
-      setError(error)
+    } catch (err) {
+      console.error({ err })
+      Sentry.captureException(err)
+      setError(err)
     } finally {
       setIsSubmitting(false)
     }
@@ -45,7 +47,7 @@ export const ChangePasswordForm = ({ token, authenticate }) => {
 
   return (
     <>
-      {error && (
+      {error !== '' && (
         <ErrorWrapper header="Unable to change password" error={error} />
       )}
 

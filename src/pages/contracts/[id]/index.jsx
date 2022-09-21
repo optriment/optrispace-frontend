@@ -8,15 +8,23 @@ import { useContract } from '../../../hooks/useContract'
 import { ContractScreen } from '../../../screens/users/contracts/show'
 import DisplayContext from '../../../context/display-context'
 import { LandingLayout } from '../../../layouts/Landing'
+import Web3Context from '../../../context/web3-context'
 
 const Page = () => {
   const { query } = useRouter()
-  const { isLoading: personLoading, isAuthenticated, token } = useAuth()
+  const {
+    isLoading: personLoading,
+    error: personError,
+    isAuthenticated,
+    person,
+    token,
+  } = useAuth()
   const {
     contract,
     isLoading: contractLoading,
     error: contractError,
   } = useContract(token, query.id)
+  const { tokenSymbol } = useContext(Web3Context)
   const { setSmallScreen } = useContext(DisplayContext)
 
   useEffect(() => {
@@ -27,6 +35,14 @@ const Page = () => {
     return (
       <LandingLayout>
         <JustOneSecond title="Loading profile..." />
+      </LandingLayout>
+    )
+  }
+
+  if (personError) {
+    return (
+      <LandingLayout>
+        <ErrorWrapper header="Internal Server Error" error={personError} />
       </LandingLayout>
     )
   }
@@ -57,7 +73,12 @@ const Page = () => {
 
   return (
     <UsersLayout meta={{ title: `Contract: ${contract.title}` }}>
-      <ContractScreen contract={contract} />
+      <ContractScreen
+        contract={contract}
+        person={person}
+        token={token}
+        tokenSymbol={tokenSymbol}
+      />
     </UsersLayout>
   )
 }

@@ -1,37 +1,17 @@
 import React, { Fragment } from 'react'
 import { Divider, Container, Header, Segment, Card } from 'semantic-ui-react'
 import JobListItem from './JobListItem'
-import isJobOwner from '../lib/job'
 import { JobsSubscriptionForm } from '../forms/Marketing/JobsSubscriptionForm'
-import JustOneSecond from './JustOneSecond'
-import ErrorWrapper from './ErrorWrapper'
-import { useAuth } from '../hooks'
-import { useJobs } from '../hooks/useJobs'
 
-export default function JobsList({ currencyLabel }) {
+export default function JobsList({ jobs, tokenSymbol }) {
   const DISPLAY_SUBSCRIPTION_FORM_AFTER_LINE_NUMBER = 7
-
-  const { person } = useAuth()
-  const { jobs, isLoading: jobsLoading, error: jobsError } = useJobs()
-
-  if (jobsLoading) {
-    return <JustOneSecond title="Loading jobs..." />
-  }
-
-  if (jobsError) {
-    return <ErrorWrapper header="Unable to load jobs" error={jobsError} />
-  }
 
   return (
     <Card.Group>
       {jobs.map((job, idx) => {
         return (
           <Fragment key={job.id}>
-            <JobListItem
-              job={job}
-              isOwner={isJobOwner(job, person)}
-              currencyLabel={currencyLabel}
-            />
+            <JobListItem job={job} tokenSymbol={tokenSymbol} />
 
             {idx + 1 === DISPLAY_SUBSCRIPTION_FORM_AFTER_LINE_NUMBER && (
               <Card fluid style={{ backgroundColor: 'orange' }}>

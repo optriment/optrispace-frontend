@@ -12,7 +12,12 @@ import ErrorWrapper from '../ErrorWrapper'
 import isJobOwner from '../../lib/job'
 import { ShareButtons } from '../ShareButtons/ShareButtons'
 
-export const JobCardForCustomer = ({ job, currencyLabel, domain }) => {
+export const JobCardForCustomer = ({
+  job,
+  tokenSymbol,
+  domain,
+  blockchainViewAddressURL,
+}) => {
   const { isLoading: personLoading, token, person } = useAuth()
   const {
     applications,
@@ -48,7 +53,7 @@ export const JobCardForCustomer = ({ job, currencyLabel, domain }) => {
           <Segment>
             <Segment basic>
               <CustomerCard customer={job.customer} />
-              <BudgetLabel value={job.budget} currencyLabel={currencyLabel} />
+              <BudgetLabel value={job.budget} tokenSymbol={tokenSymbol} />
             </Segment>
             <Segment basic>
               <Container text fluid>
@@ -74,7 +79,8 @@ export const JobCardForCustomer = ({ job, currencyLabel, domain }) => {
             <Applications
               job={job}
               applications={applications}
-              currencyLabel={currencyLabel}
+              blockchainViewAddressURL={blockchainViewAddressURL}
+              tokenSymbol={tokenSymbol}
             />
           )}
         </Grid.Column>

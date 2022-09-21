@@ -1,10 +1,11 @@
+import * as Sentry from '@sentry/nextjs'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Message, Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { createApplication } from '../../lib/api'
 
-export const ApplicationForm = ({ job, application, token, currencyLabel }) => {
+export const ApplicationForm = ({ job, application, token, tokenSymbol }) => {
   const router = useRouter()
 
   const initialFields = {
@@ -30,10 +31,18 @@ export const ApplicationForm = ({ job, application, token, currencyLabel }) => {
         })
         .catch((err) => {
           console.error({ err })
-          setError(err)
+
+          if (err.message.match(/failed to fetch/i)) {
+            Sentry.captureMessage('Server is not available')
+            setError('Server is not available')
+          } else {
+            setError(err?.info?.message || err.message)
+          }
         })
     } catch (err) {
       console.error({ err })
+
+      Sentry.captureException(err)
       setError(err.message)
     }
   }
@@ -88,7 +97,7 @@ export const ApplicationForm = ({ job, application, token, currencyLabel }) => {
           type="number"
           min={0.0}
           step={0.01}
-          label={`Your expected service price (${currencyLabel})`}
+          label={`Your expected service price (${tokenSymbol})`}
           value={fields.price}
           required
           width={4}

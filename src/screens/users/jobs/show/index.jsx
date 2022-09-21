@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import React, { useContext } from 'react'
 import { useRouter } from 'next/router'
 import getConfig from 'next/config'
@@ -6,14 +7,13 @@ import { JobCardForApplicant } from '../../../../components/JobCardForApplicant'
 import { JobCardForCustomer } from '../../../../components/JobCardForCustomer'
 import { JobCardForGuest } from '../../../../components/JobCardForGuest'
 import { Sidebar } from '../../../../components/Sidebar'
-import Web3Context from '../../../../context/web3-context'
-import { useAuth } from '../../../../hooks'
 import { blockJob } from '../../../../lib/api'
+import Web3Context from '../../../../context/web3-context'
 
 const Wrapper = ({ jobId, token, title, children, isAdmin }) => {
   const router = useRouter()
 
-  const handleBlockJob = () => {
+  const handleBlockJob = async () => {
     if (!isAdmin) {
       return
     }
@@ -23,14 +23,11 @@ const Wrapper = ({ jobId, token, title, children, isAdmin }) => {
     }
 
     try {
-      blockJob(token, jobId)
-        .then(() => {
-          router.push(`/jobs`)
-        })
-        .catch((err) => {
-          console.error({ err })
-        })
+      await blockJob(token, jobId)
+
+      router.replace(`/jobs`)
     } catch (err) {
+      Sentry.captureException(err)
       console.error({ err })
     }
   }
@@ -40,7 +37,7 @@ const Wrapper = ({ jobId, token, title, children, isAdmin }) => {
       <Header as="h1">{title}</Header>
 
       {isAdmin && (
-        <Grid.Row>
+        <Grid.Row stackable>
           <Grid.Column>
             <Segment color="red">
               <Button negative content="Block" onClick={handleBlockJob} />
@@ -63,20 +60,22 @@ const Wrapper = ({ jobId, token, title, children, isAdmin }) => {
   )
 }
 
-export const JobScreen = ({ job }) => {
-  const { isAuthenticated, person, token } = useAuth()
-  const { tokenSymbol } = useContext(Web3Context)
+export const JobScreen = ({
+  job,
+  isAuthenticated,
+  person,
+  token,
+  tokenSymbol,
+}) => {
   const { publicRuntimeConfig } = getConfig()
   const domain = publicRuntimeConfig.domain
+
+  const { blockchainViewAddressURL } = useContext(Web3Context)
 
   if (!isAuthenticated) {
     return (
       <Wrapper title={job.title}>
-        <JobCardForGuest
-          job={job}
-          currencyLabel={tokenSymbol}
-          domain={domain}
-        />
+        <JobCardForGuest job={job} tokenSymbol={tokenSymbol} domain={domain} />
       </Wrapper>
     )
   }
@@ -91,13 +90,15 @@ export const JobScreen = ({ job }) => {
       {job.created_by === person.id ? (
         <JobCardForCustomer
           job={job}
-          currencyLabel={tokenSymbol}
+          blockchainViewAddressURL={blockchainViewAddressURL}
+          tokenSymbol={tokenSymbol}
           domain={domain}
         />
       ) : (
         <JobCardForApplicant
           job={job}
-          currencyLabel={tokenSymbol}
+          person={person}
+          tokenSymbol={tokenSymbol}
           domain={domain}
         />
       )}

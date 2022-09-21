@@ -3,22 +3,22 @@ import { Button, Card, List } from 'semantic-ui-react'
 import Link from 'next/link'
 import { formatDateTime } from '../lib/formatDate'
 
-export default function ContractListItem({ person, contract, currencyLabel }) {
+export default function ContractListItem({ person, contract, tokenSymbol }) {
   const formattedDate = formatDateTime(contract.created_at)
 
   let statusIcon = 'hourglass'
 
   switch (contract.status) {
-    case 'created':
+    case 'signed':
       statusIcon = 'hourglass outline'
       break
-    case 'accepted':
+    case 'funded':
       statusIcon = 'hourglass start'
       break
-    case 'sent':
+    case 'approved':
       statusIcon = 'hourglass half'
       break
-    case 'approved':
+    case 'completed':
       statusIcon = 'hourglass end'
       break
   }
@@ -27,7 +27,11 @@ export default function ContractListItem({ person, contract, currencyLabel }) {
     <Card fluid>
       <Card.Content>
         <Card.Header>
-          <Link href="/contracts/[id]" as={`/contracts/${contract.id}`}>
+          <Link
+            href="/contracts/[id]"
+            as={`/contracts/${contract.id}`}
+            passHref
+          >
             <a>{contract.title}</a>
           </Link>
         </Card.Header>
@@ -45,6 +49,7 @@ export default function ContractListItem({ person, contract, currencyLabel }) {
                       <Link
                         href="/contracts/[id]"
                         as={`/contracts/${contract.id}`}
+                        passHref
                       >
                         <a>
                           <Button size="tiny">Read more</Button>
@@ -74,9 +79,9 @@ export default function ContractListItem({ person, contract, currencyLabel }) {
             <List.Content>
               <List.Header>
                 <List.Icon name="user" /> Customer:{' '}
-                {person && contract.customer.id === person.id
+                {person && contract.customer_id === person.id
                   ? 'Me'
-                  : contract.customer.display_name || contract.customer.id}
+                  : contract.customer_display_name}
               </List.Header>
             </List.Content>
           </List.Item>
@@ -84,16 +89,16 @@ export default function ContractListItem({ person, contract, currencyLabel }) {
             <List.Content>
               <List.Header>
                 <List.Icon name="user" /> Contractor:{' '}
-                {person && contract.performer.id === person.id
+                {person && contract.performer_id === person.id
                   ? 'Me'
-                  : contract.performer.display_name || contract.performer.id}
+                  : contract.performer_display_name}
               </List.Header>
             </List.Content>
           </List.Item>
           <List.Item>
             <List.Content>
               <List.Header>
-                <List.Icon name="money" /> {contract.price} {currencyLabel}
+                <List.Icon name="money" /> {contract.price} {tokenSymbol}
               </List.Header>
             </List.Content>
           </List.Item>

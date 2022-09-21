@@ -8,11 +8,13 @@ import { LandingLayout } from '../../../layouts/Landing'
 import JustOneSecond from '../../../components/JustOneSecond'
 import ErrorWrapper from '../../../components/ErrorWrapper'
 import { useAuth } from '../../../hooks'
+import Web3Context from '../../../context/web3-context'
 
 const Page = () => {
   const { query } = useRouter()
-  const { isLoading: personLoading, isAuthenticated } = useAuth()
+  const { isLoading: personLoading, isAuthenticated, person, token } = useAuth()
   const { job, isLoading: jobLoading, error: jobError } = useJob(query.id)
+  const { tokenSymbol } = useContext(Web3Context)
   const { setSmallScreen } = useContext(DisplayContext)
 
   useEffect(() => {
@@ -46,14 +48,26 @@ const Page = () => {
   if (!isAuthenticated) {
     return (
       <LandingLayout meta={{ title: `Job: ${job.title}` }}>
-        <JobScreen job={job} />
+        <JobScreen
+          job={job}
+          isAuthenticated={isAuthenticated}
+          person={person}
+          token={token}
+          tokenSymbol={tokenSymbol}
+        />
       </LandingLayout>
     )
   }
 
   return (
     <UsersLayout meta={{ title: `Job: ${job.title}` }}>
-      <JobScreen job={job} />
+      <JobScreen
+        job={job}
+        isAuthenticated={isAuthenticated}
+        person={person}
+        token={token}
+        tokenSymbol={tokenSymbol}
+      />
     </UsersLayout>
   )
 }

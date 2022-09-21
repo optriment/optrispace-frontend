@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Header, Button, Form, Segment, TextArea } from 'semantic-ui-react'
@@ -5,7 +6,7 @@ import { createJob } from '../../lib/api'
 import { isEmptyString } from '../../lib/validators'
 import ErrorWrapper from '../../components/ErrorWrapper'
 
-export const NewJobForm = ({ token, currencyLabel }) => {
+export const NewJobForm = ({ token, tokenSymbol }) => {
   const router = useRouter()
 
   const initialFields = {
@@ -35,11 +36,17 @@ export const NewJobForm = ({ token, currencyLabel }) => {
         .catch((err) => {
           console.error({ err })
 
-          setError(err)
+          if (err.message.match(/failed to fetch/i)) {
+            Sentry.captureMessage('Server is not available')
+            setError('Server is not available')
+          } else {
+            setError(err?.info?.message || err.message)
+          }
         })
     } catch (err) {
       console.error({ err })
 
+      Sentry.captureException(err)
       setError(err.message)
     }
   }
@@ -65,7 +72,7 @@ export const NewJobForm = ({ token, currencyLabel }) => {
       )}
 
       <Segment padded>
-        <Form>
+        <Form onSubmit={handleCreateJob}>
           <Form.Input
             id="title"
             label="Title"
@@ -91,20 +98,14 @@ export const NewJobForm = ({ token, currencyLabel }) => {
             type="number"
             min={0.0}
             step={0.01}
-            label={`Approx. budget (${currencyLabel})`}
+            label={`Approx. budget (${tokenSymbol})`}
             placeholder=""
             value={fields.budget}
             onChange={handleInputChange}
-            required
             width={3}
           />
 
-          <Button
-            content="Publish"
-            primary
-            onClick={handleCreateJob}
-            disabled={!formFilled}
-          />
+          <Button content="Publish" primary disabled={!formFilled} />
         </Form>
       </Segment>
     </>

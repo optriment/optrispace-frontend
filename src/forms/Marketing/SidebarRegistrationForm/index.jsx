@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import React, { useState } from 'react'
 import { Divider, Message, Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../../components/ErrorWrapper'
@@ -9,7 +10,7 @@ export const SidebarRegistrationForm = () => {
     email: '',
   }
   const [fields, setFields] = useState(initialFields)
-  const [error, setError] = useState(undefined)
+  const [error, setError] = useState('')
 
   const [isSubscribed, setIsSubscribed] = useState(false)
 
@@ -29,7 +30,7 @@ export const SidebarRegistrationForm = () => {
       return
     }
 
-    setError(null)
+    setError('')
     setIsSubscribed(false)
 
     try {
@@ -39,17 +40,21 @@ export const SidebarRegistrationForm = () => {
         })
         .catch((err) => {
           console.error({ err })
-          setError(err)
+          Sentry.captureException(err)
+          setError(err.message)
         })
     } catch (err) {
       console.error({ err })
+      Sentry.captureException(err)
       setError(err.message)
     }
   }
 
   return (
     <>
-      {error && <ErrorWrapper header="Unable to subscribe" error={error} />}
+      {error !== '' && (
+        <ErrorWrapper header="Unable to subscribe" error={error} />
+      )}
 
       <Form onSubmit={handleFormSubmit} success={isSubscribed}>
         {isSubscribed && (

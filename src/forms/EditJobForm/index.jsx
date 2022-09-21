@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Segment, Header, Button, Form, TextArea } from 'semantic-ui-react'
@@ -5,7 +6,7 @@ import { updateJob } from '../../lib/api'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { isEmptyString } from '../../lib/validators'
 
-export const EditJobForm = ({ job, token, currencyLabel }) => {
+export const EditJobForm = ({ job, token, tokenSymbol }) => {
   const router = useRouter()
 
   const initialFields = {
@@ -36,7 +37,7 @@ export const EditJobForm = ({ job, token, currencyLabel }) => {
         })
     } catch (err) {
       console.error({ err })
-
+      Sentry.captureException(err)
       setError(err.message)
     }
   }
@@ -88,7 +89,7 @@ export const EditJobForm = ({ job, token, currencyLabel }) => {
             type="number"
             min={0.0}
             step={0.01}
-            label={`Approx. budget (${currencyLabel})`}
+            label={`Approx. budget (${tokenSymbol})`}
             placeholder=""
             value={fields.budget}
             onChange={handleInputChange}

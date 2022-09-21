@@ -1,17 +1,15 @@
 import React from 'react'
-import { Button, Card, Icon, List } from 'semantic-ui-react'
+import { Button, Card, List } from 'semantic-ui-react'
 import Link from 'next/link'
 import { formatDateTime } from '../lib/formatDate'
 
-export default function JobListItem({ job, isOwner, currencyLabel }) {
-  const formattedDate = formatDateTime(job.updated_at)
+export default function JobListItem({ job, tokenSymbol }) {
+  const formattedDate = formatDateTime(job.created_at)
 
   return (
     <Card fluid>
       <Card.Content>
         <Card.Header>
-          {isOwner && <Icon name="heart" color="red" title="Created by me" />}
-
           <Link href="/jobs/[id]" as={`/jobs/${job.id}`}>
             <a>{job.title}</a>
           </Link>
@@ -56,7 +54,7 @@ export default function JobListItem({ job, isOwner, currencyLabel }) {
             <List.Item>
               <List.Content>
                 <List.Header>
-                  <List.Icon name="money" /> {job.budget} {currencyLabel}
+                  <List.Icon name="money" /> {job.budget} {tokenSymbol}
                 </List.Header>
               </List.Content>
             </List.Item>

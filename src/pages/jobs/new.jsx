@@ -1,18 +1,34 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { UsersLayout } from '../../layouts/Users'
 import { NewJobScreen } from '../../screens/users/jobs/new'
 import { useAuth } from '../../hooks'
 import JustOneSecond from '../../components/JustOneSecond'
 import { LandingLayout } from '../../layouts/Landing'
 import ErrorWrapper from '../../components/ErrorWrapper'
+import Web3Context from '../../context/web3-context'
 
 const Page = () => {
-  const { isLoading: personLoading, isAuthenticated } = useAuth()
+  const {
+    isLoading: personLoading,
+    error: personError,
+    isAuthenticated,
+    person,
+    token,
+  } = useAuth()
+  const { tokenSymbol } = useContext(Web3Context)
 
   if (personLoading) {
     return (
       <LandingLayout>
         <JustOneSecond title="Loading profile..." />
+      </LandingLayout>
+    )
+  }
+
+  if (personError) {
+    return (
+      <LandingLayout>
+        <ErrorWrapper header="Internal Server Error" error={personError} />
       </LandingLayout>
     )
   }
@@ -27,7 +43,7 @@ const Page = () => {
 
   return (
     <UsersLayout meta={{ title: 'New Job' }}>
-      <NewJobScreen />
+      <NewJobScreen person={person} token={token} tokenSymbol={tokenSymbol} />
     </UsersLayout>
   )
 }

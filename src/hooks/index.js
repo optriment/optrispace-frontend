@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import getConfig from 'next/config'
@@ -8,6 +9,7 @@ const { publicRuntimeConfig } = getConfig()
 export const AuthContext = createContext({})
 
 export const AuthProvider = ({ children }) => {
+  const [error, setError] = useState(undefined)
   const [person, setPerson] = useState(null)
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
@@ -22,6 +24,7 @@ export const AuthProvider = ({ children }) => {
 
   const authenticate = async (token) => {
     setIsLoading(true)
+    setError(undefined)
 
     try {
       const response = await fetch(`${publicRuntimeConfig.api_url}/me`, {
@@ -38,12 +41,18 @@ export const AuthProvider = ({ children }) => {
       if (response.ok) {
         setPerson(json.subject)
         Cookies.set('token', token)
-        setIsLoading(false)
-      } else {
-        logout()
       }
-    } catch (error) {
-      logout()
+    } catch (err) {
+      if (err.message.match(/failed to fetch/i)) {
+        Sentry.captureMessage('Server is not available')
+        setError('Server is not available')
+      } else {
+        console.error({ err })
+        Sentry.captureException(err)
+        setError(err.message)
+      }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -58,14 +67,14 @@ export const AuthProvider = ({ children }) => {
     })
   }
 
-  const signUp = async (login, password) => {
+  const signUp = async ({ login, password, email, display_name }) => {
     return await fetch(`${publicRuntimeConfig.api_url}/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       mode: 'cors',
-      body: JSON.stringify({ login, password }),
+      body: JSON.stringify({ login, password, email, display_name }),
     })
   }
 
@@ -101,13 +110,14 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        error,
         person,
         authenticate,
         signIn,
         signUp,
         logout,
         isLoading,
-        isAuthenticated: !!person,
+        isAuthenticated: !error && !!person,
         token: Cookies.get('token'),
       }}
     >

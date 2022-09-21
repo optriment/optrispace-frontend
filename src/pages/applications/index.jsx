@@ -1,18 +1,40 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import JustOneSecond from '../../components/JustOneSecond'
+import Web3Context from '../../context/web3-context'
 import { useAuth } from '../../hooks'
+import { useMyApplications } from '../../hooks/useMyApplications'
 import { LandingLayout } from '../../layouts/Landing'
 import { UsersLayout } from '../../layouts/Users'
 import { ApplicationsScreen } from '../../screens/users/applications/index'
 
 const Page = () => {
-  const { isLoading: personLoading, isAuthenticated } = useAuth()
+  const {
+    isLoading: personLoading,
+    error: personError,
+    isAuthenticated,
+    person,
+    token,
+  } = useAuth()
+  const {
+    applications,
+    isLoading: applicationsLoading,
+    error: applicationsError,
+  } = useMyApplications(token)
+  const { tokenSymbol } = useContext(Web3Context)
 
   if (personLoading) {
     return (
       <LandingLayout>
         <JustOneSecond title="Loading profile..." />
+      </LandingLayout>
+    )
+  }
+
+  if (personError) {
+    return (
+      <LandingLayout>
+        <ErrorWrapper header="Internal Server Error" error={personError} />
       </LandingLayout>
     )
   }
@@ -25,9 +47,32 @@ const Page = () => {
     )
   }
 
+  if (applicationsLoading) {
+    return (
+      <UsersLayout meta={{ title: 'Applications' }}>
+        <JustOneSecond title="Loading applications..." />
+      </UsersLayout>
+    )
+  }
+
+  if (applicationsError) {
+    return (
+      <UsersLayout meta={{ title: 'Applications' }}>
+        <ErrorWrapper
+          header="Unable to load applications"
+          error={applicationsError}
+        />
+      </UsersLayout>
+    )
+  }
+
   return (
     <UsersLayout meta={{ title: 'Applications' }}>
-      <ApplicationsScreen />
+      <ApplicationsScreen
+        applications={applications}
+        person={person}
+        tokenSymbol={tokenSymbol}
+      />
     </UsersLayout>
   )
 }

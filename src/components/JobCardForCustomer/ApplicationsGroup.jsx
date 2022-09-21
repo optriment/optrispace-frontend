@@ -2,7 +2,14 @@ import React from 'react'
 import { Tab, Menu, Label, Item } from 'semantic-ui-react'
 import ApplicationListItem from './ApplicationListItem'
 
-function ApplicationsGroup(job, label, applications, key, currencyLabel) {
+function ApplicationsGroup(
+  job,
+  label,
+  applications,
+  key,
+  blockchainViewAddressURL,
+  tokenSymbol
+) {
   return {
     menuItem: (
       <Menu.Item key={key}>
@@ -18,7 +25,8 @@ function ApplicationsGroup(job, label, applications, key, currencyLabel) {
               key={application.id}
               job={job}
               application={application}
-              currencyLabel={currencyLabel}
+              blockchainViewAddressURL={blockchainViewAddressURL}
+              tokenSymbol={tokenSymbol}
             />
           ))}
         </Item.Group>

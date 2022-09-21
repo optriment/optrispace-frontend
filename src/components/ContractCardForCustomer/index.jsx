@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import React, { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import {
@@ -7,9 +8,8 @@ import {
   Header,
   Grid,
   Segment,
-  Step,
 } from 'semantic-ui-react'
-import { approveContract, deployContract } from '../../lib/api'
+import { approveContract, deployContract, fundContract } from '../../lib/api'
 import ErrorWrapper from '../ErrorWrapper'
 import { ContractCardSidebar } from '../ContractCardSidebar'
 import { ethers } from 'ethers'
@@ -20,8 +20,10 @@ import { JustOneSecondBlockchain } from '../JustOneSecond'
 import WrongBlockchainNetwork from '../WrongBlockchainNetwork'
 import ConnectWallet from '../ConnectWallet'
 import { FormattedDescription } from '../FormattedDescription'
+import { isEmptyString } from '../../lib/validators'
+import { ContractCardSteps } from '../ContractCardSteps'
 
-export const ContractCardForCustomer = ({ contract, token, currencyLabel }) => {
+export const ContractCardForCustomer = ({ contract, token, tokenSymbol }) => {
   const router = useRouter()
 
   const {
@@ -37,15 +39,86 @@ export const ContractCardForCustomer = ({ contract, token, currencyLabel }) => {
     blockchainViewAddressURL,
   } = useContext(Web3Context)
 
-  const [error, setError] = useState(undefined)
+  const [error, setError] = useState('')
 
   const [txLoading, setTxLoading] = useState(false)
   const [txStatus, setTxStatus] = useState('')
 
   const [contractAddress, setContractAddress] = useState('')
   const [contractBalance, setContractBalance] = useState('')
-  const [isContractDeployed, setIsContractDeployed] = useState(false)
-  const [isContractFunded, setIsContractFunded] = useState(false)
+  const [contractStatus, setContractStatus] = useState('')
+
+  const reset = () => {
+    setError('')
+    setTxStatus('')
+    setTxLoading(false)
+  }
+
+  const catchException = (err) => {
+    reset()
+
+    console.error({ err })
+    Sentry.captureException(err)
+
+    if (err?.data?.message.match(/execution reverted/)) {
+      setError(
+        'Blockchain error: ' +
+          err.data.message.replace(/execution reverted:/, '').trim()
+      )
+    } else if (err.message.match(/user denied transaction/i)) {
+      setError('You are denied transaction! Please try again.')
+    } else {
+      setError(
+        'Transaction error: ' + (err?.data?.message || err?.message || err)
+      )
+    }
+  }
+
+  const callSmartContract = async (action, validate, callback) => {
+    reset()
+
+    if (!isWalletReady) {
+      setError('Wallet is not ready')
+      return
+    }
+
+    if (!validate()) {
+      return
+    }
+
+    setTxLoading(true)
+    setTxStatus(`Smart Contract: ${action}...`)
+
+    try {
+      const tx = await callback()
+
+      setTxStatus('Waiting for transaction hash...')
+
+      await tx.wait()
+
+      router.reload()
+    } catch (err) {
+      catchException(err)
+    }
+  }
+
+  const callBackend = (validate, callback) => {
+    reset()
+
+    if (!validate()) {
+      return
+    }
+
+    try {
+      callback()
+        .then(() => router.reload())
+        .catch((err) => setError(err?.info?.message || err.message))
+    } catch (err) {
+      console.error({ err })
+      Sentry.captureException(err)
+      setError(err.message)
+    }
+  }
 
   const getContractFromBlockchain = async () => {
     const _contractOnBlockchain = await contractFactory.getContractById(
@@ -56,164 +129,172 @@ export const ContractCardForCustomer = ({ contract, token, currencyLabel }) => {
   }
 
   const deployToBlockchain = async () => {
-    setTxLoading(true)
-    setTxStatus('Creating Smart Contract on blockchain...')
-    setError(null)
-
-    try {
-      contractFactory.on('ContractDeployed', (_address, _contractId) => {
-        if (_contractId === contract.id) {
-          setContractAddress(_address)
-
-          // TODO: По идее здесь надо бы отправить на бэкенд информацию с адресом контракта
+    await callSmartContract(
+      'Create',
+      () => {
+        if (contract.status !== 'accepted') {
+          setError('Contract is not accepted yet!')
+          return false
         }
-      })
 
-      const contractPrice = ethers.utils.parseEther(
-        parseFloat(contract.price).toString()
-      )
+        return true
+      },
+      () => {
+        const contractPrice = parseEther(contract.price)
 
-      let createContractTx = await contractFactory.createContract(
-        contract.id,
-        contract.performer_address,
-        contractPrice,
-        contract.customer.id,
-        contract.performer.id,
-        contract.title,
-        contract.description
-      )
-
-      setTxStatus('Waiting for transaction hash...')
-
-      await createContractTx.wait()
-
-      router.reload()
-    } catch (err) {
-      console.error({ err })
-      setError(
-        'Unable to deploy contract to blockchain: ' +
-          (err?.data?.message || err?.message || err)
-      )
-    } finally {
-      setTxStatus('')
-      setTxLoading(false)
-    }
+        return contractFactory.createContract(
+          contract.id,
+          contract.performer_address,
+          contractPrice,
+          contract.customer_id,
+          contract.performer_id
+        )
+      }
+    )
   }
 
-  const fundContract = async () => {
-    if (accountBalance < contract.price) {
-      setError('You do not have enough tokens to fund the contract')
-      return
-    }
-
-    setTxLoading(true)
-    setTxStatus('Funding Smart Contract...')
-    setError(null)
-
-    try {
-      const _contract = new ethers.Contract(
-        contractAddress,
-        contractABI,
-        signer
-      )
-
-      _contract.on('ContractFunded', (_contractId) => {
-        if (_contractId === contract.id) {
-          setIsContractFunded(true)
+  const setAsDeployedOnBackend = () => {
+    callBackend(
+      () => {
+        if (contractStatus !== 'Created') {
+          setError('The contract has not been created on the blockchain')
+          return false
         }
-      })
 
-      const fundTx = await _contract.fund({
-        value: ethers.utils.parseEther(contract.price.toString()),
-      })
+        if (isEmptyString(contractAddress)) {
+          setError(
+            'Unable to get contract address from blockchain. Refresh the page'
+          )
+          return false
+        }
 
-      setTxStatus('Waiting for transaction hash...')
-
-      await fundTx.wait()
-
-      router.reload()
-    } catch (err) {
-      console.error({ err })
-      setError(
-        'Unable to fund contract: ' + (err.data?.message || err?.message || err)
-      )
-    } finally {
-      setTxStatus('')
-      setTxLoading(false)
-    }
+        return true
+      },
+      () => {
+        return deployContract(token, contract.id, contractAddress)
+      }
+    )
   }
 
-  const deployToBackend = async () => {
-    try {
-      await deployContract(token, contract.id, contractAddress)
-      router.reload()
-    } catch (err) {
-      console.error({ err })
-      setError(err)
-    }
+  const fundOnBlockchain = async () => {
+    await callSmartContract(
+      'Fund',
+      () => {
+        if (contractStatus !== 'Signed') {
+          setError('The contract has not been signed on the blockchain')
+          return false
+        }
+
+        if (accountBalance <= contract.price) {
+          setError(
+            'You do not have enough tokens to fund the contract. Required: ' +
+              contract.price +
+              ' ' +
+              tokenSymbol
+          )
+          return false
+        }
+
+        return true
+      },
+
+      () => {
+        const _contract = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          signer
+        )
+
+        return _contract.fund({
+          value: parseEther(contract.price),
+        })
+      }
+    )
   }
 
-  const approve = async () => {
-    setTxLoading(true)
-    setTxStatus('Approving contract...')
-    setError(null)
+  const setAsFundedOnBackend = () => {
+    callBackend(
+      () => {
+        if (contractStatus !== 'Funded') {
+          setError('The contract has not been funded on the blockchain')
+          return false
+        }
 
-    try {
-      const _contract = new ethers.Contract(
-        contract.contract_address,
-        contractABI,
-        signer
-      )
+        return true
+      },
+      () => {
+        return fundContract(token, contract.id)
+      }
+    )
+  }
 
-      let approveTx = await _contract.approve()
-      await approveTx.wait()
+  const approveOnBlockchain = async () => {
+    await callSmartContract(
+      'Approve',
+      () => {
+        if (contractStatus !== 'Funded') {
+          setError('The contract has not been funded on the blockchain')
+          return false
+        }
 
-      setTxStatus('Updating status...')
+        return true
+      },
+      () => {
+        const _contract = new ethers.Contract(
+          contract.contract_address,
+          contractABI,
+          signer
+        )
 
-      await approveContract(token, contract.id)
+        return _contract.approve()
+      }
+    )
+  }
 
-      router.reload()
-    } catch (err) {
-      console.error({ err })
-      setError(
-        'Unable to complete contract: ' +
-          (err.data?.message || err?.message || err)
-      )
-      throw err
-    } finally {
-      setTxStatus('')
-      setTxLoading(false)
-    }
+  const setAsApprovedOnBackend = () => {
+    callBackend(
+      () => {
+        if (contractStatus !== 'Approved') {
+          setError('The contract has not been approved on the blockchain')
+          return false
+        }
+
+        return true
+      },
+      () => {
+        return approveContract(token, contract.id)
+      }
+    )
   }
 
   const convertToEth = (value) => {
     return ethers.utils.formatEther(value.toString())
   }
 
+  const parseEther = (value) => {
+    return ethers.utils.parseEther(parseFloat(value.toString()).toString())
+  }
+
   useEffect(() => {
+    reset()
+
     if (!isWalletReady) {
       return
     }
 
     setTxLoading(true)
     setTxStatus('Requesting contract from blockchain...')
-    setError(null)
 
     getContractFromBlockchain()
       .then((_contractOnBlockchain) => {
-        setIsContractDeployed(true)
         setContractAddress(_contractOnBlockchain[0])
-
-        const _contractBalance = convertToEth(_contractOnBlockchain[1])
-        const _contractPrice = convertToEth(_contractOnBlockchain[5])
-
-        setContractBalance(_contractBalance)
-        setIsContractFunded(_contractBalance >= _contractPrice)
+        setContractStatus(_contractOnBlockchain[8])
+        setContractBalance(convertToEth(_contractOnBlockchain[1]))
       })
       .catch((err) => {
         if (err.reason !== 'Contract does not exist') {
           console.error({ err })
-
+          Sentry.captureException(err)
           setError(err.reason)
         }
       })
@@ -236,9 +317,10 @@ export const ContractCardForCustomer = ({ contract, token, currencyLabel }) => {
     created: 1,
     accepted: 2,
     deployed: 3,
-    sent: 4,
-    approved: 5,
-    completed: 6,
+    signed: 4,
+    funded: 5,
+    approved: 6,
+    completed: 7,
   }
 
   const currentStep = statuses[currentStatus] + 1
@@ -251,130 +333,93 @@ export const ContractCardForCustomer = ({ contract, token, currencyLabel }) => {
         <ConnectWallet connectWallet={connectWallet} />
       )}
 
-      <Step.Group ordered width={5} fluid>
-        <Step completed>
-          <Step.Content>
-            <Step.Title>Created</Step.Title>
-            <Step.Description>Me</Step.Description>
-          </Step.Content>
-        </Step>
-
-        <Step
-          active={currentStatus === 'created'}
-          completed={currentStep > statuses['accepted']}
-          disabled={currentStep < statuses['accepted']}
-        >
-          <Step.Content>
-            <Step.Title>
-              {currentStep > statuses['accepted'] ? 'Accepted' : 'Accept'}
-            </Step.Title>
-            <Step.Description>Contractor</Step.Description>
-          </Step.Content>
-        </Step>
-
-        <Step
-          active={currentStatus === 'accepted'}
-          completed={currentStep > statuses['deployed']}
-          disabled={currentStep < statuses['deployed']}
-        >
-          <Step.Content>
-            <Step.Title>
-              {currentStep > statuses['deployed'] ? 'Funded' : 'Deploy & Fund'}
-            </Step.Title>
-            <Step.Description>Me</Step.Description>
-          </Step.Content>
-        </Step>
-
-        <Step
-          active={currentStatus === 'deployed'}
-          completed={currentStep > statuses['sent']}
-          disabled={currentStep < statuses['sent']}
-        >
-          <Step.Content>
-            <Step.Title>
-              {currentStep > statuses['sent']
-                ? 'Review Requested'
-                : 'In Progress'}
-            </Step.Title>
-            <Step.Description>Contractor</Step.Description>
-          </Step.Content>
-        </Step>
-
-        <Step
-          active={currentStatus === 'sent'}
-          completed={currentStep > statuses['approved']}
-          disabled={currentStep < statuses['approved']}
-        >
-          <Step.Content>
-            <Step.Title>
-              {currentStep > statuses['approved'] ? 'Approved' : 'Approve'}
-            </Step.Title>
-            <Step.Description>Me</Step.Description>
-          </Step.Content>
-        </Step>
-      </Step.Group>
+      <ContractCardSteps
+        me="customer"
+        currentStatus={currentStatus}
+        currentStep={currentStep}
+        statuses={statuses}
+      />
 
       {isLoadingWeb3 || txLoading ? (
         <JustOneSecondBlockchain message={txStatus !== '' && txStatus} />
       ) : (
         <>
           {currentStatus === 'created' && (
-            <Message header="Waiting for the accepting of the contract" />
+            <Message header="Waiting for the contract to be accepted" />
           )}
 
           {currentStatus === 'accepted' && (
-            <>
-              {isContractDeployed ? (
-                <Segment basic textAlign="right">
-                  <a
-                    href={`${blockchainViewAddressURL}/${contractAddress}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button>Open contract…</Button>
-                  </a>
-
-                  {isContractFunded ? (
-                    <Button
-                      primary
-                      content="Set as funded"
-                      onClick={deployToBackend}
-                    />
-                  ) : (
-                    <Button
-                      primary
-                      content="Fund Smart Contract"
-                      onClick={fundContract}
-                      disabled={accountBalance < contract.price}
-                    />
-                  )}
-                </Segment>
+            <Segment basic textAlign="right">
+              {contractStatus === 'Created' ? (
+                <Button
+                  primary
+                  content="Set as deployed"
+                  onClick={setAsDeployedOnBackend}
+                  disabled={isEmptyString(contractAddress)}
+                />
               ) : (
-                <Segment basic textAlign="right">
-                  <Button
-                    primary
-                    content="Deploy to blockchain"
-                    onClick={deployToBlockchain}
-                  />
-                </Segment>
+                <Button
+                  primary
+                  content="Deploy to blockchain"
+                  onClick={deployToBlockchain}
+                  disabled={!isWalletReady}
+                />
+              )}
+            </Segment>
+          )}
+
+          {currentStatus === 'signed' && (
+            <Segment basic textAlign="right">
+              {contractStatus === 'Funded' ? (
+                <Button
+                  primary
+                  content="Set as funded"
+                  onClick={setAsFundedOnBackend}
+                />
+              ) : (
+                <Button
+                  primary
+                  content="Fund"
+                  onClick={fundOnBlockchain}
+                  disabled={!isWalletReady || accountBalance <= contract.price}
+                />
+              )}
+            </Segment>
+          )}
+
+          {currentStatus === 'deployed' && (
+            <>
+              {contractStatus === 'Signed' ? (
+                <Message header="Waiting for the contract to get a signed status" />
+              ) : (
+                <Message header="Waiting for the contract to be signed on the blockchain" />
               )}
             </>
           )}
 
-          {currentStatus === 'sent' && (
+          {currentStatus === 'funded' && (
             <Segment basic textAlign="right">
-              <Button
-                primary
-                content="Confirm & Complete Contract"
-                onClick={approve}
-              />
+              {contractStatus === 'Approved' ? (
+                <Button
+                  primary
+                  content="Set as approved"
+                  onClick={setAsApprovedOnBackend}
+                />
+              ) : (
+                <Button
+                  primary
+                  content="Approve"
+                  onClick={approveOnBlockchain}
+                  disabled={!isWalletReady}
+                />
+              )}
             </Segment>
           )}
         </>
       )}
 
       <Grid stackable verticalAlign="top">
-        {error && (
+        {error !== '' && (
           <Grid.Row>
             <Grid.Column>
               <ErrorWrapper header="Failed to perform action" error={error} />
@@ -394,7 +439,7 @@ export const ContractCardForCustomer = ({ contract, token, currencyLabel }) => {
           <Grid.Column width={6}>
             <ContractCardSidebar
               contract={contract}
-              currencyLabel={currencyLabel}
+              tokenSymbol={tokenSymbol}
               blockchainViewAddressURL={blockchainViewAddressURL}
               contractBalance={contractBalance}
             />
