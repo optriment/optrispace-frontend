@@ -1,7 +1,6 @@
 import React from 'react'
 import { Header, Container, Grid, Segment } from 'semantic-ui-react'
-import { BudgetLabel } from '../BudgetLabel'
-import { CustomerCard } from '../CustomerCard'
+import { JobCardHeader } from '../JobCardHeader'
 import { FormattedDescription } from '../FormattedDescription'
 import { ApplicationForm } from '../../forms/ApplicationForm'
 import { useApplications } from '../../hooks/useApplications'
@@ -46,8 +45,7 @@ export const JobCardForApplicant = ({ job, person, tokenSymbol, domain }) => {
         <Grid.Column>
           <Segment>
             <Segment basic>
-              <CustomerCard customer={job.customer} />
-              <BudgetLabel value={job.budget} tokenSymbol={tokenSymbol} />
+              <JobCardHeader job={job} tokenSymbol={tokenSymbol} />
             </Segment>
             <Segment basic>
               <Container text fluid>

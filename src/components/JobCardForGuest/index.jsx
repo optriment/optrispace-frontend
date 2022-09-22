@@ -1,8 +1,7 @@
 import React from 'react'
 import { Container, Grid, Segment, Header } from 'semantic-ui-react'
 import Link from 'next/link'
-import { BudgetLabel } from '../BudgetLabel'
-import { CustomerCard } from '../CustomerCard'
+import { JobCardHeader } from '../JobCardHeader'
 import { FormattedDescription } from '../FormattedDescription'
 import { ShareButtons } from '../ShareButtons/ShareButtons'
 
@@ -13,8 +12,7 @@ export const JobCardForGuest = ({ job, tokenSymbol, domain }) => {
         <Grid.Column>
           <Segment>
             <Segment basic>
-              <CustomerCard customer={job.customer} />
-              <BudgetLabel value={job.budget} tokenSymbol={tokenSymbol} />
+              <JobCardHeader job={job} tokenSymbol={tokenSymbol} />
             </Segment>
             <Segment basic>
               <Container text fluid>
