@@ -63,7 +63,7 @@ export const ContractCardForContractor = ({ contract, token, tokenSymbol }) => {
         'Blockchain error: ' +
           err.data.message.replace(/execution reverted:/, '').trim()
       )
-    } else if (err.message.match(/user denied transaction/i)) {
+    } else if (err.message.match(/user (denied|rejected) transaction/i)) {
       setError('You are denied transaction! Please try again.')
     } else {
       setError(
@@ -311,22 +311,53 @@ export const ContractCardForContractor = ({ contract, token, tokenSymbol }) => {
           )}
 
           {currentStatus === 'deployed' && (
-            <Segment basic textAlign="right">
+            <>
               {contractStatus === 'Signed' ? (
-                <Button
-                  primary
-                  content="Set as signed"
-                  onClick={setAsSignedOnBackend}
-                />
+                <>
+                  <Message positive>
+                    <Message.Header>
+                      Smart Contract has been successfully signed!
+                    </Message.Header>
+                    <p>
+                      <br />
+                      Please click &quot;Set as signed&quot; to update status
+                      for the customer.
+                    </p>
+                  </Message>
+
+                  <Segment basic textAlign="right">
+                    <Button
+                      primary
+                      content="Set as signed"
+                      onClick={setAsSignedOnBackend}
+                    />
+                  </Segment>
+                </>
               ) : (
-                <Button
-                  primary
-                  content="Sign"
-                  onClick={signOnBlockchain}
-                  disabled={!isWalletReady}
-                />
+                <>
+                  <Message>
+                    <Message.Header>
+                      Smart Contract is ready to be signed!
+                    </Message.Header>
+                    <p>
+                      <br />
+                      Please click &quot;Sign&quot; to continue.
+                      <br />
+                      You have to pay gas fee for this transaction.
+                    </p>
+                  </Message>
+
+                  <Segment basic textAlign="right">
+                    <Button
+                      primary
+                      content="Sign"
+                      onClick={signOnBlockchain}
+                      disabled={!isWalletReady}
+                    />
+                  </Segment>
+                </>
               )}
-            </Segment>
+            </>
           )}
 
           {currentStatus === 'signed' && (
@@ -350,22 +381,59 @@ export const ContractCardForContractor = ({ contract, token, tokenSymbol }) => {
           )}
 
           {currentStatus === 'approved' && (
-            <Segment basic textAlign="right">
+            <>
               {contractStatus === 'Closed' ? (
-                <Button
-                  primary
-                  content="Set as completed"
-                  onClick={setAsCompletedOnBackend}
-                />
+                <>
+                  <Message positive>
+                    <Message.Header>
+                      Congratulations! You have withdrawn money from the Smart
+                      Contract!
+                    </Message.Header>
+                    <p>
+                      <br />
+                      We hope you have enjoyed working with this customer!
+                      <br />
+                      If you have any ideas on how to improve OptriSpace – feel
+                      free to contact us.
+                      <br />
+                      <br />
+                      Please click &quot;Set as completed&quot; to close
+                      contract.
+                    </p>
+                  </Message>
+
+                  <Segment basic textAlign="right">
+                    <Button
+                      primary
+                      content="Set as completed"
+                      onClick={setAsCompletedOnBackend}
+                    />
+                  </Segment>
+                </>
               ) : (
-                <Button
-                  primary
-                  content="Withdraw"
-                  onClick={withdrawOnBlockchain}
-                  disabled={!isWalletReady}
-                />
+                <>
+                  <Message>
+                    <Message.Header>
+                      You are able to withdraw money!
+                    </Message.Header>
+                    <p>
+                      <br />
+                      Please click &quot;Fund&quot; button to open MetaMask to
+                      request money.
+                    </p>
+                  </Message>
+
+                  <Segment basic textAlign="right">
+                    <Button
+                      primary
+                      content="Withdraw"
+                      onClick={withdrawOnBlockchain}
+                      disabled={!isWalletReady}
+                    />
+                  </Segment>
+                </>
               )}
-            </Segment>
+            </>
           )}
         </>
       )}

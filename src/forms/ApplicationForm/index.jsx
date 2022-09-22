@@ -100,7 +100,7 @@ export const ApplicationForm = ({ job, application, token, tokenSymbol }) => {
           label={`Your expected service price (${tokenSymbol})`}
           value={fields.price}
           required
-          width={4}
+          width={5}
           onChange={handleInputChange}
           readOnly={application !== null}
           autoComplete="off"
