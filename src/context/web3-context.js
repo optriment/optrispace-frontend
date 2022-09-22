@@ -11,7 +11,6 @@ export default Web3Context
 
 export const Web3Provider = ({ children }) => {
   const tokenSymbol = publicRuntimeConfig.token_symbol
-  const tokenDecimals = publicRuntimeConfig.token_decimals
 
   const requiredChainId = publicRuntimeConfig.required_chain_id
   const blockchainNetworkName = publicRuntimeConfig.blockchain_network_name
@@ -221,7 +220,6 @@ export const Web3Provider = ({ children }) => {
         accountBalanceLoading,
 
         tokenSymbol,
-        tokenDecimals,
 
         connectWallet,
 
