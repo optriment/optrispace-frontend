@@ -9,7 +9,6 @@ export const Web3Debug = () => {
     requiredChainId,
     currentChainId,
     tokenSymbol,
-    tokenDecimals,
     isWalletInstalled,
     isCorrectNetwork,
     isWalletConnected,
@@ -46,10 +45,6 @@ export const Web3Debug = () => {
         <Table.Row>
           <Table.Cell>tokenSymbol</Table.Cell>
           <Table.Cell>{tokenSymbol}</Table.Cell>
-        </Table.Row>
-        <Table.Row>
-          <Table.Cell>tokenDecimals</Table.Cell>
-          <Table.Cell>{tokenDecimals}</Table.Cell>
         </Table.Row>
         <Table.Row positive={isWalletInstalled} negative={!isWalletInstalled}>
           <Table.Cell>isWalletInstalled</Table.Cell>
