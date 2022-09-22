@@ -50,6 +50,10 @@ export const ConnectWalletForm = ({ token, person }) => {
             <>
               {isWalletConnected ? (
                 <>
+                  {isEmptyString(person.ethereum_address) && (
+                    <Message positive header="Please save settings" />
+                  )}
+
                   <Form.Input fluid value={currentAccount} readOnly />
 
                   <Button

@@ -12,7 +12,6 @@ export const CustomerCard = ({ customer }) => {
 
         <Item.Content verticalAlign="middle">
           <Item.Header>{customerDisplayName}</Item.Header>
-          <Item.Extra>Was online 3 days ago</Item.Extra>
         </Item.Content>
       </Item>
     </Item.Group>

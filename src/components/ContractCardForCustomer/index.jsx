@@ -65,7 +65,7 @@ export const ContractCardForCustomer = ({ contract, token, tokenSymbol }) => {
         'Blockchain error: ' +
           err.data.message.replace(/execution reverted:/, '').trim()
       )
-    } else if (err.message.match(/user denied transaction/i)) {
+    } else if (err.message.match(/user (denied|rejected) transaction/i)) {
       setError('You are denied transaction! Please try again.')
     } else {
       setError(
@@ -349,42 +349,55 @@ export const ContractCardForCustomer = ({ contract, token, tokenSymbol }) => {
           )}
 
           {currentStatus === 'accepted' && (
-            <Segment basic textAlign="right">
+            <>
               {contractStatus === 'Created' ? (
-                <Button
-                  primary
-                  content="Set as deployed"
-                  onClick={setAsDeployedOnBackend}
-                  disabled={isEmptyString(contractAddress)}
-                />
-              ) : (
-                <Button
-                  primary
-                  content="Deploy to blockchain"
-                  onClick={deployToBlockchain}
-                  disabled={!isWalletReady}
-                />
-              )}
-            </Segment>
-          )}
+                <>
+                  <Message positive>
+                    <Message.Header>
+                      Smart Contract has been successfully deployed to the
+                      blockchain!
+                    </Message.Header>
+                    <p>
+                      Please click &quot;Set as deployed&quot; to update status
+                      for the contractor.
+                    </p>
+                  </Message>
 
-          {currentStatus === 'signed' && (
-            <Segment basic textAlign="right">
-              {contractStatus === 'Funded' ? (
-                <Button
-                  primary
-                  content="Set as funded"
-                  onClick={setAsFundedOnBackend}
-                />
+                  <Segment basic textAlign="right">
+                    <Button
+                      primary
+                      content="Set as deployed"
+                      onClick={setAsDeployedOnBackend}
+                      disabled={isEmptyString(contractAddress)}
+                    />
+                  </Segment>
+                </>
               ) : (
-                <Button
-                  primary
-                  content="Fund"
-                  onClick={fundOnBlockchain}
-                  disabled={!isWalletReady || accountBalance <= contract.price}
-                />
+                <>
+                  <Message>
+                    <Message.Header>
+                      Smart Contract has been successfully accepted!
+                    </Message.Header>
+                    <p>
+                      Please click &quot;Deploy to blockchain&quot; to deploy
+                      Smart Contract.
+                      <br />
+                      When MetaMask wallet will appear on your screen, please
+                      confirm the transaction.
+                    </p>
+                  </Message>
+
+                  <Segment basic textAlign="right">
+                    <Button
+                      primary
+                      content="Deploy to blockchain"
+                      onClick={deployToBlockchain}
+                      disabled={!isWalletReady}
+                    />
+                  </Segment>
+                </>
               )}
-            </Segment>
+            </>
           )}
 
           {currentStatus === 'deployed' && (
@@ -397,23 +410,123 @@ export const ContractCardForCustomer = ({ contract, token, tokenSymbol }) => {
             </>
           )}
 
-          {currentStatus === 'funded' && (
-            <Segment basic textAlign="right">
-              {contractStatus === 'Approved' ? (
-                <Button
-                  primary
-                  content="Set as approved"
-                  onClick={setAsApprovedOnBackend}
-                />
+          {currentStatus === 'signed' && (
+            <>
+              {contractStatus === 'Funded' ? (
+                <>
+                  <Message positive>
+                    <Message.Header>
+                      Smart Contract has been successfully funded!
+                    </Message.Header>
+                    <p>
+                      <br />
+                      Please click &quot;Set as funded&quot; to allow contractor
+                      to start work.
+                    </p>
+                  </Message>
+
+                  <Segment basic textAlign="right">
+                    <Button
+                      primary
+                      content="Set as funded"
+                      onClick={setAsFundedOnBackend}
+                    />
+                  </Segment>
+                </>
               ) : (
-                <Button
-                  primary
-                  content="Approve"
-                  onClick={approveOnBlockchain}
-                  disabled={!isWalletReady}
-                />
+                <>
+                  <Message>
+                    <Message.Header>Fund Smart Contract</Message.Header>
+                    <p>
+                      <br />
+                      At this step you need to send {contract.price}{' '}
+                      {tokenSymbol} to Smart Contract.
+                      <br />
+                      Please click &quot;Fund&quot; button to open MetaMask to
+                      confirm transaction.
+                    </p>
+                  </Message>
+
+                  <Segment basic textAlign="right">
+                    <Button
+                      primary
+                      content="Fund"
+                      onClick={fundOnBlockchain}
+                      disabled={
+                        !isWalletReady || accountBalance <= contract.price
+                      }
+                    />
+                  </Segment>
+                </>
               )}
-            </Segment>
+            </>
+          )}
+
+          {currentStatus === 'funded' && (
+            <>
+              {contractStatus === 'Approved' ? (
+                <>
+                  <Message>
+                    <Message.Header>Pay attention twice!</Message.Header>
+                    <p>
+                      <br />
+                      You have allowed withdrawing money for the contractor.
+                      <br />
+                      At this step you need to confirm the operation. Click
+                      &quot;Set as approved&quot; button.
+                    </p>
+                  </Message>
+
+                  <Segment basic textAlign="right">
+                    <Button
+                      positive
+                      content="Set as approved"
+                      onClick={setAsApprovedOnBackend}
+                    />
+                  </Segment>
+                </>
+              ) : (
+                <>
+                  <Message>
+                    <Message.Header>Pay attention!</Message.Header>
+                    <p>
+                      <br />
+                      At this step you can allow contractor to withdraw money
+                      from the Smart Contract.
+                      <br />
+                      Please make sure that you have got the job result from the
+                      contractor and you are agree with the final results.
+                      <br />
+                      <br />
+                      If all is good, click &quot;Approve&quot; button and
+                      confirm the transaction.
+                    </p>
+                  </Message>
+
+                  <Segment basic textAlign="right">
+                    <Button
+                      positive
+                      content="Approve"
+                      onClick={approveOnBlockchain}
+                      disabled={!isWalletReady}
+                    />
+                  </Segment>
+                </>
+              )}
+            </>
+          )}
+
+          {(currentStatus === 'approved' || currentStatus === 'completed') && (
+            <Message positive>
+              <Message.Header>Congratulations!</Message.Header>
+              <p>
+                <br />
+                We hope you have enjoyed working with this freelancer!
+                <br />
+                If you have any ideas on how to improve OptriSpace – feel free
+                to contact us.
+              </p>
+            </Message>
           )}
         </>
       )}
