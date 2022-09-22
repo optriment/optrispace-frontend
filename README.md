@@ -2,6 +2,10 @@
 
 ![OptriSpace](./public/optrispace.png)
 
+[![Lint](https://github.com/optriment/optrispace-frontend/actions/workflows/lint.yml/badge.svg)](https://github.com/optriment/optrispace-frontend/actions/workflows/lint.yml)
+[![Spell](https://github.com/optriment/optrispace-frontend/actions/workflows/spell.yml/badge.svg)](https://github.com/optriment/optrispace-frontend/actions/workflows/spell.yml)
+[![Docker Build](https://github.com/optriment/optrispace-frontend/actions/workflows/docker-image.yml/badge.svg)](https://github.com/optriment/optrispace-frontend/actions/workflows/docker-image.yml)
+
 ## Getting Started
 
 Visit [https://optrispace.com/](https://optrispace.com/) to learn more about us.
