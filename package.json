@@ -1,6 +1,17 @@
 {
-  "name": "frontend",
+  "name": "optrispace-frontend",
   "version": "0.1.0",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/optriment/optrispace-frontend/issues"
+  },
+  "keywords": [
+    "web3",
+    "blockchain",
+    "nextjs",
+    "optrispace"
+  ],
+  "homepage": "https://github.com/optriment/optrispace-frontend#readme",
   "private": true,
   "dependencies": {
     "@next/bundle-analyzer": "^12.2.5",
