@@ -1,12 +1,16 @@
 import React, { useContext } from 'react'
 import Head from 'next/head'
-import { Button, Container, Segment } from 'semantic-ui-react'
+import { Icon, Button, Container, Message, Segment } from 'semantic-ui-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { Web3Debug } from '../../components/Web3Debug'
 import DisplayContext from '../../context/display-context'
 
 import 'semantic-ui-css/semantic.min.css'
+import getConfig from 'next/config'
+import Link from 'next/link'
+
+const { publicRuntimeConfig } = getConfig()
 
 export const UsersLayout = ({ children, meta = {} }) => {
   const { isWeb3DebugMode, setIsWeb3DebugMode } = useContext(DisplayContext)
@@ -19,6 +23,8 @@ export const UsersLayout = ({ children, meta = {} }) => {
     setIsWeb3DebugMode(!isWeb3DebugMode)
   }
 
+  const { domain } = publicRuntimeConfig
+
   return (
     <>
       <Head>
@@ -29,6 +35,30 @@ export const UsersLayout = ({ children, meta = {} }) => {
 
       <Container>
         <Header />
+
+        {domain !== 'https://my.optrispace.com/' && (
+          <Message negative icon>
+            <Icon name="rocket" />
+
+            <Message.Content>
+              <Message.Header>
+                This is the development version of the platform
+              </Message.Header>
+              <p>
+                Please use production version instead:{' '}
+                <Link href="https://my.optrispace.com/" passHref>
+                  <a
+                    href="https://my.optrispace.com"
+                    target="_self"
+                    rel="noreferrer nofollow noopener"
+                  >
+                    https://my.optrispace.com/
+                  </a>
+                </Link>
+              </p>
+            </Message.Content>
+          </Message>
+        )}
 
         <Segment basic>{children}</Segment>
 
