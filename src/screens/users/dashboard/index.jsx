@@ -16,7 +16,7 @@ export const DashboardScreen = () => {
 
       <Divider hidden />
 
-      <Header as="h2" content="How do we work in the alpha version?" />
+      <Header as="h2" content="How do we work?" />
 
       <List ordered>
         <List.Item>
@@ -42,9 +42,9 @@ export const DashboardScreen = () => {
           Installed Google Chrome, Firefox, Yandex.Browser or Opera
         </List.Item>
         <List.Item>Installed MetaMask Extension</List.Item>
-        <List.Item>Added Binance Smart Chain Testnet</List.Item>
+        <List.Item>Added Binance Smart Chain</List.Item>
         <List.Item>
-          Some Binance test tokens to pay for transactions (gas) fee
+          Some Binance tokens to pay for transactions (gas) fee
         </List.Item>
       </List>
 
@@ -72,79 +72,32 @@ export const DashboardScreen = () => {
 
       <Divider hidden />
 
-      <Header as="h2" content="How to add Binance Smart Chain Testnet?" />
-
-      <p>
-        In Alpha and Beta we use Testnet to process transactions not involving
-        real money
-      </p>
+      <Header as="h2" content="How to add Binance Smart Chain?" />
 
       <List ordered>
         <List.Item>
           Open{' '}
           <a
-            href="https://chainlist.org/"
+            href="https://chainlist.org/chain/56"
             target="_blank"
             rel="nofollow noopener noreferrer"
           >
-            https://chainlist.org{' '}
+            https://chainlist.org/chain/56{' '}
           </a>
           in your browser
-        </List.Item>
-        <List.Item>
-          Toggle &quot;Testnets&quot; checkbox on the top menu
-        </List.Item>
-        <List.Item>Type &quot;bnb&quot; in the search field</List.Item>
-        <List.Item>
-          Find &quot;Binance Smart Chain&quot; with ChainId 97
         </List.Item>
         <List.Item>Click &quot;Connect Wallet&quot; button</List.Item>
         <List.Item>Confirm in your MetaMask</List.Item>
         <List.Item>Click &quot;Add To MetaMask&quot; button</List.Item>
         <List.Item>Confirm in your MetaMask</List.Item>
         <List.Item>
-          Make sure your MetaMask has &quot;Binance Smart Chain Testnet&quot;
-        </List.Item>
-        <List.Item>
-          If it does not, activate test networks in MetaMask
+          Make sure your MetaMask has &quot;Binance Smart Chain&quot;
         </List.Item>
       </List>
 
       <Divider hidden />
 
-      <Header
-        as="h2"
-        content="How to get test BNB Tokens from Binance Faucet?"
-      />
-
-      <p>Test tokens are used to pay for gas fees (transactions).</p>
-
-      <List ordered>
-        <List.Item>
-          Open{' '}
-          <a
-            href="https://testnet.binance.org/faucet-smart"
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-          >
-            https://testnet.binance.org/faucet-smart{' '}
-          </a>
-          in your browser
-        </List.Item>
-        <List.Item>Pass the Captcha</List.Item>
-        <List.Item>
-          Paste your wallet address from MetaMask in the text field
-        </List.Item>
-        <List.Item>Click &quot;Give me BNB&quot;</List.Item>
-        <List.Item>
-          Wait a bit and check you&apos;ve received 0.5 test tokens to your
-          MetaMask
-        </List.Item>
-      </List>
-
-      <Divider hidden />
-
-      <Header as="h2" content="Congratulations!" />
+      <Header as="h2" content="You are ready!" />
     </Container>
   )
 }

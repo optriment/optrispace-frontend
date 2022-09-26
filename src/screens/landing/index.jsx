@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Container, Divider, Button, Header } from 'semantic-ui-react'
+import { Container, Divider, Button, Header, List } from 'semantic-ui-react'
 
 export const LandingScreen = ({ isSmallScreen }) => {
   return (
@@ -45,10 +45,10 @@ export const LandingScreen = ({ isSmallScreen }) => {
 
       <Divider style={{ marginTop: isSmallScreen ? '2em' : '5em' }} />
 
-      <Container text>
+      <Container text textAlign="justified">
         <Header
           as="h2"
-          content="What's going on?"
+          content="What is going on?"
           style={{
             fontSize: isSmallScreen ? '1.5em' : '1.8em',
             fontWeight: 'normal',
@@ -57,21 +57,21 @@ export const LandingScreen = ({ isSmallScreen }) => {
         />
 
         <p>
-          We are OptriSpace — a platform for freelancers looking for jobs and
-          for customers looking for professionals for their projects. Besides
-          that all our users will become shareholders of our company.
+          We are OptriSpace - an international team who got together to face a
+          challenge and build a brand-new platform for people like us:
+          freelancers, managers and entrepreneurs. We provide a platform for
+          people looking for jobs or for professionals for their projects.
         </p>
 
         <p>
           Our platform is based on the blockchain technology and uses
           cryptocurrency as a payment method. That makes OptriSpace secure and
-          fast. We&apos;re almost ready to launch the beta testing and we need
-          you to share your user experience to improve our product.
+          fast.
         </p>
 
         <Header
           as="h2"
-          content="Discover how to earn more"
+          content="What is inside?"
           style={{
             fontSize: isSmallScreen ? '1.5em' : '1.8em',
             fontWeight: 'normal',
@@ -79,26 +79,39 @@ export const LandingScreen = ({ isSmallScreen }) => {
           }}
         />
 
-        <p>
-          We are looking for hardworking and independent talents who seek global
-          contracts with less paperwork and more freedom. We offer a smart
-          contracting platform to connect with customers and experts.
-        </p>
-
-        <Header
-          as="h2"
-          content="Who can find job on the platform right now?"
-          style={{
-            fontSize: isSmallScreen ? '1.5em' : '1.8em',
-            fontWeight: 'normal',
-            marginTop: isSmallScreen ? '1.0em' : '1.3em',
-          }}
-        />
-
-        <p>
-          Software Developers, QA Engineers, Designers, Copywriters,
-          Translators.
-        </p>
+        <List bulleted>
+          <List.Item>
+            Powered by{' '}
+            <Link
+              href="https://github.com/optriment/optrispace-contract"
+              passHref
+            >
+              <a
+                href="https://github.com/optriment/optrispace-contract"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+              >
+                Smart Contracts
+              </a>
+            </Link>
+          </List.Item>
+          <List.Item>
+            All of our code is{' '}
+            <Link href="https://github.com/optriment" passHref>
+              <a
+                href="https://github.com/optriment"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+              >
+                open source
+              </a>
+            </Link>
+          </List.Item>
+          <List.Item>All payments in crypto</List.Item>
+          <List.Item>Remote first</List.Item>
+          <List.Item>No paperwork</List.Item>
+          <List.Item>No middlemen</List.Item>
+        </List>
 
         <Header
           as="h2"
@@ -111,25 +124,9 @@ export const LandingScreen = ({ isSmallScreen }) => {
         />
 
         <p>
-          During the alpha test we are using Binance Smart Chain (Testnet).
+          Binance Smart Chain.
           <br />
-          Our main currency is native currency of this network (Test BNB).
-        </p>
-
-        <Header
-          as="h2"
-          content="What about payments?"
-          style={{
-            fontSize: isSmallScreen ? '1.5em' : '1.8em',
-            fontWeight: 'normal',
-            marginTop: isSmallScreen ? '1.0em' : '1.3em',
-          }}
-        />
-
-        <p>
-          All payments will be in crypto.
-          <br />
-          Additional information you will receive after the registration.
+          Our main currency is the native currency of this network (BNB).
         </p>
       </Container>
     </>
