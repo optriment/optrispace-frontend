@@ -26,7 +26,7 @@ export const Sidebar = () => {
           circular
           color="linkedin"
           icon="linkedin"
-          href="https://www.linkedin.com/company/optrispace"
+          href="https://www.linkedin.com/company/optriment"
           target="_blank"
           rel="noreferrer noopener nofollow"
           title="LinkedIn"
@@ -41,6 +41,17 @@ export const Sidebar = () => {
           target="_blank"
           rel="noreferrer noopener nofollow"
           title="Twitter"
+        />
+
+        <Button
+          as="a"
+          circular
+          color="instagram"
+          icon="instagram"
+          href="https://www.instagram.com/optrispace/"
+          target="_blank"
+          rel="noreferrer noopener nofollow"
+          title="Instagram"
         />
 
         <Button
