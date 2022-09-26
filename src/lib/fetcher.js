@@ -21,6 +21,7 @@ export const fetcher = async (url) => {
   return res.json()
 }
 
+// TODO: rename to getWithToken
 export const fetchWithToken = async (url, token) => {
   const headers = {
     'Content-Type': 'application/json',
