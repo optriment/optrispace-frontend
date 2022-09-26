@@ -36,7 +36,7 @@ export const UsersLayout = ({ children, meta = {} }) => {
       <Container>
         <Header />
 
-        {domain !== 'https://my.optrispace.com/' && (
+        {!domain.match(/my.optrispace.com/) && (
           <Message negative icon>
             <Icon name="rocket" />
 
