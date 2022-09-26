@@ -15,37 +15,16 @@ export const ThankYouScreen = ({ isSmallScreen }) => {
             marginTop: isSmallScreen ? null : '0.7em',
           }}
         >
-          Thank you for joining us in OptriSpace!
-        </Header>
-
-        <Header
-          as="h2"
-          style={{
-            fontSize: isSmallScreen ? '1.3em' : '1.8em',
-            fontWeight: 'normal',
-            marginTop: isSmallScreen ? '1.3em' : '1.3em',
-          }}
-        >
-          It doesn&apos;t matter where you live. It doesn&apos;t matter if you
-          like working from home, from an office, or from the beach. It
-          doesn&apos;t matter the currency you use.
+          One last thing before we start...
           <br />
-          <br />
-          Sign up on our website and start looking
-          <br />
-          for your next job today!
+          Please check your inbox!
         </Header>
       </Container>
 
       <Divider style={{ marginTop: isSmallScreen ? '1.3em' : '1.8em' }} />
 
       <Container text style={{ marginTop: '2em' }}>
-        <p>
-          <strong>One last thing before we start...</strong>
-        </p>
-
         <List ordered>
-          <List.Item>Check your inbox for everything we promised.</List.Item>
           <List.Item>
             Look for our email from &quot;OptriSpace Team&quot;
             (office@optriment.com) that we just sent to you.

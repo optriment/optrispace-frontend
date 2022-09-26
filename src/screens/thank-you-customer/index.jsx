@@ -15,32 +15,16 @@ export const ThankYouCustomerScreen = ({ isSmallScreen }) => {
             marginTop: isSmallScreen ? null : '0.7em',
           }}
         >
-          Congratulations!
+          One last thing before we start...
+          <br />
+          Please check your inbox!
         </Header>
-
-        <Header
-          as="h2"
-          content="Thank you for joining us in OptriSpace!"
-          style={{
-            fontSize: isSmallScreen ? '1.3em' : '1.8em',
-            fontWeight: 'normal',
-            marginTop: isSmallScreen ? '1.3em' : '1.3em',
-          }}
-        />
       </Container>
 
-      <Divider
-        style={{ marginTop: isSmallScreen ? '1.3em' : '1.8em' }}
-        hidden
-      />
+      <Divider style={{ marginTop: isSmallScreen ? '1.3em' : '1.8em' }} />
 
-      <Container text>
-        <p>
-          <strong>One last thing before we start...</strong>
-        </p>
-
+      <Container text style={{ marginTop: '2em' }}>
         <List ordered>
-          <List.Item>Check your inbox for everything we promised.</List.Item>
           <List.Item>
             Look for our email from &quot;OptriSpace Team&quot;
             (office@optriment.com) that we just sent to you.
