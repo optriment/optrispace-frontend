@@ -45,32 +45,6 @@ export const JobCardForApplicant = ({ job, person, tokenSymbol, domain }) => {
 
   const personHasAddress = !isEmptyString(person.ethereum_address)
 
-  const applicationForm = () => {
-    return (
-      <ApplicationForm
-        job={job}
-        application={application}
-        token={token}
-        tokenSymbol={tokenSymbol}
-      />
-    )
-  }
-
-  const chatForm = () => {
-    return <Chat chatId={chat?.id} token={token} />
-  }
-
-  const renderApplicantPrice = () => {
-    return (
-      <Message>
-        <Message.Header>
-          You&apos;ve applied with the service price of {application.price}
-          {' ' + tokenSymbol}
-        </Message.Header>
-      </Message>
-    )
-  }
-
   return (
     <Grid stackable>
       <Grid.Row>
@@ -95,15 +69,26 @@ export const JobCardForApplicant = ({ job, person, tokenSymbol, domain }) => {
             <Segment basic>
               {application ? (
                 <>
-                  {renderApplicantPrice()}
-                  {chat?.id && chatForm()}
+                  <Message>
+                    <Message.Header>
+                      You&apos;ve applied with the service price of
+                      {' ' + application.price + ' ' + tokenSymbol}
+                    </Message.Header>
+                  </Message>
+
+                  {chat?.id && <Chat chatId={chat?.id} token={token} />}
                 </>
               ) : (
                 <>
                   <Header as="h3">Leave a Reply</Header>
 
                   {personHasAddress ? (
-                    applicationForm()
+                    <ApplicationForm
+                      job={job}
+                      application={application}
+                      token={token}
+                      tokenSymbol={tokenSymbol}
+                    />
                   ) : (
                     <ProfileIsNotConfigured />
                   )}
