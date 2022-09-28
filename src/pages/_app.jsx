@@ -12,28 +12,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <GoogleAnalytics />
-      <Head>
-        {process.env.SUPPRESS_ERRORS === 'true' && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
 
-          window.addEventListener('error', event => {
-            console.error(event);
-            event.stopImmediatePropagation();
-          });
-
-          window.addEventListener('unhandledrejection', event => {
-            console.error(event);
-            event.stopImmediatePropagation();
-          });
-
-          `,
-            }}
-          />
-        )}
-
-        {Component.requiresAuth && (
+      {Component.requiresAuth && (
+        <Head>
           <script
             // If no token is found, redirect immediately
             dangerouslySetInnerHTML={{
@@ -43,9 +24,9 @@ function MyApp({ Component, pageProps }) {
             )}`,
             }}
           />
-        )}
-      </Head>
-      )
+        </Head>
+      )}
+
       <Script
         id="chatwoot-widget"
         strategy="afterInteractive"
@@ -69,6 +50,7 @@ function MyApp({ Component, pageProps }) {
           `,
         }}
       />
+
       {Component.useTwitterPixel && (
         <Head>
           <script
@@ -85,6 +67,7 @@ function MyApp({ Component, pageProps }) {
           />
         </Head>
       )}
+
       <AuthProvider>
         <Web3Provider>
           <DisplayProvider>
