@@ -1,6 +1,6 @@
 import getConfig from 'next/config'
 import useSWR from 'swr'
-import { fetchWithToken } from '../lib/fetcher'
+import { getWithToken } from '../lib/fetcher'
 
 export const useApplicationChat = (token, applicationId) => {
   const { publicRuntimeConfig } = getConfig()
@@ -12,7 +12,7 @@ export const useApplicationChat = (token, applicationId) => {
         `${publicRuntimeConfig.api_url}/applications/${applicationId}/chat`,
         token,
       ],
-    fetchWithToken
+    getWithToken
   )
 
   if (error) return { error }

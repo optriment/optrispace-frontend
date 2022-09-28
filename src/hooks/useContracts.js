@@ -1,14 +1,14 @@
 import * as Sentry from '@sentry/nextjs'
 import getConfig from 'next/config'
 import useSWR from 'swr'
-import { fetchWithToken } from '../lib/fetcher'
+import { getWithToken } from '../lib/fetcher'
 
 export const useContracts = (token) => {
   const { publicRuntimeConfig } = getConfig()
 
   const { data, error } = useSWR(
     () => token && [`${publicRuntimeConfig.api_url}/contracts`, token],
-    fetchWithToken
+    getWithToken
   )
 
   if (error) {

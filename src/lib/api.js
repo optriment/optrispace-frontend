@@ -1,5 +1,5 @@
 import getConfig from 'next/config'
-import { fetchWithToken, postWithToken, putWithToken } from './fetcher'
+import { getWithToken, postWithToken, putWithToken } from './fetcher'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -119,7 +119,7 @@ export async function postChatMessage(token, chatId, messageText) {
 }
 
 export async function getChat(token, chatId) {
-  return await fetchWithToken(
+  return await getWithToken(
     `${publicRuntimeConfig.api_url}/chats/${chatId}`,
     token
   )

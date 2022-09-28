@@ -1,6 +1,6 @@
 import getConfig from 'next/config'
 import useSWR from 'swr'
-import { fetchWithToken } from '../lib/fetcher'
+import { getWithToken } from '../lib/fetcher'
 
 export const useChat = (token, chatId) => {
   const { publicRuntimeConfig } = getConfig()
@@ -9,7 +9,7 @@ export const useChat = (token, chatId) => {
     () =>
       token &&
       chatId && [`${publicRuntimeConfig.api_url}/chats/${chatId}`, token],
-    fetchWithToken
+    getWithToken
   )
 
   if (error?.status === 404) {
