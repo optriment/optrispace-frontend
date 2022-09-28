@@ -9,10 +9,6 @@ export const ChatForm = ({ chatId, token, onPostMessage }) => {
   const [messageText, setMessageText] = useState('')
   const [error, setError] = useState('')
 
-  const changeMessageText = (e) => {
-    setMessageText(e.target.value)
-  }
-
   const handlePostMessage = (e) => {
     setError('')
 
@@ -55,8 +51,7 @@ export const ChatForm = ({ chatId, token, onPostMessage }) => {
         <Form.TextArea
           id="comment"
           value={messageText}
-          onChange={changeMessageText}
-          readOnly={false}
+          onChange={(e) => setMessageText(e.target.value)}
         />
 
         <Button content="Send" primary disabled={isEmptyString(messageText)} />
