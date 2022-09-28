@@ -1,15 +1,17 @@
 import React from 'react'
-import { Header, Container, Grid, Segment } from 'semantic-ui-react'
-import { JobCardHeader } from '../JobCardHeader'
-import { FormattedDescription } from '../FormattedDescription'
+import { Message, Container, Grid, Header, Segment } from 'semantic-ui-react'
 import { ApplicationForm } from '../../forms/ApplicationForm'
-import { useApplications } from '../../hooks/useApplications'
 import { useAuth } from '../../hooks'
-import JustOneSecond from '../JustOneSecond'
-import ErrorWrapper from '../ErrorWrapper'
-import { ShareButtons } from '../ShareButtons/ShareButtons'
+import { useApplicationChat } from '../../hooks/useApplicationChat'
+import { useApplications } from '../../hooks/useApplications'
 import { isEmptyString } from '../../lib/validators'
+import { Chat } from '../Chat'
+import ErrorWrapper from '../ErrorWrapper'
+import { FormattedDescription } from '../FormattedDescription'
+import { JobCardHeader } from '../JobCardHeader'
+import JustOneSecond from '../JustOneSecond'
 import { ProfileIsNotConfigured } from '../ProfileIsNotConfigured'
+import { ShareButtons } from '../ShareButtons/ShareButtons'
 
 export const JobCardForApplicant = ({ job, person, tokenSymbol, domain }) => {
   const { isLoading: personLoading, token } = useAuth()
@@ -18,6 +20,11 @@ export const JobCardForApplicant = ({ job, person, tokenSymbol, domain }) => {
     isLoading: applicationsLoading,
     error: applicationsError,
   } = useApplications(token, job.id)
+
+  const application =
+    applications && applications.length > 0 ? applications[0] : null
+
+  const { chat } = useApplicationChat(token, application?.id)
 
   if (personLoading) {
     return <JustOneSecond title="Loading profile..." />
@@ -36,8 +43,7 @@ export const JobCardForApplicant = ({ job, person, tokenSymbol, domain }) => {
     )
   }
 
-  const application =
-    applications && applications.length > 0 ? applications[0] : null
+  const personHasAddress = !isEmptyString(person.ethereum_address)
 
   return (
     <Grid stackable>
@@ -62,20 +68,31 @@ export const JobCardForApplicant = ({ job, person, tokenSymbol, domain }) => {
           <Segment>
             <Segment basic>
               {application ? (
-                <Header as="h3">Your reply has been published</Header>
-              ) : (
-                <Header as="h3">Leave a Reply</Header>
-              )}
+                <>
+                  <Message>
+                    <Message.Header>
+                      You&apos;ve applied with the service price of
+                      {' ' + application.price + ' ' + tokenSymbol}
+                    </Message.Header>
+                  </Message>
 
-              {isEmptyString(person.ethereum_address) ? (
-                <ProfileIsNotConfigured />
+                  {chat?.id && <Chat chatId={chat?.id} token={token} />}
+                </>
               ) : (
-                <ApplicationForm
-                  job={job}
-                  application={application}
-                  token={token}
-                  tokenSymbol={tokenSymbol}
-                />
+                <>
+                  <Header as="h3">Leave a Reply</Header>
+
+                  {personHasAddress ? (
+                    <ApplicationForm
+                      job={job}
+                      application={application}
+                      token={token}
+                      tokenSymbol={tokenSymbol}
+                    />
+                  ) : (
+                    <ProfileIsNotConfigured />
+                  )}
+                </>
               )}
             </Segment>
           </Segment>

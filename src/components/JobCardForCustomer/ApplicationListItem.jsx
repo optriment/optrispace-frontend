@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { Button, Item, Icon } from 'semantic-ui-react'
 import { FormattedDescription } from '../FormattedDescription'
 import { isEmptyString } from '../../lib/validators'
+import { useApplicationChat } from '../../hooks/useApplicationChat'
+import { useAuth } from '../../hooks'
 
 export default function ApplicationListItem({
   job,
@@ -11,6 +13,9 @@ export default function ApplicationListItem({
   tokenSymbol,
 }) {
   const { applicant, contract } = application
+
+  const { token } = useAuth()
+  const { chat } = useApplicationChat(token, application?.id)
 
   return (
     <Item>
@@ -46,6 +51,17 @@ export default function ApplicationListItem({
               size="tiny"
               floated="right"
               disabled={isEmptyString(applicant.ethereum_address)}
+            />
+          </Link>
+        )}
+        {chat && (
+          <Link href="/chats/[id]" as={`/chats/${chat.id}`} passHref>
+            <Button
+              as="a"
+              content="Open chat"
+              primary
+              size="tiny"
+              floated="right"
             />
           </Link>
         )}

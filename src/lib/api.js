@@ -1,5 +1,5 @@
 import getConfig from 'next/config'
-import { postWithToken, putWithToken } from './fetcher'
+import { fetchWithToken, postWithToken, putWithToken } from './fetcher'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -104,6 +104,23 @@ export async function approveContract(token, contractId) {
 export async function completeContract(token, contractId) {
   return await postWithToken(
     `${publicRuntimeConfig.api_url}/contracts/${contractId}/complete`,
+    token
+  )
+}
+
+export async function postChatMessage(token, chatId, messageText) {
+  return await postWithToken(
+    `${publicRuntimeConfig.api_url}/chats/${chatId}/messages`,
+    token,
+    {
+      text: messageText.trim(),
+    }
+  )
+}
+
+export async function getChat(token, chatId) {
+  return await fetchWithToken(
+    `${publicRuntimeConfig.api_url}/chats/${chatId}`,
     token
   )
 }
