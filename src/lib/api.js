@@ -119,9 +119,8 @@ export async function postChatMessage(token, chatId, messageText) {
 }
 
 export async function getChat(token, chatId) {
-  let c = await fetchWithToken(
+  return await fetchWithToken(
     `${publicRuntimeConfig.api_url}/chats/${chatId}`,
     token
   )
-  return c
 }
