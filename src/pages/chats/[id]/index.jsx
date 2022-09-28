@@ -3,6 +3,7 @@ import React, { useContext, useEffect } from 'react'
 import ErrorWrapper from '../../../components/ErrorWrapper'
 import JustOneSecond from '../../../components/JustOneSecond'
 import DisplayContext from '../../../context/display-context'
+import Web3Context from '../../../context/web3-context'
 import { useAuth } from '../../../hooks'
 import { useChat } from '../../../hooks/useChat'
 import { LandingLayout } from '../../../layouts/Landing'
@@ -11,12 +12,12 @@ import { ChatScreen } from '../../../screens/users/chats/show'
 
 const Page = () => {
   const { query } = useRouter()
+  const { tokenSymbol } = useContext(Web3Context)
 
   const {
     isLoading: personLoading,
     error: personError,
     isAuthenticated,
-    person,
     token,
   } = useAuth()
 
@@ -74,7 +75,7 @@ const Page = () => {
 
   return (
     <UsersLayout meta={{ title: `Chat ${chat.topic}` }}>
-      <ChatScreen chat={chat} person={person} token={token} />
+      <ChatScreen chat={chat} token={token} tokenSymbol={tokenSymbol} />
     </UsersLayout>
   )
 }

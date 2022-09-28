@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { postChatMessage } from '../../lib/api'
+import { isEmptyString } from '../../lib/validators'
 
 export const ChatForm = ({ chatId, token, onPostMessage }) => {
   const [messageText, setMessageText] = useState('')
@@ -13,6 +14,8 @@ export const ChatForm = ({ chatId, token, onPostMessage }) => {
   }
 
   const handlePostMessage = (e) => {
+    setError('')
+
     e.preventDefault()
 
     try {
@@ -44,21 +47,19 @@ export const ChatForm = ({ chatId, token, onPostMessage }) => {
 
   return (
     <>
-      {error && (
+      {error !== '' && (
         <ErrorWrapper header="Error while posting message" error={error} />
       )}
 
-      <Form onSubmit={handlePostMessage}>
+      <Form reply onSubmit={handlePostMessage}>
         <Form.TextArea
           id="comment"
-          label="Publish comment at the conversation"
-          rows={8}
           value={messageText}
           onChange={changeMessageText}
           readOnly={false}
         />
 
-        <Button content="Post" primary disabled={!messageText} />
+        <Button content="Send" primary disabled={isEmptyString(messageText)} />
       </Form>
     </>
   )

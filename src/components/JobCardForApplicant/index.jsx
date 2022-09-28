@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Grid, Header, Icon, Segment } from 'semantic-ui-react'
+import { Message, Container, Grid, Header, Segment } from 'semantic-ui-react'
 import { ApplicationForm } from '../../forms/ApplicationForm'
 import { useAuth } from '../../hooks'
 import { useApplicationChat } from '../../hooks/useApplicationChat'
@@ -57,17 +57,17 @@ export const JobCardForApplicant = ({ job, person, tokenSymbol, domain }) => {
   }
 
   const chatForm = () => {
-    return <Chat title="Conversation" chatId={chat?.id} token={token} />
+    return <Chat chatId={chat?.id} token={token} />
   }
 
-  const printBalance = () => {
+  const renderApplicantPrice = () => {
     return (
-      <div style={{ textAlign: 'center' }}>
-        Application price is{' '}
-        <b>
-          <Icon name="money" /> {application?.price} {tokenSymbol}
-        </b>
-      </div>
+      <Message>
+        <Message.Header>
+          You&apos;ve applied with the service price of {application.price}
+          {' ' + tokenSymbol}
+        </Message.Header>
+      </Message>
     )
   }
 
@@ -93,13 +93,22 @@ export const JobCardForApplicant = ({ job, person, tokenSymbol, domain }) => {
         <Grid.Column>
           <Segment>
             <Segment basic>
-              {!application && <Header as="h3">Leave a Reply</Header>}
+              {application ? (
+                <>
+                  {renderApplicantPrice()}
+                  {chat?.id && chatForm()}
+                </>
+              ) : (
+                <>
+                  <Header as="h3">Leave a Reply</Header>
 
-              {!personHasAddress && <ProfileIsNotConfigured />}
-
-              {personHasAddress && !chat && applicationForm()}
-              {personHasAddress && application && printBalance()}
-              {personHasAddress && chat && chatForm()}
+                  {personHasAddress ? (
+                    applicationForm()
+                  ) : (
+                    <ProfileIsNotConfigured />
+                  )}
+                </>
+              )}
             </Segment>
           </Segment>
         </Grid.Column>
