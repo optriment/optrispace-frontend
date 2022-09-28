@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/nextjs'
 import getConfig from 'next/config'
 import useSWR from 'swr'
-import { fetchWithToken } from '../lib/fetcher'
+import { getWithToken } from '../lib/fetcher'
 
 export const useApplications = (token, jobId) => {
   const { publicRuntimeConfig } = getConfig()
@@ -13,7 +13,7 @@ export const useApplications = (token, jobId) => {
         `${publicRuntimeConfig.api_url}/jobs/${jobId}/applications`,
         token,
       ],
-    fetchWithToken
+    getWithToken
   )
 
   if (error) {
