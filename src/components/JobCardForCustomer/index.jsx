@@ -51,7 +51,11 @@ export const JobCardForCustomer = ({
         <Grid.Column>
           <Segment>
             <Segment basic>
-              <JobCardHeader job={job} tokenSymbol={tokenSymbol} />
+              <JobCardHeader
+                job={job}
+                tokenSymbol={tokenSymbol}
+                blockchainViewAddressURL={blockchainViewAddressURL}
+              />
             </Segment>
             <Segment basic>
               <Container text fluid>

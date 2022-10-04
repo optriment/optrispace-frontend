@@ -1,8 +1,12 @@
-import { List, Item } from 'semantic-ui-react'
+import { Icon, List, Item } from 'semantic-ui-react'
 import { formatDateTime } from '../../lib/formatDate'
+import { isEmptyString } from '../../lib/validators'
 
-export const JobCardHeader = ({ job, tokenSymbol }) => {
-  const { customer } = job
+export const JobCardHeader = ({
+  job,
+  tokenSymbol,
+  blockchainViewAddressURL,
+}) => {
   const createdAt = formatDateTime(job.created_at)
   const updatedAt = formatDateTime(job.updated_at)
 
@@ -12,7 +16,24 @@ export const JobCardHeader = ({ job, tokenSymbol }) => {
         <Item.Image bordered avatar size="tiny" src="/default-userpic.jpg" />
 
         <Item.Content verticalAlign="middle">
-          <Item.Header>{customer.display_name}</Item.Header>
+          <Item.Header>
+            {job.customer_display_name}
+
+            {!isEmptyString(job.customer_ethereum_address) && (
+              <>
+                {' '}
+                <a
+                  href={`${blockchainViewAddressURL}/${job.customer_ethereum_address}`}
+                  target="_blank"
+                  rel="noreferrer noopener nofollow"
+                  title="Open wallet information"
+                >
+                  <Icon name="address card" />
+                </a>
+              </>
+            )}
+          </Item.Header>
+
           <Item.Meta>
             <List bulleted horizontal>
               {job.budget > 0 && (
