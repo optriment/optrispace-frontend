@@ -70,7 +70,7 @@ export const Sidebar = () => {
           circular
           color="violet"
           icon="discord"
-          href="https://discord.gg/dXCC3PGSdM"
+          href="https://discord.gg/7WEbtmuqtv"
           target="_blank"
           rel="noreferrer noopener nofollow"
           title="Discord"
