@@ -75,7 +75,12 @@ export const JobScreen = ({
   if (!isAuthenticated) {
     return (
       <Wrapper title={job.title}>
-        <JobCardForGuest job={job} tokenSymbol={tokenSymbol} domain={domain} />
+        <JobCardForGuest
+          job={job}
+          blockchainViewAddressURL={blockchainViewAddressURL}
+          tokenSymbol={tokenSymbol}
+          domain={domain}
+        />
       </Wrapper>
     )
   }
@@ -97,6 +102,7 @@ export const JobScreen = ({
       ) : (
         <JobCardForApplicant
           job={job}
+          blockchainViewAddressURL={blockchainViewAddressURL}
           person={person}
           tokenSymbol={tokenSymbol}
           domain={domain}

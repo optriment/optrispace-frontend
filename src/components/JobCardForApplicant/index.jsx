@@ -13,7 +13,13 @@ import JustOneSecond from '../JustOneSecond'
 import { ProfileIsNotConfigured } from '../ProfileIsNotConfigured'
 import { ShareButtons } from '../ShareButtons/ShareButtons'
 
-export const JobCardForApplicant = ({ job, person, tokenSymbol, domain }) => {
+export const JobCardForApplicant = ({
+  job,
+  person,
+  tokenSymbol,
+  domain,
+  blockchainViewAddressURL,
+}) => {
   const { isLoading: personLoading, token } = useAuth()
   const {
     applications,
@@ -51,7 +57,11 @@ export const JobCardForApplicant = ({ job, person, tokenSymbol, domain }) => {
         <Grid.Column>
           <Segment>
             <Segment basic>
-              <JobCardHeader job={job} tokenSymbol={tokenSymbol} />
+              <JobCardHeader
+                job={job}
+                tokenSymbol={tokenSymbol}
+                blockchainViewAddressURL={blockchainViewAddressURL}
+              />
             </Segment>
             <Segment basic>
               <Container text fluid>

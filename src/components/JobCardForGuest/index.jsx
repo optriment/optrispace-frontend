@@ -5,14 +5,23 @@ import { JobCardHeader } from '../JobCardHeader'
 import { FormattedDescription } from '../FormattedDescription'
 import { ShareButtons } from '../ShareButtons/ShareButtons'
 
-export const JobCardForGuest = ({ job, tokenSymbol, domain }) => {
+export const JobCardForGuest = ({
+  job,
+  tokenSymbol,
+  domain,
+  blockchainViewAddressURL,
+}) => {
   return (
     <Grid stackable>
       <Grid.Row>
         <Grid.Column>
           <Segment>
             <Segment basic>
-              <JobCardHeader job={job} tokenSymbol={tokenSymbol} />
+              <JobCardHeader
+                job={job}
+                tokenSymbol={tokenSymbol}
+                blockchainViewAddressURL={blockchainViewAddressURL}
+              />
             </Segment>
             <Segment basic>
               <Container text fluid>
