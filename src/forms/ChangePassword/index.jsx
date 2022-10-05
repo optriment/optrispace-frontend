@@ -35,7 +35,7 @@ export const ChangePasswordForm = ({ token, authenticate }) => {
     } catch (err) {
       console.error({ err })
       Sentry.captureException(err)
-      setError(err)
+      setError(err.message)
     } finally {
       setIsSubmitting(false)
     }

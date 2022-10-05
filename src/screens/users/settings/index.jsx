@@ -22,13 +22,11 @@ export const SettingsScreen = ({ person, token, authenticate }) => {
           <Grid.Column width={8}>
             <Header as="h3">Change Display Name</Header>
 
-            <Segment>
-              <ChangeDisplayName
-                token={token}
-                id={person.id}
-                displayName={person.display_name}
-              />
-            </Segment>
+            <ChangeDisplayName
+              token={token}
+              id={person.id}
+              displayName={person.display_name}
+            />
           </Grid.Column>
         </Grid.Row>
 
