@@ -1,6 +1,7 @@
 import React from 'react'
 import { Input, Segment, Grid, Header } from 'semantic-ui-react'
 import { ChangePasswordForm } from '../../../forms/ChangePassword'
+import { ChangeDisplayName } from '../../../forms/ChangeDisplayName'
 import { ConnectWalletForm } from '../../../forms/ConnectWalletForm'
 
 export const SettingsScreen = ({ person, token, authenticate }) => {
@@ -14,6 +15,20 @@ export const SettingsScreen = ({ person, token, authenticate }) => {
             <Header as="h3">Connect Wallet</Header>
 
             <ConnectWalletForm token={token} person={person} />
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <Grid.Column width={8}>
+            <Header as="h3">Change Display Name</Header>
+
+            <Segment>
+              <ChangeDisplayName
+                token={token}
+                id={person.id}
+                displayName={person.display_name}
+              />
+            </Segment>
           </Grid.Column>
         </Grid.Row>
 
