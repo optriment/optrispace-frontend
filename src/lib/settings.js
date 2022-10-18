@@ -31,3 +31,13 @@ export async function updateDisplayName(token, personId, displayName) {
     }
   )
 }
+
+export async function updateEmail(token, personId, email) {
+  return await putWithToken(
+    `${publicRuntimeConfig.api_url}/persons/${personId}`,
+    token,
+    {
+      email: email.trim().toLowerCase(),
+    }
+  )
+}
