@@ -18,7 +18,7 @@ export const JobsScreen = ({ jobs, person, tokenSymbol }) => {
           ) : (
             <Container textAlign="right">
               <Link href="/jobs/new" passHref>
-                <Button primary content="Add New Job" />
+                <Button primary content="Post a job" />
               </Link>
             </Container>
           )}

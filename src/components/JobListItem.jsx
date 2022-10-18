@@ -54,7 +54,8 @@ export default function JobListItem({ job, tokenSymbol }) {
             <List.Item>
               <List.Content>
                 <List.Header>
-                  <List.Icon name="money" /> {job.budget} {tokenSymbol}
+                  <List.Icon name="money" title="Budget" />
+                  {job.budget} {tokenSymbol}
                 </List.Header>
               </List.Content>
             </List.Item>
@@ -63,7 +64,8 @@ export default function JobListItem({ job, tokenSymbol }) {
           <List.Item>
             <List.Content>
               <List.Header>
-                <List.Icon name="user" /> {job.applications_count}
+                <List.Icon name="user" title="Applicants" />{' '}
+                {job.applications_count}
               </List.Header>
             </List.Content>
           </List.Item>
@@ -71,7 +73,8 @@ export default function JobListItem({ job, tokenSymbol }) {
           <List.Item>
             <List.Content>
               <List.Header>
-                <List.Icon name="clock" title="Published at" /> {formattedDate}
+                <List.Icon name="clock" title="Publication date" />{' '}
+                {formattedDate}
               </List.Header>
             </List.Content>
           </List.Item>
