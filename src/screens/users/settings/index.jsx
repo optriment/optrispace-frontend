@@ -3,6 +3,7 @@ import { Input, Segment, Grid, Header } from 'semantic-ui-react'
 import { ChangePasswordForm } from '../../../forms/ChangePassword'
 import { ChangeDisplayName } from '../../../forms/ChangeDisplayName'
 import { ConnectWalletForm } from '../../../forms/ConnectWalletForm'
+import { ChangeEmail } from '../../../forms/ChangeEmail'
 
 export const SettingsScreen = ({ person, token, authenticate }) => {
   return (
@@ -27,6 +28,13 @@ export const SettingsScreen = ({ person, token, authenticate }) => {
               id={person.id}
               displayName={person.display_name}
             />
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <Grid.Column width={8}>
+            <Header as="h3">Change Email</Header>
+            <ChangeEmail token={token} id={person.id} email={person.email} />
           </Grid.Column>
         </Grid.Row>
 
