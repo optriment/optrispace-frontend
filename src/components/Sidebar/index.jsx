@@ -79,6 +79,17 @@ export const Sidebar = () => {
         <Button
           as="a"
           circular
+          color="pinterest"
+          icon="pinterest"
+          href="https://pinterest.com/optrispace/"
+          target="_blank"
+          rel="noreferrer noopener nofollow"
+          title="Pinterest"
+        />
+
+        <Button
+          as="a"
+          circular
           icon="mail"
           href="mailto:office@optriment.com"
           target="_blank"
