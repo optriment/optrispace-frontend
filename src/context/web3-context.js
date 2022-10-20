@@ -10,7 +10,7 @@ const Web3Context = createContext({})
 export default Web3Context
 
 export const Web3Provider = ({ children }) => {
-  const tokenSymbol = publicRuntimeConfig.token_symbol
+  const coinSymbol = publicRuntimeConfig.coin_symbol
 
   const requiredChainId = publicRuntimeConfig.required_chain_id
   const blockchainNetworkName = publicRuntimeConfig.blockchain_network_name
@@ -219,7 +219,7 @@ export const Web3Provider = ({ children }) => {
         accountBalance,
         accountBalanceLoading,
 
-        tokenSymbol,
+        coinSymbol,
 
         connectWallet,
 

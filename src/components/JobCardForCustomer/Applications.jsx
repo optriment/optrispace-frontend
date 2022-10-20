@@ -6,7 +6,7 @@ const Applications = ({
   job,
   applications,
   blockchainViewAddressURL,
-  tokenSymbol,
+  coinSymbol,
 }) => {
   const [panes, setPanes] = useState(undefined)
 
@@ -31,7 +31,7 @@ const Applications = ({
           applicationsWithoutContracts,
           'applications',
           blockchainViewAddressURL,
-          tokenSymbol
+          coinSymbol
         ),
         ApplicationsGroup(
           job,
@@ -39,7 +39,7 @@ const Applications = ({
           applicationsWithNotAcceptedContracts,
           'discussions',
           blockchainViewAddressURL,
-          tokenSymbol
+          coinSymbol
         ),
         ApplicationsGroup(
           job,
@@ -47,11 +47,11 @@ const Applications = ({
           applicationsWithAcceptedContracts,
           'accepted',
           blockchainViewAddressURL,
-          tokenSymbol
+          coinSymbol
         ),
       ])
     }
-  }, [job, applications, panes, blockchainViewAddressURL, tokenSymbol])
+  }, [job, applications, panes, blockchainViewAddressURL, coinSymbol])
 
   return <Tab panes={panes} />
 }

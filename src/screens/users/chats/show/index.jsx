@@ -7,7 +7,7 @@ import JustOneSecond from '../../../../components/JustOneSecond'
 import { useApplication } from '../../../../hooks/useApplication'
 import { formatDateTime } from '../../../../lib/formatDate'
 
-export const ChatScreen = ({ chat, token, tokenSymbol }) => {
+export const ChatScreen = ({ chat, token, coinSymbol }) => {
   const createdAt = formatDateTime(chat.created_at)
   const parts = chat.topic.split(':')
   const resourceId = parts[2]
@@ -58,11 +58,11 @@ export const ChatScreen = ({ chat, token, tokenSymbol }) => {
                   <b>Chat started:</b> {createdAt}
                 </List.Item>
                 <List.Item>
-                  <b>Job budget:</b> {job.budget + ' ' + tokenSymbol}
+                  <b>Job budget:</b> {job.budget + ' ' + coinSymbol}
                 </List.Item>
                 <List.Item>
                   <b>Applicant&apos;s price:</b>
-                  {' ' + application.price + ' ' + tokenSymbol}
+                  {' ' + application.price + ' ' + coinSymbol}
                 </List.Item>
               </List>
             </Segment>

@@ -23,7 +23,7 @@ import { FormattedDescription } from '../FormattedDescription'
 import { isEmptyString } from '../../lib/validators'
 import { ContractCardSteps } from '../ContractCardSteps'
 
-export const ContractCardForCustomer = ({ contract, token, tokenSymbol }) => {
+export const ContractCardForCustomer = ({ contract, token, coinSymbol }) => {
   const router = useRouter()
 
   const {
@@ -190,7 +190,7 @@ export const ContractCardForCustomer = ({ contract, token, tokenSymbol }) => {
             'You do not have enough tokens to fund the contract. Required: ' +
               contract.price +
               ' ' +
-              tokenSymbol
+              coinSymbol
           )
           return false
         }
@@ -440,7 +440,7 @@ export const ContractCardForCustomer = ({ contract, token, tokenSymbol }) => {
                     <p>
                       <br />
                       At this step you need to send {contract.price}{' '}
-                      {tokenSymbol} to Smart Contract.
+                      {coinSymbol} to Smart Contract.
                       <br />
                       Please click &quot;Fund&quot; button to open MetaMask to
                       confirm transaction.
@@ -552,7 +552,7 @@ export const ContractCardForCustomer = ({ contract, token, tokenSymbol }) => {
           <Grid.Column width={6}>
             <ContractCardSidebar
               contract={contract}
-              tokenSymbol={tokenSymbol}
+              coinSymbol={coinSymbol}
               blockchainViewAddressURL={blockchainViewAddressURL}
               contractBalance={contractBalance}
             />

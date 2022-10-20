@@ -5,7 +5,7 @@ import { Message, Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { createApplication } from '../../lib/api'
 
-export const ApplicationForm = ({ job, application, token, tokenSymbol }) => {
+export const ApplicationForm = ({ job, application, token, coinSymbol }) => {
   const router = useRouter()
 
   const initialFields = {
@@ -97,7 +97,7 @@ export const ApplicationForm = ({ job, application, token, tokenSymbol }) => {
           type="number"
           min={0.0}
           step={0.01}
-          label={`Your expected service price (${tokenSymbol})`}
+          label={`Your expected service price (${coinSymbol})`}
           value={fields.price}
           required
           width={5}

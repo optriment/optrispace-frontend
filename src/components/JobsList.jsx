@@ -3,7 +3,7 @@ import { Divider, Container, Header, Segment, Card } from 'semantic-ui-react'
 import JobListItem from './JobListItem'
 import { JobsSubscriptionForm } from '../forms/Marketing/JobsSubscriptionForm'
 
-export default function JobsList({ jobs, tokenSymbol }) {
+export default function JobsList({ jobs, coinSymbol }) {
   const DISPLAY_SUBSCRIPTION_FORM_AFTER_LINE_NUMBER = 7
 
   return (
@@ -11,7 +11,7 @@ export default function JobsList({ jobs, tokenSymbol }) {
       {jobs.map((job, idx) => {
         return (
           <Fragment key={job.id}>
-            <JobListItem job={job} tokenSymbol={tokenSymbol} />
+            <JobListItem job={job} coinSymbol={coinSymbol} />
 
             {idx + 1 === DISPLAY_SUBSCRIPTION_FORM_AFTER_LINE_NUMBER && (
               <Card fluid style={{ backgroundColor: 'orange' }}>

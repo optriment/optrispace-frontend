@@ -13,7 +13,7 @@ import { ShareButtons } from '../ShareButtons/ShareButtons'
 
 export const JobCardForCustomer = ({
   job,
-  tokenSymbol,
+  coinSymbol,
   domain,
   blockchainViewAddressURL,
 }) => {
@@ -53,7 +53,7 @@ export const JobCardForCustomer = ({
             <Segment basic>
               <JobCardHeader
                 job={job}
-                tokenSymbol={tokenSymbol}
+                coinSymbol={coinSymbol}
                 blockchainViewAddressURL={blockchainViewAddressURL}
               />
             </Segment>
@@ -82,7 +82,7 @@ export const JobCardForCustomer = ({
               job={job}
               applications={applications}
               blockchainViewAddressURL={blockchainViewAddressURL}
-              tokenSymbol={tokenSymbol}
+              coinSymbol={coinSymbol}
             />
           )}
         </Grid.Column>

@@ -6,7 +6,7 @@ import { createJob } from '../../lib/api'
 import { isEmptyString } from '../../lib/validators'
 import ErrorWrapper from '../../components/ErrorWrapper'
 
-export const NewJobForm = ({ token, tokenSymbol }) => {
+export const NewJobForm = ({ token, coinSymbol }) => {
   const router = useRouter()
 
   const initialFields = {
@@ -98,7 +98,7 @@ export const NewJobForm = ({ token, tokenSymbol }) => {
             type="number"
             min={0.0}
             step={0.01}
-            label={`Approx. budget (${tokenSymbol})`}
+            label={`Approx. budget (${coinSymbol})`}
             placeholder=""
             value={fields.budget}
             onChange={handleInputChange}

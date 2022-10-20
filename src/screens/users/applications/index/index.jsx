@@ -2,7 +2,7 @@ import React from 'react'
 import { Header } from 'semantic-ui-react'
 import ApplicationsList from '../../../../components/ApplicationsList'
 
-export const ApplicationsScreen = ({ applications, person, tokenSymbol }) => {
+export const ApplicationsScreen = ({ applications, person, coinSymbol }) => {
   return (
     <>
       <Header as="h1">Applications</Header>
@@ -10,7 +10,7 @@ export const ApplicationsScreen = ({ applications, person, tokenSymbol }) => {
       <ApplicationsList
         applications={applications}
         person={person}
-        tokenSymbol={tokenSymbol}
+        coinSymbol={coinSymbol}
       />
     </>
   )

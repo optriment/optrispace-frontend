@@ -21,7 +21,7 @@ const Page = () => {
     token,
   } = useAuth()
   const { job, isLoading: jobLoading, error: jobError } = useJob(query.id)
-  const { tokenSymbol } = useContext(Web3Context)
+  const { coinSymbol } = useContext(Web3Context)
   const { setSmallScreen } = useContext(DisplayContext)
 
   useEffect(() => {
@@ -82,7 +82,7 @@ const Page = () => {
         job={job}
         person={person}
         token={token}
-        tokenSymbol={tokenSymbol}
+        coinSymbol={coinSymbol}
       />
     </UsersLayout>
   )

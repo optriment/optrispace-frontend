@@ -4,7 +4,7 @@ import { isEmptyString } from '../../lib/validators'
 
 export const JobCardHeader = ({
   job,
-  tokenSymbol,
+  coinSymbol,
   blockchainViewAddressURL,
 }) => {
   const createdAt = formatDateTime(job.created_at)
@@ -38,7 +38,7 @@ export const JobCardHeader = ({
             <List bulleted horizontal>
               {job.budget > 0 && (
                 <List.Item>
-                  Budget: {job.budget} {tokenSymbol}
+                  Budget: {job.budget} {coinSymbol}
                 </List.Item>
               )}
               <List.Item>{job.applications_count} Applicants</List.Item>

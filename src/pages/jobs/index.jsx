@@ -11,7 +11,7 @@ import { JobsScreen } from '../../screens/users/jobs/index'
 const Page = () => {
   const { isLoading: personLoading, isAuthenticated, person } = useAuth()
   const { jobs, isLoading: jobsLoading, error: jobsError } = useJobs()
-  const { tokenSymbol } = useContext(Web3Context)
+  const { coinSymbol } = useContext(Web3Context)
 
   if (jobsLoading) {
     return (
@@ -40,14 +40,14 @@ const Page = () => {
   if (!isAuthenticated) {
     return (
       <LandingLayout meta={{ title: 'Jobs' }}>
-        <JobsScreen jobs={jobs} tokenSymbol={tokenSymbol} />
+        <JobsScreen jobs={jobs} coinSymbol={coinSymbol} />
       </LandingLayout>
     )
   }
 
   return (
     <UsersLayout meta={{ title: 'Jobs' }}>
-      <JobsScreen jobs={jobs} person={person} tokenSymbol={tokenSymbol} />
+      <JobsScreen jobs={jobs} person={person} coinSymbol={coinSymbol} />
     </UsersLayout>
   )
 }

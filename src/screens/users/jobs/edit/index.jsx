@@ -3,10 +3,10 @@ import { ProfileIsNotConfigured } from '../../../../components/ProfileIsNotConfi
 import { EditJobForm } from '../../../../forms/EditJobForm'
 import { isEmptyString } from '../../../../lib/validators'
 
-export const EditJobScreen = ({ job, person, token, tokenSymbol }) => {
+export const EditJobScreen = ({ job, person, token, coinSymbol }) => {
   if (isEmptyString(person.ethereum_address)) {
     return <ProfileIsNotConfigured />
   }
 
-  return <EditJobForm job={job} token={token} tokenSymbol={tokenSymbol} />
+  return <EditJobForm job={job} token={token} coinSymbol={coinSymbol} />
 }
