@@ -22,7 +22,7 @@ import ConnectWallet from '../ConnectWallet'
 import { FormattedDescription } from '../FormattedDescription'
 import { ContractCardSteps } from '../ContractCardSteps'
 
-export const ContractCardForContractor = ({ contract, token, tokenSymbol }) => {
+export const ContractCardForContractor = ({ contract, token, coinSymbol }) => {
   const router = useRouter()
 
   const {
@@ -459,7 +459,7 @@ export const ContractCardForContractor = ({ contract, token, tokenSymbol }) => {
           <Grid.Column width={6}>
             <ContractCardSidebar
               contract={contract}
-              tokenSymbol={tokenSymbol}
+              coinSymbol={coinSymbol}
               blockchainViewAddressURL={blockchainViewAddressURL}
               contractBalance={contractBalance}
             />

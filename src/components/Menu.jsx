@@ -51,7 +51,7 @@ function AuthDetails() {
     connectWallet,
     accountBalance,
     accountBalanceLoading,
-    tokenSymbol,
+    coinSymbol,
     blockchainNetworkName,
   } = useContext(Web3Context)
   const router = useRouter()
@@ -115,7 +115,7 @@ function AuthDetails() {
                             <Loader size="tiny" active inline />
                           ) : (
                             <b>
-                              Balance: {accountBalance} {tokenSymbol}
+                              Balance: {accountBalance} {coinSymbol}
                             </b>
                           )}
                         </>

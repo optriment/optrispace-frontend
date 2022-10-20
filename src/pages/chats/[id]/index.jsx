@@ -12,7 +12,7 @@ import { ChatScreen } from '../../../screens/users/chats/show'
 
 const Page = () => {
   const { query } = useRouter()
-  const { tokenSymbol } = useContext(Web3Context)
+  const { coinSymbol } = useContext(Web3Context)
 
   const {
     isLoading: personLoading,
@@ -75,7 +75,7 @@ const Page = () => {
 
   return (
     <UsersLayout meta={{ title: `Chat ${chat.topic}` }}>
-      <ChatScreen chat={chat} token={token} tokenSymbol={tokenSymbol} />
+      <ChatScreen chat={chat} token={token} coinSymbol={coinSymbol} />
     </UsersLayout>
   )
 }

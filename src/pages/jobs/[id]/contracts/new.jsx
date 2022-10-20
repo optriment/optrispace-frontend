@@ -26,7 +26,7 @@ const Page = () => {
     isLoading: applicationLoading,
     error: applicationError,
   } = useApplication(token, query.application_id)
-  const { tokenSymbol } = useContext(Web3Context)
+  const { coinSymbol } = useContext(Web3Context)
 
   if (personLoading) {
     return (
@@ -110,7 +110,7 @@ const Page = () => {
         application={application}
         person={person}
         token={token}
-        tokenSymbol={tokenSymbol}
+        coinSymbol={coinSymbol}
       />
     </UsersLayout>
   )

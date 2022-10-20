@@ -16,7 +16,7 @@ import { ShareButtons } from '../ShareButtons/ShareButtons'
 export const JobCardForApplicant = ({
   job,
   person,
-  tokenSymbol,
+  coinSymbol,
   domain,
   blockchainViewAddressURL,
 }) => {
@@ -59,7 +59,7 @@ export const JobCardForApplicant = ({
             <Segment basic>
               <JobCardHeader
                 job={job}
-                tokenSymbol={tokenSymbol}
+                coinSymbol={coinSymbol}
                 blockchainViewAddressURL={blockchainViewAddressURL}
               />
             </Segment>
@@ -82,7 +82,7 @@ export const JobCardForApplicant = ({
                   <Message>
                     <Message.Header>
                       You&apos;ve applied with the service price of
-                      {' ' + application.price + ' ' + tokenSymbol}
+                      {' ' + application.price + ' ' + coinSymbol}
                     </Message.Header>
                   </Message>
 
@@ -97,7 +97,7 @@ export const JobCardForApplicant = ({
                       job={job}
                       application={application}
                       token={token}
-                      tokenSymbol={tokenSymbol}
+                      coinSymbol={coinSymbol}
                     />
                   ) : (
                     <ProfileIsNotConfigured />

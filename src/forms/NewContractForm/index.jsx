@@ -20,7 +20,7 @@ import JustOneSecond from '../../components/JustOneSecond'
 import ConnectWallet from '../../components/ConnectWallet'
 import WrongBlockchainNetwork from '../../components/WrongBlockchainNetwork'
 
-export const NewContractForm = ({ job, application, token, tokenSymbol }) => {
+export const NewContractForm = ({ job, application, token, coinSymbol }) => {
   const router = useRouter()
 
   const initialFields = {
@@ -161,7 +161,7 @@ export const NewContractForm = ({ job, application, token, tokenSymbol }) => {
             type="number"
             min={0.0}
             step={0.01}
-            label={`Price (${tokenSymbol})`}
+            label={`Price (${coinSymbol})`}
             placeholder=""
             value={fields.price}
             onChange={handleInputChange}

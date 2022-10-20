@@ -10,7 +10,7 @@ export default function ApplicationListItem({
   job,
   application,
   blockchainViewAddressURL,
-  tokenSymbol,
+  coinSymbol,
 }) {
   const { applicant, contract } = application
 
@@ -89,7 +89,7 @@ export default function ApplicationListItem({
         <Item.Meta>
           {application.price && (
             <span className="price">
-              {application.price} {tokenSymbol}
+              {application.price} {coinSymbol}
             </span>
           )}
         </Item.Meta>

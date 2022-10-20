@@ -6,7 +6,7 @@ import { Sidebar } from '../../../../components/Sidebar'
 import { ProfileIsNotConfigured } from '../../../../components/ProfileIsNotConfigured'
 import { isEmptyString } from '../../../../lib/validators'
 
-export const JobsScreen = ({ jobs, person, tokenSymbol }) => {
+export const JobsScreen = ({ jobs, person, coinSymbol }) => {
   return (
     <>
       <Header as="h1">Find a Job. Find a Pro.</Header>
@@ -30,7 +30,7 @@ export const JobsScreen = ({ jobs, person, tokenSymbol }) => {
       <Grid stackable>
         <Grid.Row>
           <Grid.Column width={11}>
-            <JobsList jobs={jobs} tokenSymbol={tokenSymbol} />
+            <JobsList jobs={jobs} coinSymbol={coinSymbol} />
           </Grid.Column>
           <Grid.Column width={5}>
             <Sidebar />

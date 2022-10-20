@@ -8,7 +8,7 @@ function ApplicationsGroup(
   applications,
   key,
   blockchainViewAddressURL,
-  tokenSymbol
+  coinSymbol
 ) {
   return {
     menuItem: (
@@ -26,7 +26,7 @@ function ApplicationsGroup(
               job={job}
               application={application}
               blockchainViewAddressURL={blockchainViewAddressURL}
-              tokenSymbol={tokenSymbol}
+              coinSymbol={coinSymbol}
             />
           ))}
         </Item.Group>

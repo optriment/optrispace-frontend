@@ -14,7 +14,7 @@ const Page = () => {
   const { query } = useRouter()
   const { isLoading: personLoading, isAuthenticated, person, token } = useAuth()
   const { job, isLoading: jobLoading, error: jobError } = useJob(query.id)
-  const { tokenSymbol } = useContext(Web3Context)
+  const { coinSymbol } = useContext(Web3Context)
   const { setSmallScreen } = useContext(DisplayContext)
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const Page = () => {
           isAuthenticated={isAuthenticated}
           person={person}
           token={token}
-          tokenSymbol={tokenSymbol}
+          coinSymbol={coinSymbol}
         />
       </LandingLayout>
     )
@@ -66,7 +66,7 @@ const Page = () => {
         isAuthenticated={isAuthenticated}
         person={person}
         token={token}
-        tokenSymbol={tokenSymbol}
+        coinSymbol={coinSymbol}
       />
     </UsersLayout>
   )

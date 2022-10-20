@@ -9,7 +9,7 @@ export const NewContractScreen = ({
   application,
   person,
   token,
-  tokenSymbol,
+  coinSymbol,
 }) => {
   if (isEmptyString(person.ethereum_address)) {
     return <ProfileIsNotConfigured />
@@ -31,7 +31,7 @@ export const NewContractScreen = ({
       job={job}
       application={application}
       token={token}
-      tokenSymbol={tokenSymbol}
+      coinSymbol={coinSymbol}
     />
   )
 }

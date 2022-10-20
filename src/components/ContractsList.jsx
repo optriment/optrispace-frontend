@@ -2,7 +2,7 @@ import React from 'react'
 import { Card } from 'semantic-ui-react'
 import ContractListItem from './ContractListItem'
 
-export default function ContractsList({ contracts, person, tokenSymbol }) {
+export default function ContractsList({ contracts, person, coinSymbol }) {
   return (
     <Card.Group>
       {contracts.map((contract) => (
@@ -10,7 +10,7 @@ export default function ContractsList({ contracts, person, tokenSymbol }) {
           key={contract.id}
           contract={contract}
           person={person}
-          tokenSymbol={tokenSymbol}
+          coinSymbol={coinSymbol}
         />
       ))}
     </Card.Group>

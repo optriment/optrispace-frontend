@@ -24,7 +24,7 @@ const Page = () => {
     isLoading: contractLoading,
     error: contractError,
   } = useContract(token, query.id)
-  const { tokenSymbol } = useContext(Web3Context)
+  const { coinSymbol } = useContext(Web3Context)
   const { setSmallScreen } = useContext(DisplayContext)
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const Page = () => {
         contract={contract}
         person={person}
         token={token}
-        tokenSymbol={tokenSymbol}
+        coinSymbol={coinSymbol}
       />
     </UsersLayout>
   )

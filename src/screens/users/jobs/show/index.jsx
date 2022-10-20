@@ -65,7 +65,7 @@ export const JobScreen = ({
   isAuthenticated,
   person,
   token,
-  tokenSymbol,
+  coinSymbol,
 }) => {
   const { publicRuntimeConfig } = getConfig()
   const domain = publicRuntimeConfig.domain
@@ -78,7 +78,7 @@ export const JobScreen = ({
         <JobCardForGuest
           job={job}
           blockchainViewAddressURL={blockchainViewAddressURL}
-          tokenSymbol={tokenSymbol}
+          coinSymbol={coinSymbol}
           domain={domain}
         />
       </Wrapper>
@@ -96,7 +96,7 @@ export const JobScreen = ({
         <JobCardForCustomer
           job={job}
           blockchainViewAddressURL={blockchainViewAddressURL}
-          tokenSymbol={tokenSymbol}
+          coinSymbol={coinSymbol}
           domain={domain}
         />
       ) : (
@@ -104,7 +104,7 @@ export const JobScreen = ({
           job={job}
           blockchainViewAddressURL={blockchainViewAddressURL}
           person={person}
-          tokenSymbol={tokenSymbol}
+          coinSymbol={coinSymbol}
           domain={domain}
         />
       )}

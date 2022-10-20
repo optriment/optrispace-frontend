@@ -22,7 +22,7 @@ const nextConfig = {
   publicRuntimeConfig: {
     // Will be available on both server and client
     api_url: process.env.API_URL,
-    token_symbol: process.env.TOKEN_SYMBOL,
+    coin_symbol: 'BNB',
     contract_factory_address: process.env.CONTRACT_FACTORY_ADDRESS,
     blockchain_network_name: process.env.BLOCKCHAIN_NETWORK_NAME,
     blockchain_view_address_url: process.env.BLOCKCHAIN_VIEW_ADDRESS_URL,

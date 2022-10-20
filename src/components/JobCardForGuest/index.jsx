@@ -7,7 +7,7 @@ import { ShareButtons } from '../ShareButtons/ShareButtons'
 
 export const JobCardForGuest = ({
   job,
-  tokenSymbol,
+  coinSymbol,
   domain,
   blockchainViewAddressURL,
 }) => {
@@ -19,7 +19,7 @@ export const JobCardForGuest = ({
             <Segment basic>
               <JobCardHeader
                 job={job}
-                tokenSymbol={tokenSymbol}
+                coinSymbol={coinSymbol}
                 blockchainViewAddressURL={blockchainViewAddressURL}
               />
             </Segment>

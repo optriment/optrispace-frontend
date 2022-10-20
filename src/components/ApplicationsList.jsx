@@ -2,11 +2,7 @@ import React from 'react'
 import { Card } from 'semantic-ui-react'
 import ApplicationListItem from './ApplicationListItem'
 
-export default function ApplicationsList({
-  applications,
-  person,
-  tokenSymbol,
-}) {
+export default function ApplicationsList({ applications, person, coinSymbol }) {
   return (
     <Card.Group>
       {applications.map((application) => (
@@ -14,7 +10,7 @@ export default function ApplicationsList({
           key={application.id}
           application={application}
           person={person}
-          tokenSymbol={tokenSymbol}
+          coinSymbol={coinSymbol}
         />
       ))}
     </Card.Group>

@@ -15,7 +15,7 @@ const Page = () => {
     person,
     token,
   } = useAuth()
-  const { tokenSymbol } = useContext(Web3Context)
+  const { coinSymbol } = useContext(Web3Context)
 
   if (personLoading) {
     return (
@@ -43,7 +43,7 @@ const Page = () => {
 
   return (
     <UsersLayout meta={{ title: 'New Job' }}>
-      <NewJobScreen person={person} token={token} tokenSymbol={tokenSymbol} />
+      <NewJobScreen person={person} token={token} coinSymbol={coinSymbol} />
     </UsersLayout>
   )
 }

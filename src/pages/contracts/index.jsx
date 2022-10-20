@@ -21,7 +21,7 @@ const Page = () => {
     isLoading: contractsLoading,
     error: contractsError,
   } = useContracts(token)
-  const { tokenSymbol } = useContext(Web3Context)
+  const { coinSymbol } = useContext(Web3Context)
 
   if (personLoading) {
     return (
@@ -71,7 +71,7 @@ const Page = () => {
       <ContractsScreen
         contracts={contracts}
         person={person}
-        tokenSymbol={tokenSymbol}
+        coinSymbol={coinSymbol}
       />
     </UsersLayout>
   )
