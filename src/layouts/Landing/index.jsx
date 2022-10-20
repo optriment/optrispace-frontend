@@ -48,7 +48,7 @@ export const LandingLayout = ({ children, meta = {} }) => {
       <Container>
         <Header />
 
-        {!domain.match(/my.optrispace.com/) && (
+        {!domain.match(/my\.optrispace\.com/) && (
           <Message negative icon>
             <Icon name="rocket" />
 
