@@ -1,6 +1,5 @@
 import React from 'react'
-import { Container, Segment, Button, Grid } from 'semantic-ui-react'
-import Link from 'next/link'
+import { Container, Segment, Grid } from 'semantic-ui-react'
 import { JobCardHeader } from '../JobCardHeader'
 import { FormattedDescription } from '../FormattedDescription'
 import Applications from './Applications'
@@ -64,14 +63,6 @@ export const JobCardForCustomer = ({
             </Segment>
           </Segment>
           <ShareButtons domain={domain} job={job} />
-        </Grid.Column>
-      </Grid.Row>
-
-      <Grid.Row>
-        <Grid.Column>
-          <Link href="/jobs/[id]/edit" as={`/jobs/${job.id}/edit`} passHref>
-            <Button primary content="Edit" />
-          </Link>
         </Grid.Column>
       </Grid.Row>
 

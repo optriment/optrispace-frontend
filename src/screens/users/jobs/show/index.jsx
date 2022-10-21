@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/nextjs'
 import React, { useContext } from 'react'
 import { useRouter } from 'next/router'
 import getConfig from 'next/config'
+import Link from 'next/link'
 import { Button, Segment, Divider, Header, Grid } from 'semantic-ui-react'
 import { JobCardForApplicant } from '../../../../components/JobCardForApplicant'
 import { JobCardForCustomer } from '../../../../components/JobCardForCustomer'
@@ -10,7 +11,7 @@ import { Sidebar } from '../../../../components/Sidebar'
 import { blockJob } from '../../../../lib/api'
 import Web3Context from '../../../../context/web3-context'
 
-const Wrapper = ({ jobId, token, title, children, isAdmin }) => {
+const Wrapper = ({ jobId, token, title, children, isAdmin, isCustomer }) => {
   const router = useRouter()
 
   const handleBlockJob = async () => {
@@ -36,11 +37,37 @@ const Wrapper = ({ jobId, token, title, children, isAdmin }) => {
     <>
       <Header as="h1">{title}</Header>
 
-      {isAdmin && (
+      {(isAdmin || isCustomer) && (
         <Grid.Row stackable>
           <Grid.Column>
-            <Segment color="red">
-              <Button negative content="Block" onClick={handleBlockJob} />
+            <Segment color="red" clearing>
+              {isAdmin && (
+                <Button
+                  floated="right"
+                  negative
+                  content="Block"
+                  icon="remove"
+                  labelPosition="left"
+                  onClick={handleBlockJob}
+                />
+              )}
+
+              {isCustomer && (
+                <Link
+                  href="/jobs/[id]/edit"
+                  as={`/jobs/${jobId}/edit`}
+                  title="Edit"
+                  passHref
+                >
+                  <Button
+                    color="teal"
+                    floated="left"
+                    icon="pencil"
+                    content="Edit"
+                    labelPosition="left"
+                  />
+                </Link>
+              )}
             </Segment>
 
             <Divider hidden />
@@ -85,14 +112,17 @@ export const JobScreen = ({
     )
   }
 
+  const isMyJob = job.created_by === person.id
+
   return (
     <Wrapper
       token={token}
       jobId={job.id}
       title={job.title}
       isAdmin={person.is_admin}
+      isCustomer={isMyJob}
     >
-      {job.created_by === person.id ? (
+      {isMyJob ? (
         <JobCardForCustomer
           job={job}
           blockchainViewAddressURL={blockchainViewAddressURL}
