@@ -40,7 +40,7 @@
     "start": "next start",
     "test": "next test",
     "build-production": "next build && next export",
-    "lint": "next lint --no-cache && npx eslint '**/*.jsx' '**/*.js' && npx prettier --check .",
+    "lint": "next lint --no-cache && npx eslint . --ext .js,.jsx && npx prettier --check .",
     "lint-fix": "next lint --fix",
     "analyze": "cross-env ANALYZE=true npm run-script build"
   },
