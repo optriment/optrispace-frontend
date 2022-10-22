@@ -1,6 +1,8 @@
 import React from 'react'
 import { Comment } from 'semantic-ui-react'
 import { formatDateTime } from '../../lib/formatDate'
+import remarkGfm from 'remark-gfm'
+import ReactMarkdown from 'react-markdown'
 
 export const ChatMessage = ({ person, message }) => {
   const isMyMessage = person?.id === message?.created_by
@@ -20,17 +22,9 @@ export const ChatMessage = ({ person, message }) => {
         </Comment.Metadata>
 
         <Comment.Text>
-          {message.text
-            .trim()
-            .split('\n')
-            .map((str, idx) => {
-              return (
-                <div key={idx}>
-                  {str}
-                  <br />
-                </div>
-              )
-            })}
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {message.text}
+          </ReactMarkdown>
         </Comment.Text>
       </Comment.Content>
     </Comment>
