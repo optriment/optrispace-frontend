@@ -1,10 +1,11 @@
 import React from 'react'
 import Link from 'next/link'
-import { Button, Item, Icon } from 'semantic-ui-react'
+import { Button, List, Item, Icon } from 'semantic-ui-react'
 import { FormattedDescription } from '../FormattedDescription'
 import { isEmptyString } from '../../lib/validators'
 import { useApplicationChat } from '../../hooks/useApplicationChat'
 import { useAuth } from '../../hooks'
+import { formatDateTime } from '../../lib/formatDate'
 
 export default function ApplicationListItem({
   job,
@@ -16,6 +17,7 @@ export default function ApplicationListItem({
 
   const { token } = useAuth()
   const { chat } = useApplicationChat(token, application?.id)
+  const createdAt = formatDateTime(application.created_at)
 
   return (
     <Item>
@@ -87,11 +89,15 @@ export default function ApplicationListItem({
         </Item.Header>
 
         <Item.Meta>
-          {application.price && (
-            <span className="price">
-              {application.price} {coinSymbol}
-            </span>
-          )}
+          <List bulleted horizontal>
+            {application.price && (
+              <List.Item>
+                Price: {application.price} {coinSymbol}
+              </List.Item>
+            )}
+
+            <List.Item>Created: {createdAt}</List.Item>
+          </List>
         </Item.Meta>
 
         <Item.Description>
