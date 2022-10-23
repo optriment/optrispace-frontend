@@ -3,7 +3,6 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import {
-  Segment,
   Header,
   Button,
   Form,
@@ -19,6 +18,7 @@ import WalletIsNotInstalled from '../../components/WalletIsNotInstalled'
 import JustOneSecond from '../../components/JustOneSecond'
 import ConnectWallet from '../../components/ConnectWallet'
 import WrongBlockchainNetwork from '../../components/WrongBlockchainNetwork'
+import { MarkdownIsSupported } from '../../components/MarkdownIsSupported'
 
 export const NewContractForm = ({ job, application, token, coinSymbol }) => {
   const router = useRouter()
@@ -116,74 +116,74 @@ export const NewContractForm = ({ job, application, token, coinSymbol }) => {
         </Message>
       )}
 
-      <Segment padded>
-        <Form>
+      <Form>
+        <Form.Input
+          id="title"
+          label="Title"
+          placeholder=""
+          value={fields.title}
+          onChange={handleInputChange}
+          required
+        />
+
+        <Form.Group>
           <Form.Input
-            id="title"
-            label="Title"
+            label="Contractor"
             placeholder=""
-            value={fields.title}
-            onChange={handleInputChange}
-            required
-          />
-
-          <Form.Group>
-            <Form.Input
-              label="Contractor"
-              placeholder=""
-              value={applicant.display_name}
-              readOnly
-              width={4}
-            />
-
-            <Form.Input
-              label="Wallet Address"
-              placeholder=""
-              value={applicant.ethereum_address}
-              readOnly
-              width={6}
-            />
-          </Form.Group>
-
-          <Form.Input
-            control={TextArea}
-            id="description"
-            label="Description"
-            placeholder=""
-            rows={15}
-            value={fields.description}
-            onChange={handleInputChange}
-            required
+            value={applicant.display_name}
+            readOnly
+            width={4}
           />
 
           <Form.Input
-            id="price"
-            type="number"
-            min={0.0}
-            step={0.01}
-            label={`Price (${coinSymbol})`}
+            label="Wallet Address"
             placeholder=""
-            value={fields.price}
-            onChange={handleInputChange}
-            required
-            width={3}
+            value={applicant.ethereum_address}
+            readOnly
+            width={6}
           />
+        </Form.Group>
 
-          <Form.Checkbox
-            label="I agree to the Terms and Conditions"
-            checked={agreedTo}
-            onClick={() => setAgreedTo(!agreedTo)}
-          />
+        <Form.Input
+          control={TextArea}
+          id="description"
+          label="Description"
+          placeholder=""
+          rows={12}
+          value={fields.description}
+          onChange={handleInputChange}
+          required
+        />
 
-          <Button
-            primary
-            type="submit"
-            content="Create"
-            disabled={isLoadingWeb3 || !formFilled}
-            onClick={handleCreateContract}
-          />
-        </Form>
-      </Segment>
+        <MarkdownIsSupported />
+
+        <Form.Input
+          id="price"
+          type="number"
+          min={0.0}
+          step={0.01}
+          label={`Price (${coinSymbol})`}
+          placeholder=""
+          value={fields.price}
+          onChange={handleInputChange}
+          required
+          width={3}
+        />
+
+        <Form.Checkbox
+          label="I agree to the Terms and Conditions"
+          checked={agreedTo}
+          onClick={() => setAgreedTo(!agreedTo)}
+        />
+
+        <Button
+          primary
+          type="submit"
+          content="Create"
+          disabled={isLoadingWeb3 || !formFilled}
+          onClick={handleCreateContract}
+        />
+      </Form>
     </>
   )
 }

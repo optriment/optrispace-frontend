@@ -1,10 +1,11 @@
 import * as Sentry from '@sentry/nextjs'
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Header, Button, Form, Segment, TextArea } from 'semantic-ui-react'
+import { Header, Button, Form, TextArea } from 'semantic-ui-react'
 import { createJob } from '../../lib/api'
 import { isEmptyString } from '../../lib/validators'
 import ErrorWrapper from '../../components/ErrorWrapper'
+import { MarkdownIsSupported } from '../../components/MarkdownIsSupported'
 
 export const NewJobForm = ({ token, coinSymbol }) => {
   const router = useRouter()
@@ -71,8 +72,8 @@ export const NewJobForm = ({ token, coinSymbol }) => {
         <ErrorWrapper header="Unable to create job" error={error} />
       )}
 
-      <Segment padded>
-        <Form onSubmit={handleCreateJob}>
+      <Form onSubmit={handleCreateJob}>
+        <Form.Group>
           <Form.Input
             id="title"
             label="Title"
@@ -80,17 +81,7 @@ export const NewJobForm = ({ token, coinSymbol }) => {
             value={fields.title}
             onChange={handleInputChange}
             required
-          />
-
-          <Form.Input
-            control={TextArea}
-            id="description"
-            label="Description"
-            placeholder=""
-            rows={15}
-            value={fields.description}
-            onChange={handleInputChange}
-            required
+            width={12}
           />
 
           <Form.Input
@@ -102,12 +93,25 @@ export const NewJobForm = ({ token, coinSymbol }) => {
             placeholder=""
             value={fields.budget}
             onChange={handleInputChange}
-            width={3}
+            width={4}
           />
+        </Form.Group>
 
-          <Button content="Publish" primary disabled={!formFilled} />
-        </Form>
-      </Segment>
+        <Form.Input
+          control={TextArea}
+          id="description"
+          label="Description"
+          placeholder=""
+          rows={12}
+          value={fields.description}
+          onChange={handleInputChange}
+          required
+        />
+
+        <MarkdownIsSupported />
+
+        <Button content="Publish" primary disabled={!formFilled} />
+      </Form>
     </>
   )
 }

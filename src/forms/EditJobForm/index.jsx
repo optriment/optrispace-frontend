@@ -1,10 +1,11 @@
 import * as Sentry from '@sentry/nextjs'
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Segment, Header, Button, Form, TextArea } from 'semantic-ui-react'
+import { Header, Button, Form, TextArea } from 'semantic-ui-react'
 import { updateJob } from '../../lib/api'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { isEmptyString } from '../../lib/validators'
+import { MarkdownIsSupported } from '../../components/MarkdownIsSupported'
 
 export const EditJobForm = ({ job, token, coinSymbol }) => {
   const router = useRouter()
@@ -62,8 +63,8 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
         <ErrorWrapper header="Unable to update job" error={error} />
       )}
 
-      <Segment padded>
-        <Form>
+      <Form>
+        <Form.Group>
           <Form.Input
             id="title"
             label="Title"
@@ -71,17 +72,7 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
             value={fields.title}
             onChange={handleInputChange}
             required
-          />
-
-          <Form.Input
-            control={TextArea}
-            id="description"
-            label="Description"
-            placeholder=""
-            rows={15}
-            value={fields.description}
-            onChange={handleInputChange}
-            required
+            width={12}
           />
 
           <Form.Input
@@ -94,17 +85,30 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
             value={fields.budget}
             onChange={handleInputChange}
             required
-            width={3}
+            width={4}
           />
+        </Form.Group>
 
-          <Button
-            content="Save"
-            primary
-            onClick={handleEditJob}
-            disabled={!formFilled}
-          />
-        </Form>
-      </Segment>
+        <Form.Input
+          control={TextArea}
+          id="description"
+          label="Description"
+          placeholder=""
+          rows={12}
+          value={fields.description}
+          onChange={handleInputChange}
+          required
+        />
+
+        <MarkdownIsSupported />
+
+        <Button
+          content="Update"
+          primary
+          onClick={handleEditJob}
+          disabled={!formFilled}
+        />
+      </Form>
     </>
   )
 }
