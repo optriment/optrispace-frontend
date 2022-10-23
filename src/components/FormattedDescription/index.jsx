@@ -1,16 +1,20 @@
+import ReactMarkdown from 'react-markdown'
+
 export const FormattedDescription = ({ description }) => {
   return (
-    <div style={{ textAlign: 'justify' }}>
-      {description
-        .trim()
-        .split('\n')
-        .map((str, idx) => (
-          <div key={idx}>
-            {str}
-
-            <br />
-          </div>
-        ))}
-    </div>
+    <ReactMarkdown
+      linkTarget="_blank"
+      components={{
+        h1: 'p',
+        h2: 'p',
+        h3: 'p',
+        h4: 'p',
+        h5: 'p',
+        h6: 'p',
+        blockquote: 'p',
+      }}
+    >
+      {description}
+    </ReactMarkdown>
   )
 }
