@@ -15,7 +15,7 @@ import { JobCardForApplicant } from '../../../../components/JobCardForApplicant'
 import { JobCardForCustomer } from '../../../../components/JobCardForCustomer'
 import { JobCardForGuest } from '../../../../components/JobCardForGuest'
 import { Sidebar } from '../../../../components/Sidebar'
-import { blockJob, suspendJob } from '../../../../lib/api'
+import { blockJob, suspendJob, resumeJob } from '../../../../lib/api'
 import Web3Context from '../../../../context/web3-context'
 
 const Wrapper = ({ job, token, children, isAdmin, isCustomer }) => {
@@ -47,6 +47,10 @@ const Wrapper = ({ job, token, children, isAdmin, isCustomer }) => {
       return
     }
 
+    if (job.is_suspended) {
+      return
+    }
+
     if (
       !window.confirm('Are you sure you want to stop receiving applications?')
     ) {
@@ -55,6 +59,31 @@ const Wrapper = ({ job, token, children, isAdmin, isCustomer }) => {
 
     try {
       await suspendJob(token, jobId)
+
+      router.reload()
+    } catch (err) {
+      Sentry.captureException(err)
+      console.error({ err })
+    }
+  }
+
+  const handleResumeJob = async () => {
+    if (!isCustomer) {
+      return
+    }
+
+    if (!job.is_suspended) {
+      return
+    }
+
+    if (
+      !window.confirm('Are you sure you want to resume receiving applications?')
+    ) {
+      return
+    }
+
+    try {
+      await resumeJob(token, jobId)
 
       router.reload()
     } catch (err) {
@@ -107,7 +136,15 @@ const Wrapper = ({ job, token, children, isAdmin, isCustomer }) => {
                     />
                   </Link>
 
-                  {!job.is_suspended && (
+                  {job.is_suspended ? (
+                    <Button
+                      floated="left"
+                      icon="play"
+                      content="Resume"
+                      labelPosition="left"
+                      onClick={handleResumeJob}
+                    />
+                  ) : (
                     <Button
                       floated="left"
                       icon="pause"
