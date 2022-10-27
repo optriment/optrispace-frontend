@@ -41,6 +41,13 @@ export async function suspendJob(token, jobId) {
   )
 }
 
+export async function resumeJob(token, jobId) {
+  return await postWithToken(
+    `${publicRuntimeConfig.api_url}/jobs/${jobId}/resume`,
+    token
+  )
+}
+
 export async function createApplication(token, jobId, { comment, price }) {
   return await postWithToken(
     `${publicRuntimeConfig.api_url}/jobs/${jobId}/applications`,
