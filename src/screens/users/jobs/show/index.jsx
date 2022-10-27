@@ -8,18 +8,20 @@ import { JobCardForApplicant } from '../../../../components/JobCardForApplicant'
 import { JobCardForCustomer } from '../../../../components/JobCardForCustomer'
 import { JobCardForGuest } from '../../../../components/JobCardForGuest'
 import { Sidebar } from '../../../../components/Sidebar'
-import { blockJob } from '../../../../lib/api'
+import { blockJob, suspendJob } from '../../../../lib/api'
 import Web3Context from '../../../../context/web3-context'
 
-const Wrapper = ({ jobId, token, title, children, isAdmin, isCustomer }) => {
+const Wrapper = ({ job, token, children, isAdmin, isCustomer }) => {
   const router = useRouter()
+
+  const { id: jobId, title } = job
 
   const handleBlockJob = async () => {
     if (!isAdmin) {
       return
     }
 
-    if (!window.confirm('Are you sure?')) {
+    if (!window.confirm('Are you sure you want to block this job?')) {
       return
     }
 
@@ -27,6 +29,25 @@ const Wrapper = ({ jobId, token, title, children, isAdmin, isCustomer }) => {
       await blockJob(token, jobId)
 
       router.replace(`/jobs`)
+    } catch (err) {
+      Sentry.captureException(err)
+      console.error({ err })
+    }
+  }
+
+  const handleSuspendJob = async () => {
+    if (!isCustomer) {
+      return
+    }
+
+    if (
+      !window.confirm('Are you sure you want to stop receiving applications?')
+    ) {
+      return
+    }
+
+    try {
+      await suspendJob(token, jobId)
     } catch (err) {
       Sentry.captureException(err)
       console.error({ err })
@@ -53,20 +74,32 @@ const Wrapper = ({ jobId, token, title, children, isAdmin, isCustomer }) => {
               )}
 
               {isCustomer && (
-                <Link
-                  href="/jobs/[id]/edit"
-                  as={`/jobs/${jobId}/edit`}
-                  title="Edit"
-                  passHref
-                >
-                  <Button
-                    color="teal"
-                    floated="left"
-                    icon="pencil"
-                    content="Edit"
-                    labelPosition="left"
-                  />
-                </Link>
+                <>
+                  <Link
+                    href="/jobs/[id]/edit"
+                    as={`/jobs/${jobId}/edit`}
+                    title="Edit"
+                    passHref
+                  >
+                    <Button
+                      color="teal"
+                      floated="left"
+                      icon="pencil"
+                      content="Edit"
+                      labelPosition="left"
+                    />
+                  </Link>
+
+                  {!job.is_suspended && (
+                    <Button
+                      floated="left"
+                      icon="pause"
+                      content="Suspend"
+                      labelPosition="left"
+                      onClick={handleSuspendJob}
+                    />
+                  )}
+                </>
               )}
             </Segment>
 
@@ -101,7 +134,7 @@ export const JobScreen = ({
 
   if (!isAuthenticated) {
     return (
-      <Wrapper title={job.title}>
+      <Wrapper job={job}>
         <JobCardForGuest
           job={job}
           blockchainViewAddressURL={blockchainViewAddressURL}
@@ -117,8 +150,7 @@ export const JobScreen = ({
   return (
     <Wrapper
       token={token}
-      jobId={job.id}
-      title={job.title}
+      job={job}
       isAdmin={person.is_admin}
       isCustomer={isMyJob}
     >
