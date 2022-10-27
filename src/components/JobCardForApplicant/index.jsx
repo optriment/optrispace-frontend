@@ -92,15 +92,25 @@ export const JobCardForApplicant = ({
                 <>
                   <Header as="h3">Leave a Reply</Header>
 
-                  {personHasAddress ? (
-                    <ApplicationForm
-                      job={job}
-                      application={application}
-                      token={token}
-                      coinSymbol={coinSymbol}
+                  {job.is_suspended ? (
+                    <Message
+                      icon="pause"
+                      header="This job does not accept new applications"
+                      content="The customer has temporarily suspended accepting applications for this job"
                     />
                   ) : (
-                    <ProfileIsNotConfigured />
+                    <>
+                      {personHasAddress ? (
+                        <ApplicationForm
+                          job={job}
+                          application={application}
+                          token={token}
+                          coinSymbol={coinSymbol}
+                        />
+                      ) : (
+                        <ProfileIsNotConfigured />
+                      )}
+                    </>
                   )}
                 </>
               )}
