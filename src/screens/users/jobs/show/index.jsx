@@ -3,7 +3,14 @@ import React, { useContext } from 'react'
 import { useRouter } from 'next/router'
 import getConfig from 'next/config'
 import Link from 'next/link'
-import { Button, Segment, Divider, Header, Grid } from 'semantic-ui-react'
+import {
+  Message,
+  Button,
+  Segment,
+  Divider,
+  Header,
+  Grid,
+} from 'semantic-ui-react'
 import { JobCardForApplicant } from '../../../../components/JobCardForApplicant'
 import { JobCardForCustomer } from '../../../../components/JobCardForCustomer'
 import { JobCardForGuest } from '../../../../components/JobCardForGuest'
@@ -48,6 +55,8 @@ const Wrapper = ({ job, token, children, isAdmin, isCustomer }) => {
 
     try {
       await suspendJob(token, jobId)
+
+      router.reload()
     } catch (err) {
       Sentry.captureException(err)
       console.error({ err })
@@ -57,6 +66,14 @@ const Wrapper = ({ job, token, children, isAdmin, isCustomer }) => {
   return (
     <>
       <Header as="h1">{title}</Header>
+
+      {isCustomer && job.is_suspended && (
+        <Message
+          icon="exclamation"
+          header="You have suspended the acceptance of applications for this job"
+          content="Use a button below to continue receiving applications from freelancers"
+        />
+      )}
 
       {(isAdmin || isCustomer) && (
         <Grid.Row stackable>
