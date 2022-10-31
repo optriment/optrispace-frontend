@@ -3,7 +3,7 @@ import ErrorWrapper from '../../components/ErrorWrapper'
 import JustOneSecond from '../../components/JustOneSecond'
 import Web3Context from '../../context/web3-context'
 import { useAuth } from '../../hooks'
-import { useMyApplications } from '../../hooks/useMyApplications'
+import { useApplications } from '../../hooks/useApplications'
 import { LandingLayout } from '../../layouts/Landing'
 import { UsersLayout } from '../../layouts/Users'
 import { ApplicationsScreen } from '../../screens/users/applications/index'
@@ -20,7 +20,7 @@ const Page = () => {
     applications,
     isLoading: applicationsLoading,
     error: applicationsError,
-  } = useMyApplications(token)
+  } = useApplications(token)
   const { coinSymbol } = useContext(Web3Context)
 
   if (personLoading) {

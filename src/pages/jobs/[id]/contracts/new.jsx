@@ -10,6 +10,7 @@ import { UsersLayout } from '../../../../layouts/Users'
 import { NewContractScreen } from '../../../../screens/users/contracts/new'
 import { LandingLayout } from '../../../../layouts/Landing'
 import Web3Context from '../../../../context/web3-context'
+import { isEmptyString } from '../../../../lib/validators'
 
 const Page = () => {
   const { query } = useRouter()
@@ -25,8 +26,16 @@ const Page = () => {
     application,
     isLoading: applicationLoading,
     error: applicationError,
-  } = useApplication(token, query.application_id)
+  } = useApplication(token, query?.application_id)
   const { coinSymbol } = useContext(Web3Context)
+
+  if (isEmptyString(query?.application_id)) {
+    return (
+      <LandingLayout>
+        <ErrorWrapper header="Application ID is missing" />
+      </LandingLayout>
+    )
+  }
 
   if (personLoading) {
     return (
@@ -95,7 +104,7 @@ const Page = () => {
     )
   }
 
-  if (application.job.id !== job.id) {
+  if (application.job_id !== job.id) {
     return (
       <UsersLayout>
         <ErrorWrapper header="You don't have access to this action" />

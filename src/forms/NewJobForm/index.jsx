@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/nextjs'
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Header, Button, Form, TextArea } from 'semantic-ui-react'
@@ -6,6 +5,7 @@ import { createJob } from '../../lib/api'
 import { isEmptyString } from '../../lib/validators'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { MarkdownIsSupported } from '../../components/MarkdownIsSupported'
+import { errorHandler } from '../../lib/errorHandler'
 
 export const NewJobForm = ({ token, coinSymbol }) => {
   const router = useRouter()
@@ -19,36 +19,18 @@ export const NewJobForm = ({ token, coinSymbol }) => {
   const [error, setError] = useState('')
   const [formFilled, setFormFilled] = useState(false)
 
-  const handleCreateJob = (e) => {
+  const handleCreateJob = async (e) => {
     e.preventDefault()
     setError('')
 
     try {
-      createJob(token, { ...fields })
-        .then((result) => {
-          if (!result.id) {
-            setError(result.message)
+      const res = await createJob(token, { ...fields })
 
-            return
-          }
-
-          router.push(`/jobs/${result.id}`)
-        })
-        .catch((err) => {
-          console.error({ err })
-
-          if (err.message.match(/failed to fetch/i)) {
-            Sentry.captureMessage('Server is not available')
-            setError('Server is not available')
-          } else {
-            setError(err?.info?.message || err.message)
-          }
-        })
+      router.push(`/jobs/${res.id}`)
     } catch (err) {
       console.error({ err })
 
-      Sentry.captureException(err)
-      setError(err.message)
+      setError(errorHandler(err))
     }
   }
 

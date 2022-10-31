@@ -1,6 +1,6 @@
-import * as Sentry from '@sentry/nextjs'
 import getConfig from 'next/config'
 import useSWR from 'swr'
+import { errorHandler } from '../lib/errorHandler'
 import { fetcher } from '../lib/fetcher'
 
 export const useJobs = () => {
@@ -8,15 +8,7 @@ export const useJobs = () => {
 
   const { data, error } = useSWR(`${publicRuntimeConfig.api_url}/jobs`, fetcher)
 
-  if (error) {
-    if (error.message.match(/failed to fetch/i)) {
-      Sentry.captureMessage('Server is not available')
-      return { error: 'Server is not available' }
-    }
-
-    Sentry.captureException(error)
-    return { error }
-  }
+  if (error) return { error: errorHandler(error) }
 
   if (!data) return { isLoading: true }
 

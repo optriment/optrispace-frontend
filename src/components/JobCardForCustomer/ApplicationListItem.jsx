@@ -13,8 +13,6 @@ export default function ApplicationListItem({
   blockchainViewAddressURL,
   coinSymbol,
 }) {
-  const { applicant, contract } = application
-
   const { token } = useAuth()
   const { chat } = useApplicationChat(token, application?.id)
   const createdAt = formatDateTime(application.created_at)
@@ -24,10 +22,10 @@ export default function ApplicationListItem({
       <Item.Image size="tiny" avatar src="/default-userpic.jpg" />
 
       <Item.Content>
-        {contract ? (
+        {application.contract_id ? (
           <Link
             href="/contracts/[id]"
-            as={`/contracts/${contract.id}`}
+            as={`/contracts/${application.contract_id}`}
             passHref
           >
             <Button
@@ -52,7 +50,7 @@ export default function ApplicationListItem({
               primary
               size="tiny"
               floated="right"
-              disabled={isEmptyString(applicant.ethereum_address)}
+              disabled={isEmptyString(application.applicant_ethereum_address)}
             />
           </Link>
         )}
@@ -69,15 +67,13 @@ export default function ApplicationListItem({
         )}
 
         <Item.Header>
-          {isEmptyString(applicant.display_name)
-            ? applicant.login
-            : applicant.display_name}
+          {application.applicant_display_name}
 
-          {!isEmptyString(applicant.ethereum_address) && (
+          {!isEmptyString(application.applicant_ethereum_address) && (
             <>
               {' '}
               <a
-                href={`${blockchainViewAddressURL}/${applicant.ethereum_address}`}
+                href={`${blockchainViewAddressURL}/${application.applicant_ethereum_address}`}
                 target="_blank"
                 rel="noreferrer noopener nofollow"
                 title="Open wallet information"

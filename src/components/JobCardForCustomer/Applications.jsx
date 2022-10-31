@@ -14,14 +14,16 @@ const Applications = ({
     if (applications && applications.length > 0 && !panes) {
       const applicationsWithAcceptedContracts = applications.filter(
         (application) =>
-          application.contract && application.contract.status !== 'created'
+          application.contract_status &&
+          application.contract_status !== 'created'
       )
       const applicationsWithNotAcceptedContracts = applications.filter(
         (application) =>
-          application.contract && application.contract.status === 'created'
+          application.contract_status &&
+          application.contract_status === 'created'
       )
       const applicationsWithoutContracts = applications.filter(
-        (application) => !application.contract
+        (application) => !application.contract_id
       )
 
       setPanes([

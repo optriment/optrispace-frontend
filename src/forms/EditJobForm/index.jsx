@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/nextjs'
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Header, Button, Form, TextArea } from 'semantic-ui-react'
@@ -6,6 +5,7 @@ import { updateJob } from '../../lib/api'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { isEmptyString } from '../../lib/validators'
 import { MarkdownIsSupported } from '../../components/MarkdownIsSupported'
+import { errorHandler } from '../../lib/errorHandler'
 
 export const EditJobForm = ({ job, token, coinSymbol }) => {
   const router = useRouter()
@@ -15,31 +15,23 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
     description: job.description,
     budget: job.budget,
   }
+
   const [fields, setFields] = useState(initialFields)
   const [error, setError] = useState('')
   const [formFilled, setFormFilled] = useState(false)
 
-  const handleEditJob = () => {
+  const handleEditJob = async (e) => {
+    e.preventDefault()
     setError('')
 
     try {
-      updateJob(token, job.id, { ...fields })
-        .then((result) => {
-          if (!result.id) {
-            setError(result.message)
-          } else {
-            router.push(`/jobs/${result.id}`)
-          }
-        })
-        .catch((err) => {
-          console.error({ err })
+      const res = await updateJob(token, job.id, { ...fields })
 
-          setError(err)
-        })
+      router.push(`/jobs/${res.id}`)
     } catch (err) {
       console.error({ err })
-      Sentry.captureException(err)
-      setError(err.message)
+
+      setError(errorHandler(err))
     }
   }
 
@@ -63,7 +55,7 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
         <ErrorWrapper header="Unable to update job" error={error} />
       )}
 
-      <Form>
+      <Form onSubmit={handleEditJob}>
         <Form.Group>
           <Form.Input
             id="title"
@@ -102,12 +94,7 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
 
         <MarkdownIsSupported />
 
-        <Button
-          content="Update"
-          primary
-          onClick={handleEditJob}
-          disabled={!formFilled}
-        />
+        <Button content="Update" primary disabled={!formFilled} />
       </Form>
     </>
   )

@@ -1,8 +1,9 @@
-import * as Sentry from '@sentry/nextjs'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import getConfig from 'next/config'
 import Cookies from 'js-cookie'
+import { getWithToken, postWithoutToken } from '../lib/fetcher'
+import { errorHandler } from '../lib/errorHandler'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -27,54 +28,32 @@ export const AuthProvider = ({ children }) => {
     setError(undefined)
 
     try {
-      const response = await fetch(`${publicRuntimeConfig.api_url}/me`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        mode: 'cors',
-      })
+      const res = await getWithToken(`${publicRuntimeConfig.api_url}/me`, token)
 
-      const json = await response.json()
-
-      if (response.ok) {
-        setPerson(json.subject)
-        Cookies.set('token', token)
-      }
+      setPerson(res.subject)
+      Cookies.set('token', token)
     } catch (err) {
-      if (err.message.match(/failed to fetch/i)) {
-        Sentry.captureMessage('Server is not available')
-        setError('Server is not available')
-      } else {
-        console.error({ err })
-        Sentry.captureException(err)
-        setError(err.message)
-      }
+      console.error({ err })
+
+      setError(errorHandler(err))
     } finally {
       setIsLoading(false)
     }
   }
 
   const signIn = async (login, password) => {
-    return await fetch(`${publicRuntimeConfig.api_url}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      mode: 'cors',
-      body: JSON.stringify({ login, password }),
+    return await postWithoutToken(`${publicRuntimeConfig.api_url}/login`, {
+      login,
+      password,
     })
   }
 
   const signUp = async ({ login, password, email, display_name }) => {
-    return await fetch(`${publicRuntimeConfig.api_url}/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      mode: 'cors',
-      body: JSON.stringify({ login, password, email, display_name }),
+    return await postWithoutToken(`${publicRuntimeConfig.api_url}/signup`, {
+      login,
+      password,
+      email,
+      display_name,
     })
   }
 

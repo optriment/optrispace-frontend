@@ -15,9 +15,7 @@ export const NewContractScreen = ({
     return <ProfileIsNotConfigured />
   }
 
-  const { applicant } = application
-
-  if (isEmptyString(applicant.ethereum_address)) {
+  if (isEmptyString(application.applicant_ethereum_address)) {
     return (
       <ErrorWrapper
         header="You can not create contract right now"

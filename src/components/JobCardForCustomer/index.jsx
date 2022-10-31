@@ -3,7 +3,7 @@ import { Container, Segment, Grid } from 'semantic-ui-react'
 import { JobCardHeader } from '../JobCardHeader'
 import { FormattedDescription } from '../FormattedDescription'
 import Applications from './Applications'
-import { useApplications } from '../../hooks/useApplications'
+import { useJobApplications } from '../../hooks/useJobApplications'
 import { useAuth } from '../../hooks'
 import JustOneSecond from '../JustOneSecond'
 import ErrorWrapper from '../ErrorWrapper'
@@ -21,7 +21,7 @@ export const JobCardForCustomer = ({
     applications,
     isLoading: applicationsLoading,
     error: applicationsError,
-  } = useApplications(token, job.id)
+  } = useJobApplications(token, job.id)
 
   if (personLoading) {
     return <JustOneSecond title="Loading profile..." />

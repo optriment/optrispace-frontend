@@ -1,50 +1,35 @@
-import * as Sentry from '@sentry/nextjs'
 import React, { useState } from 'react'
 import { Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { postChatMessage } from '../../lib/api'
+import { errorHandler } from '../../lib/errorHandler'
 import { isEmptyString } from '../../lib/validators'
 
 export const ChatForm = ({ chatId, token, onPostMessage }) => {
   const [messageText, setMessageText] = useState('')
   const [error, setError] = useState('')
 
-  const handlePostMessage = (e) => {
+  const handlePostMessage = async (e) => {
+    e.preventDefault()
     setError('')
 
-    e.preventDefault()
-
     try {
-      postChatMessage(token, chatId, messageText)
-        .then((result) => {
-          if (!result.id) {
-            setError(result.message)
-          }
-          onPostMessage && onPostMessage()
-          setMessageText('')
-        })
-        .catch((err) => {
-          console.error({ err })
+      await postChatMessage(token, chatId, messageText)
 
-          if (err.message.match(/failed to fetch/i)) {
-            Sentry.captureMessage('Server is not available')
-            setError('Server is not available')
-          } else {
-            setError(err?.info?.message || err.message)
-          }
-        })
+      onPostMessage && onPostMessage()
+
+      setMessageText('')
     } catch (err) {
       console.error({ err })
 
-      Sentry.captureException(err)
-      setError(err.message)
+      setError(errorHandler(err))
     }
   }
 
   return (
     <>
       {error !== '' && (
-        <ErrorWrapper header="Error while posting message" error={error} />
+        <ErrorWrapper header="Error while sending message" error={error} />
       )}
 
       <Form reply onSubmit={handlePostMessage}>
