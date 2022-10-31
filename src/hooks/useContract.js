@@ -1,12 +1,12 @@
-import * as Sentry from '@sentry/nextjs'
 import getConfig from 'next/config'
 import useSWR from 'swr'
+import { errorHandler } from '../lib/errorHandler'
 import { getWithToken } from '../lib/fetcher'
 
 export const useContract = (token, contractId) => {
   const { publicRuntimeConfig } = getConfig()
 
-  const { data: contract, error } = useSWR(
+  const { data, error } = useSWR(
     () =>
       token &&
       contractId && [
@@ -16,20 +16,9 @@ export const useContract = (token, contractId) => {
     getWithToken
   )
 
-  if (error) {
-    if (error.message.match(/failed to fetch/i)) {
-      Sentry.captureMessage('Server is not available')
-      return { error: 'Server is not available' }
-    }
+  if (error) return { error: errorHandler(error) }
 
-    if (error?.info?.message.match(/entity not found/i)) {
-      return { error: 'Contract does not exist' }
-    }
+  if (!data) return { isLoading: true }
 
-    Sentry.captureException(error)
-    return { error }
-  }
-  if (!contract) return { isLoading: true }
-
-  return { contract }
+  return { contract: data }
 }

@@ -3,13 +3,16 @@ import useSWR from 'swr'
 import { errorHandler } from '../lib/errorHandler'
 import { getWithToken } from '../lib/fetcher'
 
-export const useChat = (token, chatId) => {
+export const useJobApplication = (token, jobId) => {
   const { publicRuntimeConfig } = getConfig()
 
   const { data, error } = useSWR(
     () =>
       token &&
-      chatId && [`${publicRuntimeConfig.api_url}/chats/${chatId}`, token],
+      jobId && [
+        `${publicRuntimeConfig.api_url}/jobs/${jobId}/application`,
+        token,
+      ],
     getWithToken
   )
 
@@ -17,5 +20,5 @@ export const useChat = (token, chatId) => {
 
   if (!data) return { isLoading: true }
 
-  return { chat: data }
+  return { application: data }
 }

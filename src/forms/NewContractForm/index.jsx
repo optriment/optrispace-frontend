@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/nextjs'
 import React, { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -19,6 +18,7 @@ import JustOneSecond from '../../components/JustOneSecond'
 import ConnectWallet from '../../components/ConnectWallet'
 import WrongBlockchainNetwork from '../../components/WrongBlockchainNetwork'
 import { MarkdownIsSupported } from '../../components/MarkdownIsSupported'
+import { errorHandler } from '../../lib/errorHandler'
 
 export const NewContractForm = ({ job, application, token, coinSymbol }) => {
   const router = useRouter()
@@ -43,28 +43,23 @@ export const NewContractForm = ({ job, application, token, coinSymbol }) => {
     currentAccount,
   } = useContext(Web3Context)
 
-  const { applicant } = application
-
-  const handleCreateContract = async () => {
+  const handleCreateContract = async (e) => {
+    e.preventDefault()
     setError('')
 
     try {
-      const contract = await createContract(token, {
+      const res = await createContract(token, {
         applicationId: application.id,
-        contractorId: application.applicant.id,
+        contractorId: application.applicant_id,
         customerAddress: currentAccount,
         ...fields,
       })
 
-      if (!contract.id) {
-        setError(contract.message)
-      } else {
-        router.push(`/contracts/${contract.id}`)
-      }
+      router.push(`/contracts/${res.id}`)
     } catch (err) {
       console.error({ err })
-      Sentry.captureException(err)
-      setError(err?.info?.message || err.message)
+
+      setError(errorHandler(err))
     }
   }
 
@@ -116,7 +111,7 @@ export const NewContractForm = ({ job, application, token, coinSymbol }) => {
         </Message>
       )}
 
-      <Form>
+      <Form onSubmit={handleCreateContract}>
         <Form.Input
           id="title"
           label="Title"
@@ -130,7 +125,7 @@ export const NewContractForm = ({ job, application, token, coinSymbol }) => {
           <Form.Input
             label="Contractor"
             placeholder=""
-            value={applicant.display_name}
+            value={application.applicant_display_name}
             readOnly
             width={4}
           />
@@ -138,7 +133,7 @@ export const NewContractForm = ({ job, application, token, coinSymbol }) => {
           <Form.Input
             label="Wallet Address"
             placeholder=""
-            value={applicant.ethereum_address}
+            value={application.applicant_ethereum_address}
             readOnly
             width={6}
           />
@@ -181,7 +176,6 @@ export const NewContractForm = ({ job, application, token, coinSymbol }) => {
           type="submit"
           content="Create"
           disabled={isLoadingWeb3 || !formFilled}
-          onClick={handleCreateContract}
         />
       </Form>
     </>

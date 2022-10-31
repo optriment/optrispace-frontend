@@ -3,6 +3,7 @@ export const fetcher = async (url) => {
 
   const payload = {
     method: 'GET',
+    mode: 'cors',
     headers,
   }
 
@@ -29,6 +30,7 @@ export const getWithToken = async (url, token) => {
 
   const payload = {
     method: 'GET',
+    mode: 'cors',
     headers,
   }
 
@@ -55,6 +57,7 @@ export const postWithToken = async (url, token, body = {}) => {
 
   const payload = {
     method: 'POST',
+    mode: 'cors',
     headers,
     body: JSON.stringify(body),
   }
@@ -81,6 +84,7 @@ export const postWithoutToken = async (url, body = {}) => {
 
   const payload = {
     method: 'POST',
+    mode: 'cors',
     headers,
     body: JSON.stringify(body),
   }
@@ -108,6 +112,7 @@ export const putWithToken = async (url, token, body = {}) => {
 
   const payload = {
     method: 'PUT',
+    mode: 'cors',
     headers,
     body: JSON.stringify(body),
   }

@@ -3,14 +3,7 @@ import React, { useContext } from 'react'
 import { useRouter } from 'next/router'
 import getConfig from 'next/config'
 import Link from 'next/link'
-import {
-  Message,
-  Button,
-  Segment,
-  Divider,
-  Header,
-  Grid,
-} from 'semantic-ui-react'
+import { Message, Button, Segment, Header, Grid } from 'semantic-ui-react'
 import { JobCardForApplicant } from '../../../../components/JobCardForApplicant'
 import { JobCardForCustomer } from '../../../../components/JobCardForCustomer'
 import { JobCardForGuest } from '../../../../components/JobCardForGuest'
@@ -104,65 +97,63 @@ const Wrapper = ({ job, token, children, isAdmin, isCustomer }) => {
         />
       )}
 
-      {(isAdmin || isCustomer) && (
-        <Grid.Row stackable>
-          <Grid.Column>
-            <Segment color="red" clearing>
-              {isAdmin && (
-                <Button
-                  floated="right"
-                  negative
-                  content="Block"
-                  icon="remove"
-                  labelPosition="left"
-                  onClick={handleBlockJob}
-                />
-              )}
-
-              {isCustomer && (
-                <>
-                  <Link
-                    href="/jobs/[id]/edit"
-                    as={`/jobs/${jobId}/edit`}
-                    title="Edit"
-                    passHref
-                  >
-                    <Button
-                      color="teal"
-                      floated="left"
-                      icon="pencil"
-                      content="Edit"
-                      labelPosition="left"
-                    />
-                  </Link>
-
-                  {job.is_suspended ? (
-                    <Button
-                      floated="left"
-                      icon="play"
-                      content="Resume"
-                      labelPosition="left"
-                      onClick={handleResumeJob}
-                    />
-                  ) : (
-                    <Button
-                      floated="left"
-                      icon="pause"
-                      content="Suspend"
-                      labelPosition="left"
-                      onClick={handleSuspendJob}
-                    />
-                  )}
-                </>
-              )}
-            </Segment>
-
-            <Divider hidden />
-          </Grid.Column>
-        </Grid.Row>
-      )}
-
       <Grid stackable>
+        {(isAdmin || isCustomer) && (
+          <Grid.Row>
+            <Grid.Column>
+              <Segment color="red" clearing>
+                {isAdmin && (
+                  <Button
+                    floated="right"
+                    negative
+                    content="Block"
+                    icon="remove"
+                    labelPosition="left"
+                    onClick={handleBlockJob}
+                  />
+                )}
+
+                {isCustomer && (
+                  <>
+                    <Link
+                      href="/jobs/[id]/edit"
+                      as={`/jobs/${jobId}/edit`}
+                      title="Edit"
+                      passHref
+                    >
+                      <Button
+                        color="teal"
+                        floated="left"
+                        icon="pencil"
+                        content="Edit"
+                        labelPosition="left"
+                      />
+                    </Link>
+
+                    {job.is_suspended ? (
+                      <Button
+                        floated="left"
+                        icon="play"
+                        content="Resume"
+                        labelPosition="left"
+                        onClick={handleResumeJob}
+                      />
+                    ) : (
+                      <Button
+                        floated="left"
+                        icon="pause"
+                        content="Suspend"
+                        labelPosition="left"
+                        onClick={handleSuspendJob}
+                      />
+                    )}
+                  </>
+                )}
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
+        )}
+
         <Grid.Row>
           <Grid.Column width={11}>{children}</Grid.Column>
           <Grid.Column width={5}>

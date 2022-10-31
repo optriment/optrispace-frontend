@@ -1,13 +1,12 @@
-import * as Sentry from '@sentry/nextjs'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Button, Form, Segment } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { changeUserPassword } from '../../lib/settings'
+import { errorHandler } from '../../lib/errorHandler'
 
 export const ChangePasswordForm = ({ token, authenticate }) => {
   const router = useRouter()
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const initialFields = {
     old_password: '',
@@ -19,9 +18,7 @@ export const ChangePasswordForm = ({ token, authenticate }) => {
 
   const handleChangePassword = async (e) => {
     e.preventDefault()
-
     setError('')
-    setIsSubmitting(true)
 
     try {
       const json = await changeUserPassword(token, {
@@ -34,10 +31,8 @@ export const ChangePasswordForm = ({ token, authenticate }) => {
       router.reload()
     } catch (err) {
       console.error({ err })
-      Sentry.captureException(err)
-      setError(err.message)
-    } finally {
-      setIsSubmitting(false)
+
+      setError(errorHandler(err))
     }
   }
 
@@ -51,8 +46,8 @@ export const ChangePasswordForm = ({ token, authenticate }) => {
         <ErrorWrapper header="Unable to change password" error={error} />
       )}
 
-      <Form size="large" onSubmit={handleChangePassword}>
-        <Segment>
+      <Segment>
+        <Form onSubmit={handleChangePassword}>
           <Form.Input
             id="old_password"
             fluid
@@ -79,11 +74,11 @@ export const ChangePasswordForm = ({ token, authenticate }) => {
             onChange={handleInputChange}
           />
 
-          <Button primary fluid size="large" disabled={isSubmitting}>
+          <Button primary fluid>
             Update Password
           </Button>
-        </Segment>
-      </Form>
+        </Form>
+      </Segment>
     </>
   )
 }

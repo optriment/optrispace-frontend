@@ -1,14 +1,13 @@
-import * as Sentry from '@sentry/nextjs'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Button, Form, Segment } from 'semantic-ui-react'
 import { useAuth } from '../../hooks'
 import ErrorWrapper from '../../components/ErrorWrapper'
+import { errorHandler } from '../../lib/errorHandler'
 
 export const SignUpForm = () => {
   const { signUp, authenticate } = useAuth()
   const router = useRouter()
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const initialFields = {
     login: '',
@@ -22,36 +21,17 @@ export const SignUpForm = () => {
   const handleSignUp = async (e) => {
     e.preventDefault()
     setError('')
-    setIsSubmitting(true)
 
     try {
-      const response = await signUp(fields)
-      const json = await response.json()
+      const res = await signUp(fields)
 
-      if (response.ok) {
-        await authenticate(json.token)
+      await authenticate(res.token)
 
-        router.push('/')
-      } else {
-        // We use this condition below because in backend we don't have descriptive messages right now
-        if (json.message.match(/duplication/i)) {
-          setError('Login already exists')
-        } else {
-          setError(json.message)
-        }
-      }
+      router.push('/')
     } catch (err) {
       console.error({ err })
 
-      if (err.message.match(/failed to fetch/i)) {
-        Sentry.captureMessage('Server is not available')
-        setError('Server is not available')
-      } else {
-        Sentry.captureException(err)
-        setError(err.message)
-      }
-    } finally {
-      setIsSubmitting(false)
+      setError(errorHandler(err))
     }
   }
 
@@ -65,8 +45,8 @@ export const SignUpForm = () => {
         <ErrorWrapper header="Unable to sign up" error={error} />
       )}
 
-      <Form size="large" onSubmit={handleSignUp}>
-        <Segment>
+      <Segment>
+        <Form onSubmit={handleSignUp}>
           <Form.Input
             id="login"
             fluid
@@ -116,11 +96,11 @@ export const SignUpForm = () => {
           />
           */}
 
-          <Button primary fluid size="large" disabled={isSubmitting}>
+          <Button primary fluid>
             Sign Up
           </Button>
-        </Segment>
-      </Form>
+        </Form>
+      </Segment>
     </>
   )
 }

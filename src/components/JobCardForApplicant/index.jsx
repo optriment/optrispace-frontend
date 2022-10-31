@@ -3,7 +3,7 @@ import { Message, Container, Grid, Header, Segment } from 'semantic-ui-react'
 import { ApplicationForm } from '../../forms/ApplicationForm'
 import { useAuth } from '../../hooks'
 import { useApplicationChat } from '../../hooks/useApplicationChat'
-import { useApplications } from '../../hooks/useApplications'
+import { useJobApplication } from '../../hooks/useJobApplication'
 import { isEmptyString } from '../../lib/validators'
 import { Chat } from '../Chat'
 import ErrorWrapper from '../ErrorWrapper'
@@ -22,13 +22,10 @@ export const JobCardForApplicant = ({
 }) => {
   const { isLoading: personLoading, token } = useAuth()
   const {
-    applications,
-    isLoading: applicationsLoading,
-    error: applicationsError,
-  } = useApplications(token, job.id)
-
-  const application =
-    applications && applications.length > 0 ? applications[0] : null
+    application,
+    isLoading: applicationLoading,
+    error: applicationError,
+  } = useJobApplication(token, job?.id)
 
   const { chat } = useApplicationChat(token, application?.id)
 
@@ -36,15 +33,15 @@ export const JobCardForApplicant = ({
     return <JustOneSecond title="Loading profile..." />
   }
 
-  if (applicationsLoading) {
-    return <JustOneSecond title="Loading applications..." />
+  if (applicationLoading) {
+    return <JustOneSecond title="Loading application..." />
   }
 
-  if (applicationsError) {
+  if (applicationError) {
     return (
       <ErrorWrapper
-        header="Unable to load applications"
-        error={applicationsError}
+        header="Unable to load application"
+        error={applicationError}
       />
     )
   }
@@ -77,7 +74,7 @@ export const JobCardForApplicant = ({
         <Grid.Column>
           <Segment>
             <Segment basic>
-              {application ? (
+              {application?.id ? (
                 <>
                   <Message>
                     <Message.Header>
@@ -103,7 +100,6 @@ export const JobCardForApplicant = ({
                       {personHasAddress ? (
                         <ApplicationForm
                           job={job}
-                          application={application}
                           token={token}
                           coinSymbol={coinSymbol}
                         />

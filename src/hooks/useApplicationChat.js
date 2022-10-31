@@ -1,5 +1,6 @@
 import getConfig from 'next/config'
 import useSWR from 'swr'
+import { errorHandler } from '../lib/errorHandler'
 import { getWithToken } from '../lib/fetcher'
 
 export const useApplicationChat = (token, applicationId) => {
@@ -15,7 +16,9 @@ export const useApplicationChat = (token, applicationId) => {
     getWithToken
   )
 
-  if (error) return { error }
+  if (error) return { error: errorHandler(error) }
+
+  if (!data) return { isLoading: true }
 
   return { chat: data }
 }

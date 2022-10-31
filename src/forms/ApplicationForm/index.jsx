@@ -1,49 +1,33 @@
-import * as Sentry from '@sentry/nextjs'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Message, Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { createApplication } from '../../lib/api'
+import { errorHandler } from '../../lib/errorHandler'
 
-export const ApplicationForm = ({ job, application, token, coinSymbol }) => {
+export const ApplicationForm = ({ job, token, coinSymbol }) => {
   const router = useRouter()
 
   const initialFields = {
-    comment: application?.comment || '',
-    price: application?.price || '',
+    comment: '',
+    price: '',
   }
 
   const [fields, setFields] = useState(initialFields)
   const [error, setError] = useState('')
 
-  const handleCreateApplication = (e) => {
+  const handleCreateApplication = async (e) => {
     e.preventDefault()
     setError('')
 
     try {
-      createApplication(token, job.id, { ...fields })
-        .then((result) => {
-          if (!result.id) {
-            setError(result.message)
-          } else {
-            router.reload()
-          }
-        })
-        .catch((err) => {
-          console.error({ err })
+      await createApplication(token, job.id, { ...fields })
 
-          if (err.message.match(/failed to fetch/i)) {
-            Sentry.captureMessage('Server is not available')
-            setError('Server is not available')
-          } else {
-            setError(err?.info?.message || err.message)
-          }
-        })
+      router.reload()
     } catch (err) {
       console.error({ err })
 
-      Sentry.captureException(err)
-      setError(err.message)
+      setError(errorHandler(err))
     }
   }
 
@@ -57,29 +41,27 @@ export const ApplicationForm = ({ job, application, token, coinSymbol }) => {
         <ErrorWrapper header="Unable to post an application" error={error} />
       )}
 
-      {!application && (
-        <Message>
-          <Message.Header>Please do not forget:</Message.Header>
-          <Message.List>
-            <Message.Item>
-              Leave your contacts (Telegram, Skype or email) for the customer
-            </Message.Item>
-            <Message.Item>
-              Write descriptive comment about your relevant experience
-            </Message.Item>
-            <Message.Item>
-              The price of your services must be in{' '}
-              <a
-                href="https://coinmarketcap.com/currencies/bnb/"
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-              >
-                BNB
-              </a>
-            </Message.Item>
-          </Message.List>
-        </Message>
-      )}
+      <Message>
+        <Message.Header>Please do not forget:</Message.Header>
+        <Message.List>
+          <Message.Item>
+            Leave your contacts (Telegram, Skype or email) for the customer
+          </Message.Item>
+          <Message.Item>
+            Write descriptive comment about your relevant experience
+          </Message.Item>
+          <Message.Item>
+            The price of your services must be in{' '}
+            <a
+              href={`https://coinmarketcap.com/currencies/${coinSymbol}/`}
+              target="_blank"
+              rel="nofollow noopener noreferrer"
+            >
+              {coinSymbol}
+            </a>
+          </Message.Item>
+        </Message.List>
+      </Message>
 
       <Form onSubmit={handleCreateApplication}>
         <Form.TextArea
@@ -89,7 +71,6 @@ export const ApplicationForm = ({ job, application, token, coinSymbol }) => {
           required
           value={fields.comment}
           onChange={handleInputChange}
-          readOnly={application !== null}
         />
 
         <Form.Input
@@ -102,11 +83,10 @@ export const ApplicationForm = ({ job, application, token, coinSymbol }) => {
           required
           width={5}
           onChange={handleInputChange}
-          readOnly={application !== null}
           autoComplete="off"
         />
 
-        <Button content="Publish" primary disabled={application !== null} />
+        <Button content="Publish" primary />
       </Form>
     </>
   )

@@ -1,12 +1,12 @@
-import * as Sentry from '@sentry/nextjs'
 import getConfig from 'next/config'
 import useSWR from 'swr'
+import { errorHandler } from '../lib/errorHandler'
 import { getWithToken } from '../lib/fetcher'
 
 export const useApplication = (token, applicationId) => {
   const { publicRuntimeConfig } = getConfig()
 
-  const { data: application, error } = useSWR(
+  const { data, error } = useSWR(
     () =>
       token &&
       applicationId && [
@@ -16,21 +16,9 @@ export const useApplication = (token, applicationId) => {
     getWithToken
   )
 
-  if (error) {
-    if (error.message.match(/failed to fetch/i)) {
-      Sentry.captureMessage('Server is not available')
-      return { error: 'Server is not available' }
-    }
+  if (error) return { error: errorHandler(error) }
 
-    if (error?.info?.message.match(/entity not found/i)) {
-      return { error: 'Application does not exist' }
-    }
+  if (!data) return { isLoading: true }
 
-    Sentry.captureException(error)
-    return { error }
-  }
-
-  if (!application) return { isLoading: true }
-
-  return { application }
+  return { application: data }
 }

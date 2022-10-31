@@ -31,13 +31,11 @@ export const ChatScreen = ({ chat, token, coinSymbol }) => {
     )
   }
 
-  const { job } = application
-
   return (
     <Segment basic>
       <Header as="h2">
-        <Link href={`/jobs/${job.id}`} passHref>
-          <a>{job.title}</a>
+        <Link href={`/jobs/${application.job_id}`} passHref>
+          <a>{application.job_title}</a>
         </Link>
       </Header>
 
@@ -58,7 +56,7 @@ export const ChatScreen = ({ chat, token, coinSymbol }) => {
                   <b>Chat started:</b> {createdAt}
                 </List.Item>
                 <List.Item>
-                  <b>Job budget:</b> {job.budget + ' ' + coinSymbol}
+                  <b>Job budget:</b> {application.job_budget + ' ' + coinSymbol}
                 </List.Item>
                 <List.Item>
                   <b>Applicant&apos;s price:</b>

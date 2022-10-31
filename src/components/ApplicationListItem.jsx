@@ -10,14 +10,14 @@ export default function ApplicationListItem({ application, coinSymbol }) {
     <Card fluid>
       <Card.Content>
         <Card.Header>
-          <Link href="/jobs/[id]" as={`/jobs/${application.job.id}`}>
-            <a>{application.job.title}</a>
+          <Link href="/jobs/[id]" as={`/jobs/${application.job_id}`}>
+            <a>{application.job_title}</a>
           </Link>
         </Card.Header>
 
         <Card.Description>
           <div style={{ textAlign: 'justify' }}>
-            {application.job.description
+            {application.job_description
               .trim()
               .split('\n')
               .map((str, idx) => {
@@ -27,7 +27,7 @@ export default function ApplicationListItem({ application, coinSymbol }) {
                       <br />
                       <Link
                         href="/jobs/[id]"
-                        as={`/jobs/${application.job.id}`}
+                        as={`/jobs/${application.job_id}`}
                       >
                         <a>
                           <Button size="tiny">Read more</Button>
