@@ -418,8 +418,8 @@ export const ContractCardForContractor = ({ contract, token, coinSymbol }) => {
                     </Message.Header>
                     <p>
                       <br />
-                      Please click &quot;Fund&quot; button to open MetaMask to
-                      request money.
+                      Please click &quot;Withdraw&quot; button to open MetaMask
+                      to request money.
                     </p>
                   </Message>
 
