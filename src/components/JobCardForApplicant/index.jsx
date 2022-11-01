@@ -103,8 +103,15 @@ export const JobCardForApplicant = ({
                     <Message>
                       <Message.Header>
                         You&apos;ve applied with the service price of
-                        {' ' + application.price + ' ' + coinSymbol}
+                        {' ' + application.price + ' ' + coinSymbol}.
                       </Message.Header>
+                      <p>
+                        The next step is to get a contract from the customer to
+                        do this task and get paid. You have to discuss terms and
+                        conditions and then prove, that you are ready to work.
+                        Pay attention and ask anything you need to finish this
+                        task.
+                      </p>
                     </Message>
                   ) : (
                     <Message positive>
