@@ -1,5 +1,13 @@
 import React from 'react'
-import { Message, Container, Grid, Header, Segment } from 'semantic-ui-react'
+import Link from 'next/link'
+import {
+  Icon,
+  Step,
+  Message,
+  Container,
+  Grid,
+  Segment,
+} from 'semantic-ui-react'
 import { ApplicationForm } from '../../forms/ApplicationForm'
 import { useAuth } from '../../hooks'
 import { useApplicationChat } from '../../hooks/useApplicationChat'
@@ -72,23 +80,51 @@ export const JobCardForApplicant = ({
 
       <Grid.Row>
         <Grid.Column>
-          <Segment>
+          <Step.Group widths={2} attached="bottom">
+            <Step completed={!!application?.id} active={!application.id}>
+              <Icon name="write" />
+              <Step.Content>
+                <Step.Title>Leave a reply</Step.Title>
+              </Step.Content>
+            </Step>
+            <Step disabled={!application?.id} active={!!application?.id}>
+              <Icon name="chat" />
+              <Step.Content>
+                <Step.Title>Chat with customer</Step.Title>
+              </Step.Content>
+            </Step>
+          </Step.Group>
+
+          <Segment attached>
             <Segment basic>
               {application?.id ? (
                 <>
-                  <Message>
-                    <Message.Header>
-                      You&apos;ve applied with the service price of
-                      {' ' + application.price + ' ' + coinSymbol}
-                    </Message.Header>
-                  </Message>
+                  {isEmptyString(application?.contract_id) ? (
+                    <Message>
+                      <Message.Header>
+                        You&apos;ve applied with the service price of
+                        {' ' + application.price + ' ' + coinSymbol}
+                      </Message.Header>
+                    </Message>
+                  ) : (
+                    <Message positive>
+                      <Message.Header>You have a contract</Message.Header>
+                      <p>
+                        <Link
+                          href="/contracts/[id]"
+                          as={`/contracts/${application.contract_id}`}
+                          passHref
+                        >
+                          <a>Click here to open contract</a>
+                        </Link>
+                      </p>
+                    </Message>
+                  )}
 
-                  {chat?.id && <Chat chatId={chat?.id} token={token} />}
+                  {chat?.id && <Chat chatId={chat.id} token={token} />}
                 </>
               ) : (
                 <>
-                  <Header as="h3">Leave a Reply</Header>
-
                   {job.is_suspended ? (
                     <Message
                       icon="pause"
