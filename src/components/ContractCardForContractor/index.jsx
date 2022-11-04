@@ -21,8 +21,14 @@ import WrongBlockchainNetwork from '../WrongBlockchainNetwork'
 import ConnectWallet from '../ConnectWallet'
 import { FormattedDescription } from '../FormattedDescription'
 import { ContractCardSteps } from '../ContractCardSteps'
+import { Chat } from '../Chat'
 
-export const ContractCardForContractor = ({ contract, token, coinSymbol }) => {
+export const ContractCardForContractor = ({
+  contract,
+  token,
+  coinSymbol,
+  chat,
+}) => {
   const router = useRouter()
 
   const {
@@ -454,6 +460,12 @@ export const ContractCardForContractor = ({ contract, token, coinSymbol }) => {
                 <FormattedDescription description={contract.description} />
               </Container>
             </Segment>
+
+            {chat?.id && (
+              <Segment>
+                <Chat chatId={chat.id} token={token} />
+              </Segment>
+            )}
           </Grid.Column>
 
           <Grid.Column width={6}>

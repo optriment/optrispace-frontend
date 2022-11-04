@@ -5,6 +5,7 @@ import JustOneSecond from '../../../components/JustOneSecond'
 import { useAuth } from '../../../hooks'
 import { UsersLayout } from '../../../layouts/Users'
 import { useContract } from '../../../hooks/useContract'
+import { useApplicationChat } from '../../../hooks/useApplicationChat'
 import { ContractScreen } from '../../../screens/users/contracts/show'
 import DisplayContext from '../../../context/display-context'
 import { LandingLayout } from '../../../layouts/Landing'
@@ -24,6 +25,12 @@ const Page = () => {
     isLoading: contractLoading,
     error: contractError,
   } = useContract(token, query.id)
+  const {
+    chat,
+    isLoading: chatLoading,
+    error: chatError,
+  } = useApplicationChat(token, contract?.application_id)
+
   const { coinSymbol } = useContext(Web3Context)
   const { setSmallScreen } = useContext(DisplayContext)
 
@@ -71,6 +78,22 @@ const Page = () => {
     )
   }
 
+  if (chatLoading) {
+    return (
+      <UsersLayout>
+        <JustOneSecond title="Loading chat..." />
+      </UsersLayout>
+    )
+  }
+
+  if (chatError) {
+    return (
+      <UsersLayout>
+        <ErrorWrapper header="Unable to load chat" error={chatError} />
+      </UsersLayout>
+    )
+  }
+
   return (
     <UsersLayout meta={{ title: `Contract: ${contract.title}` }}>
       <ContractScreen
@@ -78,6 +101,7 @@ const Page = () => {
         person={person}
         token={token}
         coinSymbol={coinSymbol}
+        chat={chat}
       />
     </UsersLayout>
   )
