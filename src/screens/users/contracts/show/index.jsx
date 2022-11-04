@@ -4,7 +4,13 @@ import { ContractCardForContractor } from '../../../../components/ContractCardFo
 import { ProfileIsNotConfigured } from '../../../../components/ProfileIsNotConfigured'
 import { isEmptyString } from '../../../../lib/validators'
 
-export const ContractScreen = ({ contract, person, token, coinSymbol }) => {
+export const ContractScreen = ({
+  contract,
+  person,
+  token,
+  coinSymbol,
+  chat,
+}) => {
   if (isEmptyString(person.ethereum_address)) {
     return <ProfileIsNotConfigured />
   }
@@ -16,6 +22,7 @@ export const ContractScreen = ({ contract, person, token, coinSymbol }) => {
         person={person}
         token={token}
         coinSymbol={coinSymbol}
+        chat={chat}
       />
     )
   }
@@ -26,6 +33,7 @@ export const ContractScreen = ({ contract, person, token, coinSymbol }) => {
       person={person}
       token={token}
       coinSymbol={coinSymbol}
+      chat={chat}
     />
   )
 }

@@ -12,6 +12,7 @@ import {
 import { approveContract, deployContract, fundContract } from '../../lib/api'
 import ErrorWrapper from '../ErrorWrapper'
 import { ContractCardSidebar } from '../ContractCardSidebar'
+import { Chat } from '../Chat'
 import { ethers } from 'ethers'
 import contractABI from '../../../contracts/Contract.json'
 import Web3Context from '../../context/web3-context'
@@ -23,7 +24,12 @@ import { FormattedDescription } from '../FormattedDescription'
 import { isEmptyString } from '../../lib/validators'
 import { ContractCardSteps } from '../ContractCardSteps'
 
-export const ContractCardForCustomer = ({ contract, token, coinSymbol }) => {
+export const ContractCardForCustomer = ({
+  contract,
+  token,
+  coinSymbol,
+  chat,
+}) => {
   const router = useRouter()
 
   const {
@@ -547,6 +553,12 @@ export const ContractCardForCustomer = ({ contract, token, coinSymbol }) => {
                 <FormattedDescription description={contract.description} />
               </Container>
             </Segment>
+
+            {chat?.id && (
+              <Segment>
+                <Chat chatId={chat.id} token={token} />
+              </Segment>
+            )}
           </Grid.Column>
 
           <Grid.Column width={6}>
