@@ -26,6 +26,10 @@ export const NewJobForm = ({ token, coinSymbol }) => {
     try {
       const res = await createJob(token, { ...fields })
 
+      localStorage.removeItem('jobTitle')
+      localStorage.removeItem('jobBudget')
+      localStorage.removeItem('jobDescription')
+
       router.push(`/jobs/${res.id}`)
     } catch (err) {
       console.error({ err })
