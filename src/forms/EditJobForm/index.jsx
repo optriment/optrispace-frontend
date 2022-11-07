@@ -27,9 +27,9 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
     try {
       const res = await updateJob(token, job.id, { ...fields })
 
-      localStorage.removeItem('editjobTitle')
-      localStorage.removeItem('editjobBudget')
-      localStorage.removeItem('editjobDescription')
+      localStorage.removeItem(`editjobTitle-${job.id}`)
+      localStorage.removeItem(`editjobBudget-${job.id}`)
+      localStorage.removeItem(`editjobDescription-${job.id}`)
 
       router.push(`/jobs/${res.id}`)
     } catch (err) {
