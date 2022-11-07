@@ -46,8 +46,8 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
   useEffect(() => {
     setFormFilled(
       !isEmptyString(fields.title) &&
-      !isEmptyString(fields.description) &&
-      !isEmptyString(fields.budget)
+        !isEmptyString(fields.description) &&
+        !isEmptyString(fields.budget)
     )
   }, [fields])
 
