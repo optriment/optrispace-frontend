@@ -42,10 +42,22 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
   useEffect(() => {
     setFormFilled(
       !isEmptyString(fields.title) &&
-        !isEmptyString(fields.description) &&
-        !isEmptyString(fields.budget)
+      !isEmptyString(fields.description) &&
+      !isEmptyString(fields.budget)
     )
   }, [fields])
+
+  const setLocalJobTitle = (jobTitle) => {
+    localStorage.setItem('editjobTitle', jobTitle)
+  }
+
+  const setLocalJobBudget = (jobBudget) => {
+    localStorage.setItem('editjobBudget', jobBudget)
+  }
+
+  const setLocalJobDescription = (jobDescription) => {
+    localStorage.setItem('editjobDescription', jobDescription)
+  }
 
   return (
     <>
@@ -61,8 +73,11 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
             id="title"
             label="Title"
             placeholder=""
-            value={fields.title}
-            onChange={handleInputChange}
+            defaultValue={localStorage.getItem('editjobTitle') ?? ''}
+            onChange={(event) => {
+              handleInputChange(event)
+              setLocalJobTitle(event.target.value)
+            }}
             required
             width={12}
           />
@@ -74,8 +89,11 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
             step={0.01}
             label={`Approx. budget (${coinSymbol})`}
             placeholder=""
-            value={fields.budget}
-            onChange={handleInputChange}
+            defaultValue={localStorage.getItem('editjobBudget') ?? ''}
+            onChange={(event) => {
+              handleInputChange(event)
+              setLocalJobBudget(event.target.value)
+            }}
             required
             width={4}
           />
@@ -87,8 +105,11 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
           label="Description"
           placeholder=""
           rows={12}
-          value={fields.description}
-          onChange={handleInputChange}
+          defaultValue={localStorage.getItem('editjobDescription') ?? ''}
+          onChange={(event) => {
+            handleInputChange(event)
+            setLocalJobDescription(event.target.value)
+          }}
           required
         />
 
