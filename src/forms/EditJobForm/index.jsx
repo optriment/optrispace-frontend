@@ -27,6 +27,10 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
     try {
       const res = await updateJob(token, job.id, { ...fields })
 
+      localStorage.removeItem(`editjobTitle-${job.id}`)
+      localStorage.removeItem(`editjobBudget-${job.id}`)
+      localStorage.removeItem(`editjobDescription-${job.id}`)
+
       router.push(`/jobs/${res.id}`)
     } catch (err) {
       console.error({ err })
@@ -47,6 +51,18 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
     )
   }, [fields])
 
+  const setLocalJobTitle = (jobTitle) => {
+    localStorage.setItem(`editjobTitle-${job.id}`, jobTitle)
+  }
+
+  const setLocalJobBudget = (jobBudget) => {
+    localStorage.setItem(`editjobBudget-${job.id}`, jobBudget)
+  }
+
+  const setLocalJobDescription = (jobDescription) => {
+    localStorage.setItem(`editjobDescription-${job.id}`, jobDescription)
+  }
+
   return (
     <>
       <Header as="h1">Edit Job</Header>
@@ -61,8 +77,13 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
             id="title"
             label="Title"
             placeholder=""
-            value={fields.title}
-            onChange={handleInputChange}
+            defaultValue={
+              localStorage.getItem(`editjobTitle-${job.id}`) ?? fields.title
+            }
+            onChange={(event) => {
+              handleInputChange(event)
+              setLocalJobTitle(event.target.value)
+            }}
             required
             width={12}
           />
@@ -74,8 +95,13 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
             step={0.01}
             label={`Approx. budget (${coinSymbol})`}
             placeholder=""
-            value={fields.budget}
-            onChange={handleInputChange}
+            defaultValue={
+              localStorage.getItem(`editjobBudget-${job.id}`) ?? fields.budget
+            }
+            onChange={(event) => {
+              handleInputChange(event)
+              setLocalJobBudget(event.target.value)
+            }}
             required
             width={4}
           />
@@ -87,8 +113,14 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
           label="Description"
           placeholder=""
           rows={12}
-          value={fields.description}
-          onChange={handleInputChange}
+          defaultValue={
+            localStorage.getItem(`editjobDescription-${job.id}`) ??
+            fields.description
+          }
+          onChange={(event) => {
+            handleInputChange(event)
+            setLocalJobDescription(event.target.value)
+          }}
           required
         />
 
