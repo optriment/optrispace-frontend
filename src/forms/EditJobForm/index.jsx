@@ -52,15 +52,15 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
   }, [fields])
 
   const setLocalJobTitle = (jobTitle) => {
-    localStorage.setItem('editjobTitle', jobTitle)
+    localStorage.setItem(`editjobTitle-${job.id}`, jobTitle)
   }
 
   const setLocalJobBudget = (jobBudget) => {
-    localStorage.setItem('editjobBudget', jobBudget)
+    localStorage.setItem(`editjobBudget-${job.id}`, jobBudget)
   }
 
   const setLocalJobDescription = (jobDescription) => {
-    localStorage.setItem('editjobDescription', jobDescription)
+    localStorage.setItem(`editjobDescription-${job.id}`, jobDescription)
   }
 
   return (
@@ -77,7 +77,9 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
             id="title"
             label="Title"
             placeholder=""
-            defaultValue={localStorage.getItem('editjobTitle') ?? fields.title}
+            defaultValue={
+              localStorage.getItem(`editjobTitle-${job.id}`) ?? fields.title
+            }
             onChange={(event) => {
               handleInputChange(event)
               setLocalJobTitle(event.target.value)
@@ -94,7 +96,7 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
             label={`Approx. budget (${coinSymbol})`}
             placeholder=""
             defaultValue={
-              localStorage.getItem('editjobBudget') ?? fields.budget
+              localStorage.getItem(`editjobBudget-${job.id}`) ?? fields.budget
             }
             onChange={(event) => {
               handleInputChange(event)
@@ -112,7 +114,8 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
           placeholder=""
           rows={12}
           defaultValue={
-            localStorage.getItem('editjobDescription') ?? fields.description
+            localStorage.getItem(`editjobDescription-${job.id}`) ??
+            fields.description
           }
           onChange={(event) => {
             handleInputChange(event)
