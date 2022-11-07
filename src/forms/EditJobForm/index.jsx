@@ -77,7 +77,7 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
             id="title"
             label="Title"
             placeholder=""
-            defaultValue={localStorage.getItem('editjobTitle') ?? ''}
+            defaultValue={localStorage.getItem('editjobTitle') ?? fields.title}
             onChange={(event) => {
               handleInputChange(event)
               setLocalJobTitle(event.target.value)
@@ -93,7 +93,9 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
             step={0.01}
             label={`Approx. budget (${coinSymbol})`}
             placeholder=""
-            defaultValue={localStorage.getItem('editjobBudget') ?? ''}
+            defaultValue={
+              localStorage.getItem('editjobBudget') ?? fields.budget
+            }
             onChange={(event) => {
               handleInputChange(event)
               setLocalJobBudget(event.target.value)
@@ -109,7 +111,9 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
           label="Description"
           placeholder=""
           rows={12}
-          defaultValue={localStorage.getItem('editjobDescription') ?? ''}
+          defaultValue={
+            localStorage.getItem('editjobDescription') ?? fields.description
+          }
           onChange={(event) => {
             handleInputChange(event)
             setLocalJobDescription(event.target.value)
