@@ -6,29 +6,31 @@ import { isEmptyString } from '../../lib/validators'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { MarkdownIsSupported } from '../../components/MarkdownIsSupported'
 import { errorHandler } from '../../lib/errorHandler'
+import { getFromStorage, setToStorage } from '../../lib/helpers'
+import { UnsavedChangesDialog } from '../../components/UnsavedChangesDialog'
 
 export const NewJobForm = ({ token, coinSymbol }) => {
   const router = useRouter()
 
-  const initialFields = {
-    title: '',
-    description: '',
-    budget: '',
-  }
-  const [fields, setFields] = useState(initialFields)
+  const [displayModal, setDisplayModal] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [budget, setBudget] = useState('')
   const [error, setError] = useState('')
-  const [formFilled, setFormFilled] = useState(false)
 
   const handleCreateJob = async (e) => {
     e.preventDefault()
     setError('')
 
     try {
-      const res = await createJob(token, { ...fields })
+      const res = await createJob(token, {
+        title,
+        description,
+        budget,
+      })
 
-      localStorage.removeItem('jobTitle')
-      localStorage.removeItem('jobBudget')
-      localStorage.removeItem('jobDescription')
+      clearStoredFields()
 
       router.push(`/jobs/${res.id}`)
     } catch (err) {
@@ -38,29 +40,58 @@ export const NewJobForm = ({ token, coinSymbol }) => {
     }
   }
 
-  const handleInputChange = (e) => {
-    setFields({ ...fields, ...{ [e.target.id]: e.target.value } })
+  const handleTitleChange = (e) => {
+    const { value } = e.target
+
+    setTitle(value)
+    setToStorage('newJobTitle', value)
+  }
+
+  const handleDescriptionChange = (e) => {
+    const { value } = e.target
+
+    setDescription(value)
+    setToStorage('newJobDescription', value)
+  }
+
+  const handleBudgetChange = (e) => {
+    const { value } = e.target
+
+    setBudget(value)
+    setToStorage('newJobBudget', value)
+  }
+
+  const clearStoredFields = () => {
+    localStorage.removeItem('newJobTitle')
+    localStorage.removeItem('newJobDescription')
+    localStorage.removeItem('newJobBudget')
+  }
+
+  const storedTitle = getFromStorage('newJobTitle')
+  const storedDescription = getFromStorage('newJobDescription')
+  const storedBudget = getFromStorage('newJobBudget')
+
+  const restoreUnsavedChanges = () => {
+    setTitle(storedTitle)
+    setDescription(storedDescription)
+    setBudget(storedBudget)
   }
 
   useEffect(() => {
-    setFormFilled(
-      !isEmptyString(fields.title) &&
-        !isEmptyString(fields.description) &&
-        !isEmptyString(fields.budget)
-    )
-  }, [fields])
+    if (isLoaded) return
 
-  const setLocalJobTitle = (jobTitle) => {
-    localStorage.setItem('jobTitle', jobTitle)
-  }
+    if (storedTitle === '' && storedDescription === '' && storedBudget === '') {
+      setIsLoaded(true)
+    } else {
+      setDisplayModal(true)
+    }
+  }, [isLoaded, storedTitle, storedDescription, storedBudget])
 
-  const setLocalJobBudget = (jobBudget) => {
-    localStorage.setItem('jobBudget', jobBudget)
-  }
-
-  const setLocalJobDescription = (jobDescription) => {
-    localStorage.setItem('jobDescription', jobDescription)
-  }
+  const formFilled =
+    isLoaded &&
+    !isEmptyString(title) &&
+    !isEmptyString(description) &&
+    !isEmptyString(budget)
 
   return (
     <>
@@ -76,11 +107,8 @@ export const NewJobForm = ({ token, coinSymbol }) => {
             id="title"
             label="Title"
             placeholder=""
-            defaultValue={localStorage.getItem('jobTitle') ?? ''}
-            onChange={(event) => {
-              handleInputChange(event)
-              setLocalJobTitle(event.target.value)
-            }}
+            value={title}
+            onChange={handleTitleChange}
             required
             width={12}
           />
@@ -92,11 +120,8 @@ export const NewJobForm = ({ token, coinSymbol }) => {
             step={0.01}
             label={`Approx. budget (${coinSymbol})`}
             placeholder=""
-            defaultValue={localStorage.getItem('jobBudget') ?? ''}
-            onChange={(event) => {
-              handleInputChange(event)
-              setLocalJobBudget(event.target.value)
-            }}
+            value={budget}
+            onChange={handleBudgetChange}
             width={4}
           />
         </Form.Group>
@@ -107,11 +132,8 @@ export const NewJobForm = ({ token, coinSymbol }) => {
           label="Description"
           placeholder=""
           rows={12}
-          defaultValue={localStorage.getItem('jobDescription') ?? ''}
-          onChange={(event) => {
-            handleInputChange(event)
-            setLocalJobDescription(event.target.value)
-          }}
+          value={description}
+          onChange={handleDescriptionChange}
           required
         />
 
@@ -119,6 +141,20 @@ export const NewJobForm = ({ token, coinSymbol }) => {
 
         <Button content="Publish" primary disabled={!formFilled} />
       </Form>
+
+      <UnsavedChangesDialog
+        open={displayModal}
+        onNoClicked={() => {
+          clearStoredFields()
+          setIsLoaded(true)
+          setDisplayModal(false)
+        }}
+        onYesClicked={() => {
+          restoreUnsavedChanges()
+          setIsLoaded(true)
+          setDisplayModal(false)
+        }}
+      />
     </>
   )
 }
