@@ -10,8 +10,13 @@ export const ChatForm = ({ chatId, token, onPostMessage }) => {
   const [error, setError] = useState('')
 
   const keyDownHandler = (e) => {
-    if ((e.key === 'Enter' && !e.shiftKey) || (e.key === 'Enter' && e.ctrlKey))
-      handlePostMessage(e)
+    if (!isEmptyString(messageText)) {
+      if (
+        (e.key === 'Enter' && !e.shiftKey) ||
+        (e.key === 'Enter' && e.ctrlKey)
+      )
+        handlePostMessage(e)
+    }
   }
 
   const handlePostMessage = async (e) => {
