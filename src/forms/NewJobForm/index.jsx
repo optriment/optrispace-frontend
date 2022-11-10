@@ -9,7 +9,7 @@ import { errorHandler } from '../../lib/errorHandler'
 import { getFromStorage, setToStorage } from '../../lib/helpers'
 import { UnsavedChangesDialog } from '../../components/UnsavedChangesDialog'
 import { Tab } from 'semantic-ui-react'
-import ReactMarkdown from 'react-markdown'
+import { FormattedDescription } from '../../components/FormattedDescription'
 
 export const NewJobForm = ({ token, coinSymbol }) => {
   const router = useRouter()
@@ -120,14 +120,16 @@ export const NewJobForm = ({ token, coinSymbol }) => {
       />
     )
   }
-
+  
   const renderPreviewJob = () => {
     return (
-      <ReactMarkdown>
-        {!isEmptyString(description)
-          ? getFromStorage('newJobDescription')
-          : 'Nothing to preview!'}
-      </ReactMarkdown>
+      <FormattedDescription
+        description={
+          !isEmptyString(description)
+            ? getFromStorage('newJobDescription')
+            : 'Nothing to preview!'
+        }
+      />
     )
   }
 
