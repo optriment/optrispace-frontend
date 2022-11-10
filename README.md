@@ -1,6 +1,6 @@
 # OptriSpace Web
 
-![OptriSpace](./public/optrispace.png)
+![OptriSpace](./assets/optrispace.png)
 
 [![Lint](https://github.com/optriment/optrispace-frontend/actions/workflows/lint.yml/badge.svg)](https://github.com/optriment/optrispace-frontend/actions/workflows/lint.yml)
 [![Spell](https://github.com/optriment/optrispace-frontend/actions/workflows/spell.yml/badge.svg)](https://github.com/optriment/optrispace-frontend/actions/workflows/spell.yml)

@@ -5,10 +5,11 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { Web3Debug } from '../../components/Web3Debug'
 import DisplayContext from '../../context/display-context'
-
-import 'semantic-ui-css/semantic.min.css'
 import getConfig from 'next/config'
 import Link from 'next/link'
+import { Favicon } from '../../components/Favicon'
+
+import 'semantic-ui-css/semantic.min.css'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -30,7 +31,8 @@ export const UsersLayout = ({ children, meta = {} }) => {
       <Head>
         <title>{pageTitle}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="/favicon.png"></link>
+
+        <Favicon />
       </Head>
 
       <Container>
