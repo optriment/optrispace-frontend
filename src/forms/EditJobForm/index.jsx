@@ -8,7 +8,7 @@ import { getFromStorage, setToStorage } from '../../lib/helpers'
 import { MarkdownIsSupported } from '../../components/MarkdownIsSupported'
 import { errorHandler } from '../../lib/errorHandler'
 import { Tab } from 'semantic-ui-react'
-import ReactMarkdown from 'react-markdown'
+import { FormattedDescription } from '../../components/FormattedDescription'
 
 export const EditJobForm = ({ job, token, coinSymbol }) => {
   const router = useRouter()
@@ -97,14 +97,17 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
       />
     )
   }
-
+  
   const renderPreviewJob = () => {
     return (
-      <ReactMarkdown>
-        {!isEmptyString(fields.description)
-          ? getFromStorage(`editjobDescription-${job.id}`) || fields.description
-          : 'Nothing to preview!'}
-      </ReactMarkdown>
+      <FormattedDescription
+        description={
+          !isEmptyString(fields.description)
+            ? getFromStorage(`editjobDescription-${job.id}`) ||
+              fields.description
+            : 'Nothing to preview!'
+        }
+      />
     )
   }
 
