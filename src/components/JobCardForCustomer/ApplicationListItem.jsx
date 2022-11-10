@@ -1,5 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
 import { Button, List, Item, Icon } from 'semantic-ui-react'
 import { FormattedDescription } from '../FormattedDescription'
 import { isEmptyString } from '../../lib/validators'
@@ -19,53 +18,9 @@ export default function ApplicationListItem({
 
   return (
     <Item>
-      <Item.Image size="tiny" avatar src="/default-userpic.jpg" />
+      <Item.Image size="tiny" avatar src="/default-userpic-128x128.png" />
 
       <Item.Content>
-        {application.contract_id ? (
-          <Link
-            href="/contracts/[id]"
-            as={`/contracts/${application.contract_id}`}
-            passHref
-          >
-            <Button
-              as="a"
-              content="Open contract"
-              primary
-              size="tiny"
-              floated="right"
-            />
-          </Link>
-        ) : (
-          <Link
-            href={{
-              pathname: `/jobs/${job.id}/contracts/new`,
-              query: { application_id: application.id },
-            }}
-            passHref
-          >
-            <Button
-              as="a"
-              content="Hire"
-              primary
-              size="tiny"
-              floated="right"
-              disabled={isEmptyString(application.applicant_ethereum_address)}
-            />
-          </Link>
-        )}
-        {chat && (
-          <Link href="/chats/[id]" as={`/chats/${chat.id}`} passHref>
-            <Button
-              as="a"
-              content="Open chat"
-              primary
-              size="tiny"
-              floated="right"
-            />
-          </Link>
-        )}
-
         <Item.Header>
           {application.applicant_display_name}
 
@@ -99,6 +54,37 @@ export default function ApplicationListItem({
         <Item.Description>
           <FormattedDescription description={application.comment} />
         </Item.Description>
+
+        <Item.Extra>
+          {application.contract_id ? (
+            <Button
+              size="tiny"
+              primary
+              floated="right"
+              href={`/contracts/${application.contract_id}`}
+              content="Open contract"
+            />
+          ) : (
+            <Button
+              size="tiny"
+              primary
+              floated="right"
+              href={`/jobs/${job.id}/contracts/new?application_id=${application.id}`}
+              content="Hire"
+              disabled={isEmptyString(application.applicant_ethereum_address)}
+            />
+          )}
+
+          {chat && (
+            <Button
+              size="tiny"
+              primary
+              floated="right"
+              href={`/chats/${chat.id}`}
+              content="Open chat"
+            />
+          )}
+        </Item.Extra>
       </Item.Content>
     </Item>
   )

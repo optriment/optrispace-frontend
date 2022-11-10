@@ -5,6 +5,7 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import getConfig from 'next/config'
 import Link from 'next/link'
+import { Favicon } from '../../components/Favicon'
 
 import 'semantic-ui-css/semantic.min.css'
 
@@ -42,7 +43,7 @@ export const LandingLayout = ({ children, meta = {} }) => {
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
 
-        <link rel="icon" type="image/png" href="/favicon.png"></link>
+        <Favicon />
       </Head>
 
       <Container>

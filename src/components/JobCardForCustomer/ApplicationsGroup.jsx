@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tab, Menu, Label, Item } from 'semantic-ui-react'
+import { Segment, Tab, Menu, Label, Item } from 'semantic-ui-react'
 import ApplicationListItem from './ApplicationListItem'
 
 function ApplicationsGroup(
@@ -19,17 +19,19 @@ function ApplicationsGroup(
     ),
     render: () => (
       <Tab.Pane>
-        <Item.Group relaxed divided>
-          {applications.map((application) => (
-            <ApplicationListItem
-              key={application.id}
-              job={job}
-              application={application}
-              blockchainViewAddressURL={blockchainViewAddressURL}
-              coinSymbol={coinSymbol}
-            />
-          ))}
-        </Item.Group>
+        <Segment basic>
+          <Item.Group relaxed divided>
+            {applications.map((application) => (
+              <ApplicationListItem
+                key={application.id}
+                job={job}
+                application={application}
+                blockchainViewAddressURL={blockchainViewAddressURL}
+                coinSymbol={coinSymbol}
+              />
+            ))}
+          </Item.Group>
+        </Segment>
       </Tab.Pane>
     ),
   }
