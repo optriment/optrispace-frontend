@@ -4,8 +4,11 @@ import { Header, Button, Form, TextArea } from 'semantic-ui-react'
 import { updateJob } from '../../lib/api'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { isEmptyString } from '../../lib/validators'
+import { getFromStorage, setToStorage } from '../../lib/helpers'
 import { MarkdownIsSupported } from '../../components/MarkdownIsSupported'
 import { errorHandler } from '../../lib/errorHandler'
+import { Tab } from 'semantic-ui-react'
+import ReactMarkdown from 'react-markdown'
 
 export const EditJobForm = ({ job, token, coinSymbol }) => {
   const router = useRouter()
@@ -15,6 +18,17 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
     description: job.description,
     budget: job.budget,
   }
+
+  const panes = [
+    {
+      menuItem: { key: 'write', icon: 'pencil', content: 'Edit' },
+      render: () => <Tab.Pane>{renderEditJob()}</Tab.Pane>,
+    },
+    {
+      menuItem: { key: 'preview', icon: 'eye', content: 'Preview' },
+      render: () => <Tab.Pane>{renderPreviewJob()}</Tab.Pane>,
+    },
+  ]
 
   const [fields, setFields] = useState(initialFields)
   const [error, setError] = useState('')
@@ -52,15 +66,46 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
   }, [fields])
 
   const setLocalJobTitle = (jobTitle) => {
-    localStorage.setItem(`editjobTitle-${job.id}`, jobTitle)
+    setToStorage(`editjobTitle-${job.id}`, jobTitle)
   }
 
   const setLocalJobBudget = (jobBudget) => {
-    localStorage.setItem(`editjobBudget-${job.id}`, jobBudget)
+    setToStorage(`editjobBudget-${job.id}`, jobBudget)
   }
 
   const setLocalJobDescription = (jobDescription) => {
-    localStorage.setItem(`editjobDescription-${job.id}`, jobDescription)
+    setToStorage(`editjobDescription-${job.id}`, jobDescription)
+  }
+
+  const renderEditJob = () => {
+    return (
+      <Form.Input
+        control={TextArea}
+        id="description"
+        label="Description"
+        placeholder=""
+        rows={12}
+        defaultValue={
+          localStorage.getItem(`editjobDescription-${job.id}`) ??
+          fields.description
+        }
+        onChange={(event) => {
+          handleInputChange(event)
+          setLocalJobDescription(event.target.value)
+        }}
+        required
+      />
+    )
+  }
+
+  const renderPreviewJob = () => {
+    return (
+      <ReactMarkdown>
+        {!isEmptyString(fields.description)
+          ? getFromStorage(`editjobDescription-${job.id}`) || fields.description
+          : 'Nothing to preview!'}
+      </ReactMarkdown>
+    )
   }
 
   return (
@@ -107,22 +152,7 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
           />
         </Form.Group>
 
-        <Form.Input
-          control={TextArea}
-          id="description"
-          label="Description"
-          placeholder=""
-          rows={12}
-          defaultValue={
-            localStorage.getItem(`editjobDescription-${job.id}`) ??
-            fields.description
-          }
-          onChange={(event) => {
-            handleInputChange(event)
-            setLocalJobDescription(event.target.value)
-          }}
-          required
-        />
+        <Tab panes={panes} />
 
         <MarkdownIsSupported />
 
