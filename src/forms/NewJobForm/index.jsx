@@ -8,6 +8,8 @@ import { MarkdownIsSupported } from '../../components/MarkdownIsSupported'
 import { errorHandler } from '../../lib/errorHandler'
 import { getFromStorage, setToStorage } from '../../lib/helpers'
 import { UnsavedChangesDialog } from '../../components/UnsavedChangesDialog'
+import { Tab } from 'semantic-ui-react'
+import ReactMarkdown from 'react-markdown'
 
 export const NewJobForm = ({ token, coinSymbol }) => {
   const router = useRouter()
@@ -18,6 +20,17 @@ export const NewJobForm = ({ token, coinSymbol }) => {
   const [description, setDescription] = useState('')
   const [budget, setBudget] = useState('')
   const [error, setError] = useState('')
+
+  const panes = [
+    {
+      menuItem: { key: 'write', icon: 'pencil', content: 'Write' },
+      render: () => <Tab.Pane>{renderWriteJob()}</Tab.Pane>,
+    },
+    {
+      menuItem: { key: 'preview', icon: 'eye', content: 'Preview' },
+      render: () => <Tab.Pane>{renderPreviewJob()}</Tab.Pane>,
+    },
+  ]
 
   const handleCreateJob = async (e) => {
     e.preventDefault()
@@ -93,6 +106,31 @@ export const NewJobForm = ({ token, coinSymbol }) => {
     !isEmptyString(description) &&
     !isEmptyString(budget)
 
+  const renderWriteJob = () => {
+    return (
+      <Form.Input
+          control={TextArea}
+          id="description"
+          label="Description"
+          placeholder=""
+          rows={12}
+          value={description}
+          onChange={handleDescriptionChange}
+          required
+        />
+    )
+  }
+
+  const renderPreviewJob = () => {
+    return (
+      <ReactMarkdown>
+        {!isEmptyString(description)
+          ? getFromStorage('newJobDescription')
+          : 'Nothing to preview!'}
+      </ReactMarkdown>
+    )
+  }
+
   return (
     <>
       <Header as="h1">Add New Job</Header>
@@ -126,16 +164,7 @@ export const NewJobForm = ({ token, coinSymbol }) => {
           />
         </Form.Group>
 
-        <Form.Input
-          control={TextArea}
-          id="description"
-          label="Description"
-          placeholder=""
-          rows={12}
-          value={description}
-          onChange={handleDescriptionChange}
-          required
-        />
+        <Tab panes={panes} />
 
         <MarkdownIsSupported />
 
