@@ -109,15 +109,15 @@ export const NewJobForm = ({ token, coinSymbol }) => {
   const renderWriteJob = () => {
     return (
       <Form.Input
-          control={TextArea}
-          id="description"
-          label="Description"
-          placeholder=""
-          rows={12}
-          value={description}
-          onChange={handleDescriptionChange}
-          required
-        />
+        control={TextArea}
+        id="description"
+        label="Description"
+        placeholder=""
+        rows={12}
+        value={description}
+        onChange={handleDescriptionChange}
+        required
+      />
     )
   }
 
