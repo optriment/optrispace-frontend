@@ -157,7 +157,7 @@ export const NewJobForm = ({ token, coinSymbol }) => {
             id="budget"
             type="number"
             min={0.0}
-            step={0.01}
+            step={0.001}
             label={`Approx. budget (${coinSymbol})`}
             placeholder=""
             value={budget}
