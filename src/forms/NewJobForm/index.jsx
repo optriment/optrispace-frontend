@@ -120,7 +120,7 @@ export const NewJobForm = ({ token, coinSymbol }) => {
       />
     )
   }
-  
+
   const renderPreviewJob = () => {
     return (
       <FormattedDescription
