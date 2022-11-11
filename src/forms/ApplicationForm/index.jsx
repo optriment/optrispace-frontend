@@ -77,7 +77,7 @@ export const ApplicationForm = ({ job, token, coinSymbol }) => {
           id="price"
           type="number"
           min={0.0}
-          step={0.01}
+          step={0.001}
           label={`Your expected service price (${coinSymbol})`}
           value={fields.price}
           required
