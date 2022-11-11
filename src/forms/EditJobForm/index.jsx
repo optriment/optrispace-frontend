@@ -140,7 +140,7 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
             id="budget"
             type="number"
             min={0.0}
-            step={0.01}
+            step={0.001}
             label={`Approx. budget (${coinSymbol})`}
             placeholder=""
             defaultValue={

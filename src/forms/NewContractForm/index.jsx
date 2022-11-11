@@ -156,7 +156,7 @@ export const NewContractForm = ({ job, application, token, coinSymbol }) => {
           id="price"
           type="number"
           min={0.0}
-          step={0.01}
+          step={0.001}
           label={`Price (${coinSymbol})`}
           placeholder=""
           value={fields.price}
