@@ -97,7 +97,7 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
       />
     )
   }
-  
+
   const renderPreviewJob = () => {
     return (
       <FormattedDescription
