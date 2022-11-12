@@ -11,7 +11,7 @@ import { Sidebar } from '../../../../components/Sidebar'
 import { blockJob, suspendJob, resumeJob } from '../../../../lib/api'
 import Web3Context from '../../../../context/web3-context'
 
-const Wrapper = ({ job, token, children, isAdmin, isCustomer }) => {
+const Wrapper = ({ job, token, children, isAdmin, isCustomer, stats }) => {
   const router = useRouter()
 
   const { id: jobId, title } = job
@@ -157,7 +157,7 @@ const Wrapper = ({ job, token, children, isAdmin, isCustomer }) => {
         <Grid.Row>
           <Grid.Column width={11}>{children}</Grid.Column>
           <Grid.Column width={5}>
-            <Sidebar />
+            <Sidebar stats={stats} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -171,6 +171,7 @@ export const JobScreen = ({
   person,
   token,
   coinSymbol,
+  stats,
 }) => {
   const { publicRuntimeConfig } = getConfig()
   const domain = publicRuntimeConfig.domain
@@ -179,7 +180,7 @@ export const JobScreen = ({
 
   if (!isAuthenticated) {
     return (
-      <Wrapper job={job}>
+      <Wrapper job={job} stats={stats}>
         <JobCardForGuest
           job={job}
           blockchainViewAddressURL={blockchainViewAddressURL}
@@ -198,6 +199,7 @@ export const JobScreen = ({
       job={job}
       isAdmin={person.is_admin}
       isCustomer={isMyJob}
+      stats={stats}
     >
       {isMyJob ? (
         <JobCardForCustomer
