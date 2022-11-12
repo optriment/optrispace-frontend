@@ -4,6 +4,7 @@ import JustOneSecond from '../../components/JustOneSecond'
 import Web3Context from '../../context/web3-context'
 import { useAuth } from '../../hooks'
 import { useJobs } from '../../hooks/useJobs'
+import { useStats } from '../../hooks/useStats'
 import { LandingLayout } from '../../layouts/Landing'
 import { UsersLayout } from '../../layouts/Users'
 import { JobsScreen } from '../../screens/users/jobs/index'
@@ -11,6 +12,7 @@ import { JobsScreen } from '../../screens/users/jobs/index'
 const Page = () => {
   const { isLoading: personLoading, isAuthenticated, person } = useAuth()
   const { jobs, isLoading: jobsLoading, error: jobsError } = useJobs()
+  const { stats, isLoading: statsLoading, error: statsError } = useStats()
   const { coinSymbol } = useContext(Web3Context)
 
   if (jobsLoading) {
@@ -29,6 +31,22 @@ const Page = () => {
     )
   }
 
+  if (statsLoading) {
+    return (
+      <LandingLayout>
+        <JustOneSecond title="Loading stats..." />
+      </LandingLayout>
+    )
+  }
+
+  if (statsError) {
+    return (
+      <LandingLayout>
+        <ErrorWrapper header="Unable to load stats" error={statsError} />
+      </LandingLayout>
+    )
+  }
+
   if (personLoading) {
     return (
       <LandingLayout>
@@ -40,14 +58,19 @@ const Page = () => {
   if (!isAuthenticated) {
     return (
       <LandingLayout meta={{ title: 'Jobs' }}>
-        <JobsScreen jobs={jobs} coinSymbol={coinSymbol} />
+        <JobsScreen jobs={jobs} stats={stats} coinSymbol={coinSymbol} />
       </LandingLayout>
     )
   }
 
   return (
     <UsersLayout meta={{ title: 'Jobs' }}>
-      <JobsScreen jobs={jobs} person={person} coinSymbol={coinSymbol} />
+      <JobsScreen
+        jobs={jobs}
+        stats={stats}
+        person={person}
+        coinSymbol={coinSymbol}
+      />
     </UsersLayout>
   )
 }
