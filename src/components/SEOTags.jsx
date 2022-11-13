@@ -1,7 +1,11 @@
 import React from 'react'
 import { NextSeo } from 'next-seo'
+import getConfig from 'next/config'
 
 export default function SEOTags({ pageTitle, pageDescription, pageUrl }) {
+  const { publicRuntimeConfig } = getConfig()
+  const { domain } = publicRuntimeConfig
+
   return (
     <NextSeo
       title={pageTitle}
@@ -15,7 +19,7 @@ export default function SEOTags({ pageTitle, pageDescription, pageUrl }) {
         siteName: 'OptriSpace',
         images: [
           {
-            url: `https://${pageUrl}/optrispace-logo-with-slogan.png`,
+            url: `${domain}/optrispace-logo-with-slogan.png`,
             width: 600,
             height: 300,
             alt: pageDescription,
