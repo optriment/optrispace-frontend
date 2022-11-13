@@ -23,6 +23,8 @@
     "ethers": "^5.7.2",
     "js-cookie": "^3.0.1",
     "next": "^12.3.1",
+    "next-seo": "^5.14.1",
+    "next-sitemap": "^3.1.31",
     "nextjs-google-analytics": "^2.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -41,7 +43,8 @@
     "build-production": "next build && next export",
     "lint": "next lint --no-cache && npx eslint . --ext .js,.jsx && npx prettier --check .",
     "lint-fix": "next lint --fix",
-    "analyze": "cross-env ANALYZE=true npm run-script build"
+    "analyze": "cross-env ANALYZE=true npm run-script build",
+    "postbuild": "next-sitemap"
   },
   "browserslist": {
     "production": [

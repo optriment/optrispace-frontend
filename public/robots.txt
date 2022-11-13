@@ -1,0 +1,10 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://test02.optrispace.com
+
+# Sitemaps
+Sitemap: https://test02.optrispace.com/sitemap.xml
+Sitemap: https://test02.optrispace.com/jobs-sitemap.xml
