@@ -13,9 +13,9 @@ export const JobCardHeader = ({
   return (
     <Item.Group>
       <Item>
-        <Item.Image bordered avatar size="tiny" src="/default-userpic.jpg" />
+        <Item.Image size="tiny" src="/default-userpic-128x128.png" />
 
-        <Item.Content verticalAlign="middle">
+        <Item.Content>
           <Item.Header>
             {job.customer_display_name}
 

@@ -9,10 +9,19 @@ export const ChatForm = ({ chatId, token, onPostMessage }) => {
   const [messageText, setMessageText] = useState('')
   const [error, setError] = useState('')
 
+  const keyDownHandler = (e) => {
+    if (!isEmptyString(messageText)) {
+      if (
+        (e.key === 'Enter' && !e.shiftKey) ||
+        (e.key === 'Enter' && e.ctrlKey)
+      )
+        handlePostMessage(e)
+    }
+  }
+
   const handlePostMessage = async (e) => {
     e.preventDefault()
     setError('')
-
     try {
       await postChatMessage(token, chatId, messageText)
 
@@ -37,6 +46,7 @@ export const ChatForm = ({ chatId, token, onPostMessage }) => {
           id="comment"
           value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
+          onKeyDown={keyDownHandler}
         />
 
         <Button content="Send" primary disabled={isEmptyString(messageText)} />

@@ -6,10 +6,14 @@ import { Sidebar } from '../../../../components/Sidebar'
 import { ProfileIsNotConfigured } from '../../../../components/ProfileIsNotConfigured'
 import { isEmptyString } from '../../../../lib/validators'
 
-export const JobsScreen = ({ jobs, person, coinSymbol }) => {
+export const JobsScreen = ({ jobs, stats, person, coinSymbol }) => {
   return (
     <>
-      <Header as="h1">Find a Job. Find a Pro.</Header>
+      <Header as="h1" textAlign="center">
+        No middlemen. No paperwork.
+        <br />
+        Fast & Secure Payments.
+      </Header>
 
       {person && (
         <>
@@ -33,7 +37,7 @@ export const JobsScreen = ({ jobs, person, coinSymbol }) => {
             <JobsList jobs={jobs} coinSymbol={coinSymbol} />
           </Grid.Column>
           <Grid.Column width={5}>
-            <Sidebar />
+            <Sidebar stats={stats} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
