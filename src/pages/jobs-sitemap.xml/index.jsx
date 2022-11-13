@@ -6,7 +6,7 @@ export default function Sitemap() {}
 
 export const getServerSideProps = async (ctx) => {
   const { publicRuntimeConfig } = getConfig()
-  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
+  // process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
   const data = await fetch(`${publicRuntimeConfig.api_url}/jobs`)
 
   const jobs = await data.json()
