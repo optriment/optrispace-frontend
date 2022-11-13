@@ -7,7 +7,7 @@ export default function SEOTags({ pageTitle, pageDescription, pageUrl }) {
       title={pageTitle}
       description={pageDescription}
       openGraph={{
-        url: `http://${pageUrl}`,
+        url: pageUrl,
         title: pageTitle,
         description: pageDescription,
         type: 'website',
@@ -15,7 +15,7 @@ export default function SEOTags({ pageTitle, pageDescription, pageUrl }) {
         siteName: 'OptriSpace',
         images: [
           {
-            url: `http://${pageUrl}/optrispace-logo-with-slogan.png`,
+            url: `https://${pageUrl}/optrispace-logo-with-slogan.png`,
             width: 600,
             height: 300,
             alt: pageDescription,

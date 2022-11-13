@@ -6,6 +6,7 @@ import Footer from '../../components/Footer'
 import getConfig from 'next/config'
 import Link from 'next/link'
 import { Favicon } from '../../components/Favicon'
+import { useRouter } from 'next/router'
 
 import 'semantic-ui-css/semantic.min.css'
 import SEOTags from '../../components/SEOTags'
@@ -14,8 +15,9 @@ const { publicRuntimeConfig } = getConfig()
 
 export const LandingLayout = ({ children, meta = {} }) => {
   const { title, description } = meta
+  const router = useRouter()
 
-  const productDomain = 'optrispace.com'
+  //const productDomain = 'optrispace.com'
   const productTitle = 'OptriSpace'
   const pageTitle = title ? `${title} | ${productTitle}` : productTitle
   const defaultDescription =
@@ -38,7 +40,7 @@ export const LandingLayout = ({ children, meta = {} }) => {
         <SEOTags
           pageTitle={pageTitle}
           pageDescription={pageDescription}
-          pageUrl={productDomain}
+          pageUrl={domain + router.asPath}
         />
         <Header />
 
