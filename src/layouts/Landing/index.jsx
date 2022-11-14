@@ -17,7 +17,6 @@ export const LandingLayout = ({ children, meta = {} }) => {
   const { title, description } = meta
   const router = useRouter()
 
-  //const productDomain = 'optrispace.com'
   const productTitle = 'OptriSpace'
   const pageTitle = title ? `${title} | ${productTitle}` : productTitle
   const defaultDescription =
