@@ -47,7 +47,9 @@ const Page = () => {
 
   if (!isAuthenticated) {
     return (
-      <LandingLayout meta={{ title: `Job: ${job.title}` }}>
+      <LandingLayout
+        meta={{ title: `Job: ${job.title}`, description: job.description }}
+      >
         <JobScreen
           job={job}
           isAuthenticated={isAuthenticated}
