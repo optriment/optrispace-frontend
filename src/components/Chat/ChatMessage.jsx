@@ -8,7 +8,7 @@ export const ChatMessage = ({ person, message }) => {
 
   return (
     <Comment key={message.id}>
-      <Comment.Avatar src="/default-userpic.jpg" />
+      <Comment.Avatar src="/default-userpic.png" />
 
       <Comment.Content>
         <Comment.Author as="a">

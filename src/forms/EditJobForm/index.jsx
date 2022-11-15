@@ -4,8 +4,11 @@ import { Header, Button, Form, TextArea } from 'semantic-ui-react'
 import { updateJob } from '../../lib/api'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { isEmptyString } from '../../lib/validators'
+import { getFromStorage, setToStorage } from '../../lib/helpers'
 import { MarkdownIsSupported } from '../../components/MarkdownIsSupported'
 import { errorHandler } from '../../lib/errorHandler'
+import { Tab } from 'semantic-ui-react'
+import { FormattedDescription } from '../../components/FormattedDescription'
 
 export const EditJobForm = ({ job, token, coinSymbol }) => {
   const router = useRouter()
@@ -15,6 +18,17 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
     description: job.description,
     budget: job.budget,
   }
+
+  const panes = [
+    {
+      menuItem: { key: 'write', icon: 'pencil', content: 'Edit' },
+      render: () => <Tab.Pane>{renderEditJob()}</Tab.Pane>,
+    },
+    {
+      menuItem: { key: 'preview', icon: 'eye', content: 'Preview' },
+      render: () => <Tab.Pane>{renderPreviewJob()}</Tab.Pane>,
+    },
+  ]
 
   const [fields, setFields] = useState(initialFields)
   const [error, setError] = useState('')
@@ -26,6 +40,10 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
 
     try {
       const res = await updateJob(token, job.id, { ...fields })
+
+      localStorage.removeItem(`editjobTitle-${job.id}`)
+      localStorage.removeItem(`editjobBudget-${job.id}`)
+      localStorage.removeItem(`editjobDescription-${job.id}`)
 
       router.push(`/jobs/${res.id}`)
     } catch (err) {
@@ -42,21 +60,55 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
   useEffect(() => {
     setFormFilled(
       !isEmptyString(fields.title) &&
-      !isEmptyString(fields.description) &&
-      !isEmptyString(fields.budget)
+        !isEmptyString(fields.description) &&
+        !isEmptyString(fields.budget)
     )
   }, [fields])
 
   const setLocalJobTitle = (jobTitle) => {
-    localStorage.setItem('editjobTitle', jobTitle)
+    setToStorage(`editjobTitle-${job.id}`, jobTitle)
   }
 
   const setLocalJobBudget = (jobBudget) => {
-    localStorage.setItem('editjobBudget', jobBudget)
+    setToStorage(`editjobBudget-${job.id}`, jobBudget)
   }
 
   const setLocalJobDescription = (jobDescription) => {
-    localStorage.setItem('editjobDescription', jobDescription)
+    setToStorage(`editjobDescription-${job.id}`, jobDescription)
+  }
+
+  const renderEditJob = () => {
+    return (
+      <Form.Input
+        control={TextArea}
+        id="description"
+        label="Description"
+        placeholder=""
+        rows={12}
+        defaultValue={
+          localStorage.getItem(`editjobDescription-${job.id}`) ??
+          fields.description
+        }
+        onChange={(event) => {
+          handleInputChange(event)
+          setLocalJobDescription(event.target.value)
+        }}
+        required
+      />
+    )
+  }
+
+  const renderPreviewJob = () => {
+    return (
+      <FormattedDescription
+        description={
+          !isEmptyString(fields.description)
+            ? getFromStorage(`editjobDescription-${job.id}`) ||
+              fields.description
+            : 'Nothing to preview!'
+        }
+      />
+    )
   }
 
   return (
@@ -73,7 +125,9 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
             id="title"
             label="Title"
             placeholder=""
-            defaultValue={localStorage.getItem('editjobTitle') ?? ''}
+            defaultValue={
+              localStorage.getItem(`editjobTitle-${job.id}`) ?? fields.title
+            }
             onChange={(event) => {
               handleInputChange(event)
               setLocalJobTitle(event.target.value)
@@ -86,10 +140,12 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
             id="budget"
             type="number"
             min={0.0}
-            step={0.01}
+            step={0.001}
             label={`Approx. budget (${coinSymbol})`}
             placeholder=""
-            defaultValue={localStorage.getItem('editjobBudget') ?? ''}
+            defaultValue={
+              localStorage.getItem(`editjobBudget-${job.id}`) ?? fields.budget
+            }
             onChange={(event) => {
               handleInputChange(event)
               setLocalJobBudget(event.target.value)
@@ -99,19 +155,7 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
           />
         </Form.Group>
 
-        <Form.Input
-          control={TextArea}
-          id="description"
-          label="Description"
-          placeholder=""
-          rows={12}
-          defaultValue={localStorage.getItem('editjobDescription') ?? ''}
-          onChange={(event) => {
-            handleInputChange(event)
-            setLocalJobDescription(event.target.value)
-          }}
-          required
-        />
+        <Tab panes={panes} />
 
         <MarkdownIsSupported />
 

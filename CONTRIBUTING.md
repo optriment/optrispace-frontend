@@ -1,5 +1,9 @@
 # Contributing to OptriSpace Web
 
+[![Lint](https://github.com/optriment/optrispace-frontend/actions/workflows/lint.yml/badge.svg)](https://github.com/optriment/optrispace-frontend/actions/workflows/lint.yml)
+[![Spell](https://github.com/optriment/optrispace-frontend/actions/workflows/spell.yml/badge.svg)](https://github.com/optriment/optrispace-frontend/actions/workflows/spell.yml)
+[![Docker Build](https://github.com/optriment/optrispace-frontend/actions/workflows/docker-image.yml/badge.svg)](https://github.com/optriment/optrispace-frontend/actions/workflows/docker-image.yml)
+
 The development branch is `master`.\
 This is the default branch that all Pull Requests (PR) should be made against.
 
@@ -9,7 +13,8 @@ Requirements:
 
 ## For Windows users
 
-We highly recommend to install EditorConfig extension to your editor to have consistent settings with our codebase.
+We highly recommend to install EditorConfig extension to your editor to have
+consistent settings with our codebase.
 
 Please make sure that you've valid settings for Git:
 
