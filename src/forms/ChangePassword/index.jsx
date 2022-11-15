@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Form, Segment } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { changeUserPassword } from '../../lib/settings'
 import { errorHandler } from '../../lib/errorHandler'
@@ -46,39 +46,37 @@ export const ChangePasswordForm = ({ token, authenticate }) => {
         <ErrorWrapper header="Unable to change password" error={error} />
       )}
 
-      <Segment>
-        <Form onSubmit={handleChangePassword}>
-          <Form.Input
-            id="old_password"
-            fluid
-            icon="lock"
-            iconPosition="left"
-            placeholder="Current Password"
-            type="password"
-            required
-            autoComplete="current-password"
-            value={fields.old_password}
-            onChange={handleInputChange}
-          />
+      <Form onSubmit={handleChangePassword}>
+        <Form.Input
+          id="old_password"
+          fluid
+          icon="lock"
+          iconPosition="left"
+          placeholder="Current Password"
+          type="password"
+          required
+          autoComplete="current-password"
+          value={fields.old_password}
+          onChange={handleInputChange}
+        />
 
-          <Form.Input
-            id="new_password"
-            fluid
-            icon="lock"
-            iconPosition="left"
-            placeholder="New Password"
-            type="password"
-            required
-            autoComplete="new-password"
-            value={fields.new_password}
-            onChange={handleInputChange}
-          />
+        <Form.Input
+          id="new_password"
+          fluid
+          icon="lock"
+          iconPosition="left"
+          placeholder="New Password"
+          type="password"
+          required
+          autoComplete="new-password"
+          value={fields.new_password}
+          onChange={handleInputChange}
+        />
 
-          <Button primary fluid>
-            Update Password
-          </Button>
-        </Form>
-      </Segment>
+        <Button primary fluid>
+          Update Password
+        </Button>
+      </Form>
     </>
   )
 }

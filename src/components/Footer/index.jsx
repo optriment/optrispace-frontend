@@ -1,13 +1,12 @@
 import React from 'react'
-import { Segment } from 'semantic-ui-react'
+import { Divider, Container } from 'semantic-ui-react'
 
 const Footer = () => {
   return (
-    <>
-      <Segment basic padded textAlign="center">
-        &copy; 2022 Optriment LLC
-      </Segment>
-    </>
+    <Container textAlign="center">
+      <Divider hidden />
+      &copy; 2022 Optriment LLC
+    </Container>
   )
 }
 

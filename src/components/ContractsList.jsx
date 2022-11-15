@@ -1,18 +1,24 @@
 import React from 'react'
-import { Card } from 'semantic-ui-react'
+import { Grid, Segment } from 'semantic-ui-react'
 import ContractListItem from './ContractListItem'
 
 export default function ContractsList({ contracts, person, coinSymbol }) {
   return (
-    <Card.Group>
-      {contracts.map((contract) => (
-        <ContractListItem
-          key={contract.id}
-          contract={contract}
-          person={person}
-          coinSymbol={coinSymbol}
-        />
-      ))}
-    </Card.Group>
+    <Grid columns={1}>
+      {contracts.map((contract) => {
+        return (
+          <Grid.Column key={contract.id}>
+            <Segment>
+              <ContractListItem
+                key={contract.id}
+                contract={contract}
+                person={person}
+                coinSymbol={coinSymbol}
+              />
+            </Segment>
+          </Grid.Column>
+        )
+      })}
+    </Grid>
   )
 }

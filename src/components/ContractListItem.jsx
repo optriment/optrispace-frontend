@@ -1,10 +1,10 @@
 import React from 'react'
-import { Button, Card, List } from 'semantic-ui-react'
 import Link from 'next/link'
+import { Header, Divider, Label, Icon } from 'semantic-ui-react'
 import { formatDateTime } from '../lib/formatDate'
 
 export default function ContractListItem({ person, contract, coinSymbol }) {
-  const formattedDate = formatDateTime(contract.created_at)
+  const createdAt = formatDateTime(contract.created_at)
 
   let statusIcon = 'hourglass'
 
@@ -24,100 +24,48 @@ export default function ContractListItem({ person, contract, coinSymbol }) {
   }
 
   return (
-    <Card fluid>
-      <Card.Content>
-        <Card.Header>
-          <Link
-            href="/contracts/[id]"
-            as={`/contracts/${contract.id}`}
-            passHref
-          >
-            <a>{contract.title}</a>
-          </Link>
-        </Card.Header>
+    <>
+      <Header as="h3">
+        <Link href={`/contracts/${contract.id}`}>{contract.title}</Link>
+      </Header>
 
-        <Card.Description>
-          <div style={{ textAlign: 'justify' }}>
-            {contract.description
-              .trim()
-              .split('\n')
-              .map((str, idx) => {
-                if (idx === 5) {
-                  return (
-                    <p key={idx}>
-                      <br />
-                      <Link
-                        href="/contracts/[id]"
-                        as={`/contracts/${contract.id}`}
-                        passHref
-                      >
-                        <a>
-                          <Button size="tiny">Read more</Button>
-                        </a>
-                      </Link>
-                    </p>
-                  )
-                }
+      <div style={{ wordWrap: 'break-word' }}>
+        {contract.description
+          .trim()
+          .split('\n')
+          .map((str, idx) => {
+            if (idx < 5) {
+              return (
+                <div key={idx}>
+                  {str}
 
-                if (idx < 5) {
-                  return (
-                    <div key={idx}>
-                      {str}
+                  <br />
+                </div>
+              )
+            }
+          })}
+      </div>
 
-                      <br />
-                    </div>
-                  )
-                }
-              })}
-          </div>
-        </Card.Description>
-      </Card.Content>
+      <Divider />
 
-      <Card.Content extra>
-        <List horizontal relaxed>
-          <List.Item>
-            <List.Content>
-              <List.Header>
-                <List.Icon name="user" /> Customer:{' '}
-                {person && contract.customer_id === person.id
-                  ? 'Me'
-                  : contract.customer_display_name}
-              </List.Header>
-            </List.Content>
-          </List.Item>
-          <List.Item>
-            <List.Content>
-              <List.Header>
-                <List.Icon name="user" /> Contractor:{' '}
-                {person && contract.performer_id === person.id
-                  ? 'Me'
-                  : contract.performer_display_name}
-              </List.Header>
-            </List.Content>
-          </List.Item>
-          <List.Item>
-            <List.Content>
-              <List.Header>
-                <List.Icon name="money" /> {contract.price} {coinSymbol}
-              </List.Header>
-            </List.Content>
-          </List.Item>
-          <List.Item>
-            <List.Content>
-              <List.Header>
-                <List.Icon name="time" /> {formattedDate}
-              </List.Header>
-            </List.Content>
-          </List.Item>
-          <List.Item>
-            <List.Content>
-              <List.Header>
-                <List.Icon name={statusIcon} /> {contract.status}
-              </List.Header>
-            </List.Content>
-          </List.Item>
-        </List>
-      </Card.Content>
-    </Card>
+      <Label>
+        <Icon name="user" />
+        {contract.performer_id === person.id
+          ? contract.customer_display_name
+          : contract.performer_display_name}
+      </Label>
+
+      <Label>
+        <Icon name="money" /> {contract.price} {coinSymbol}
+      </Label>
+
+      <Label>
+        <Icon name={statusIcon} title="Status" /> {contract.status}
+      </Label>
+
+      <Label>
+        <Icon name="clock" title="Created" /> {createdAt}
+      </Label>
+    </>
   )
 }

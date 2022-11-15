@@ -2,28 +2,22 @@ import React from 'react'
 import Link from 'next/link'
 import { Container, Button, List, Divider, Header } from 'semantic-ui-react'
 
-export const ThankYouCustomerScreen = ({ isSmallScreen }) => {
+export const ThankYouCustomerScreen = () => {
   return (
     <>
       <Container text textAlign="center">
-        <Header
-          as="h1"
-          style={{
-            fontSize: isSmallScreen ? '2.3em' : '3em',
-            fontWeight: 'bold',
-            marginBottom: 0,
-            marginTop: isSmallScreen ? null : '0.7em',
-          }}
-        >
+        <Header as="h1">
           One last thing before we start...
           <br />
           Please check your inbox!
         </Header>
       </Container>
 
-      <Divider style={{ marginTop: isSmallScreen ? '1.3em' : '1.8em' }} />
+      <Divider hidden />
+      <Divider />
+      <Divider hidden />
 
-      <Container text style={{ marginTop: '2em' }}>
+      <Container text>
         <List ordered>
           <List.Item>
             Look for our email from &quot;OptriSpace Team&quot;
@@ -40,10 +34,7 @@ export const ThankYouCustomerScreen = ({ isSmallScreen }) => {
         </List>
       </Container>
 
-      <Divider
-        style={{ marginTop: isSmallScreen ? '1.3em' : '1.8em' }}
-        hidden
-      />
+      <Divider hidden />
 
       <Container textAlign="center">
         <Link href="/sign_up" passHref>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, List, Item, Icon } from 'semantic-ui-react'
+import { Label, Divider, Button, Header, Icon } from 'semantic-ui-react'
 import { FormattedDescription } from '../FormattedDescription'
 import { isEmptyString } from '../../lib/validators'
 import { useApplicationChat } from '../../hooks/useApplicationChat'
@@ -17,75 +17,65 @@ export default function ApplicationListItem({
   const createdAt = formatDateTime(application.created_at)
 
   return (
-    <Item>
-      <Item.Image size="tiny" avatar src="/default-userpic-128x128.png" />
+    <>
+      <Header as="h3">{application.applicant_display_name}</Header>
 
-      <Item.Content>
-        <Item.Header>
-          {application.applicant_display_name}
+      {!isEmptyString(application.applicant_ethereum_address) && (
+        <span>
+          <a
+            href={`${blockchainViewAddressURL}/${application.applicant_ethereum_address}`}
+            target="_blank"
+            rel="noreferrer noopener nofollow"
+            title="Open wallet information"
+          >
+            <Icon name="address card" /> View transactions history
+          </a>
+        </span>
+      )}
 
-          {!isEmptyString(application.applicant_ethereum_address) && (
-            <>
-              {' '}
-              <a
-                href={`${blockchainViewAddressURL}/${application.applicant_ethereum_address}`}
-                target="_blank"
-                rel="noreferrer noopener nofollow"
-                title="Open wallet information"
-              >
-                <Icon name="address card" />
-              </a>
-            </>
-          )}
-        </Item.Header>
+      <Divider />
 
-        <Item.Meta>
-          <List bulleted horizontal>
-            {application.price && (
-              <List.Item>
-                Price: {application.price} {coinSymbol}
-              </List.Item>
-            )}
+      <div style={{ wordWrap: 'break-word' }}>
+        <FormattedDescription description={application.comment} />
+      </div>
 
-            <List.Item>Created: {createdAt}</List.Item>
-          </List>
-        </Item.Meta>
+      <Divider />
 
-        <Item.Description>
-          <FormattedDescription description={application.comment} />
-        </Item.Description>
+      <Label>
+        <Icon name="money" /> {application.price} {coinSymbol}
+      </Label>
 
-        <Item.Extra>
-          {application.contract_id ? (
-            <Button
-              size="tiny"
-              primary
-              floated="right"
-              href={`/contracts/${application.contract_id}`}
-              content="Open contract"
-            />
-          ) : (
-            <Button
-              size="tiny"
-              primary
-              floated="right"
-              href={`/jobs/${job.id}/contracts/new?application_id=${application.id}`}
-              content="Hire"
-              disabled={isEmptyString(application.applicant_ethereum_address)}
-            />
-          )}
+      <Label>
+        <Icon name="clock" title="Created" /> {createdAt}
+      </Label>
 
-          {chat && (
-            <Button
-              size="tiny"
-              primary
-              floated="right"
-              href={`/chats/${chat.id}`}
-              content="Open chat"
-            />
-          )}
-        </Item.Extra>
-      </Item.Content>
-    </Item>
+      <Divider />
+
+      {application.contract_id ? (
+        <Button
+          size="tiny"
+          positive
+          href={`/contracts/${application.contract_id}`}
+          content="Open contract"
+        />
+      ) : (
+        <Button
+          size="tiny"
+          primary
+          href={`/jobs/${job.id}/contracts/new?application_id=${application.id}`}
+          content="Hire"
+          disabled={isEmptyString(application.applicant_ethereum_address)}
+        />
+      )}
+
+      {chat && (
+        <Button
+          size="tiny"
+          secondary
+          href={`/chats/${chat.id}`}
+          content="Open chat"
+        />
+      )}
+    </>
   )
 }

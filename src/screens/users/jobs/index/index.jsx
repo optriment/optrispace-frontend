@@ -1,6 +1,5 @@
 import React from 'react'
-import Link from 'next/link'
-import { Grid, Container, Divider, Button, Header } from 'semantic-ui-react'
+import { Grid, Button, Header } from 'semantic-ui-react'
 import JobsList from '../../../../components/JobsList'
 import { Sidebar } from '../../../../components/Sidebar'
 import { ProfileIsNotConfigured } from '../../../../components/ProfileIsNotConfigured'
@@ -8,39 +7,41 @@ import { isEmptyString } from '../../../../lib/validators'
 
 export const JobsScreen = ({ jobs, stats, person, coinSymbol }) => {
   return (
-    <>
-      <Header as="h1" textAlign="center">
-        No middlemen. No paperwork.
-        <br />
-        Fast & Secure Payments.
-      </Header>
+    <Grid stackable columns={1}>
+      <Grid.Column textAlign="center">
+        <Header as="h1">OptriSpace</Header>
+        <Header as="h2">
+          No middlemen. No paperwork. Fast & Secure Payments.
+        </Header>
+      </Grid.Column>
 
       {person && (
-        <>
+        <Grid.Column>
           {isEmptyString(person.ethereum_address) ? (
             <ProfileIsNotConfigured />
           ) : (
-            <Container textAlign="right">
-              <Link href="/jobs/new" passHref>
-                <Button primary content="Post a job" />
-              </Link>
-            </Container>
+            <Button
+              as="a"
+              primary
+              href="/jobs/new"
+              floated="right"
+              content="Post a job"
+            />
           )}
-        </>
+        </Grid.Column>
       )}
 
-      <Divider hidden />
-
-      <Grid stackable>
-        <Grid.Row>
-          <Grid.Column width={11}>
+      <Grid.Column>
+        <Grid columns={2} stackable>
+          <Grid.Column mobile={16} computer={11}>
             <JobsList jobs={jobs} coinSymbol={coinSymbol} />
           </Grid.Column>
-          <Grid.Column width={5}>
+
+          <Grid.Column computer={5} only="computer">
             <Sidebar stats={stats} />
           </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </>
+        </Grid>
+      </Grid.Column>
+    </Grid>
   )
 }

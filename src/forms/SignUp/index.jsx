@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Form, Segment } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 import { useAuth } from '../../hooks'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { errorHandler } from '../../lib/errorHandler'
@@ -45,62 +45,60 @@ export const SignUpForm = () => {
         <ErrorWrapper header="Unable to sign up" error={error} />
       )}
 
-      <Segment>
-        <Form onSubmit={handleSignUp}>
-          <Form.Input
-            id="login"
-            fluid
-            icon="user"
-            required
-            iconPosition="left"
-            placeholder="Login"
-            value={fields.login}
-            autoComplete="username"
-            onChange={handleInputChange}
-          />
+      <Form onSubmit={handleSignUp}>
+        <Form.Input
+          id="login"
+          fluid
+          icon="user"
+          required
+          iconPosition="left"
+          placeholder="Login"
+          value={fields.login}
+          autoComplete="username"
+          onChange={handleInputChange}
+        />
 
-          <Form.Input
-            id="password"
-            fluid
-            icon="lock"
-            iconPosition="left"
-            placeholder="Password"
-            type="password"
-            required
-            value={fields.password}
-            autoComplete="new-password"
-            onChange={handleInputChange}
-          />
+        <Form.Input
+          id="password"
+          fluid
+          icon="lock"
+          iconPosition="left"
+          placeholder="Password"
+          type="password"
+          required
+          value={fields.password}
+          autoComplete="new-password"
+          onChange={handleInputChange}
+        />
 
-          {/*
-          <Form.Input
-            id="email"
-            fluid
-            icon="mail"
-            iconPosition="left"
-            placeholder="Email"
-            value={fields.email}
-            autoComplete="email"
-            onChange={handleInputChange}
-          />
+        {/*
+        <Form.Input
+          id="email"
+          fluid
+          icon="mail"
+          iconPosition="left"
+          placeholder="Email"
+          value={fields.email}
+          autoComplete="email"
+          onChange={handleInputChange}
+        />
 
-          <Form.Input
-            id="display_name"
-            fluid
-            icon="user"
-            iconPosition="left"
-            placeholder="Display Name"
-            value={fields.display_name}
-            autoComplete="name"
-            onChange={handleInputChange}
-          />
-          */}
+        <Form.Input
+          id="display_name"
+          fluid
+          icon="user"
+          iconPosition="left"
+          placeholder="Display Name"
+          value={fields.display_name}
+          autoComplete="name"
+          onChange={handleInputChange}
+        />
+        */}
 
-          <Button primary fluid>
-            Sign Up
-          </Button>
-        </Form>
-      </Segment>
+        <Button primary fluid>
+          Sign Up
+        </Button>
+      </Form>
     </>
   )
 }

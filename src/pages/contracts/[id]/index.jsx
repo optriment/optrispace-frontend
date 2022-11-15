@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import { useRouter } from 'next/router'
 import ErrorWrapper from '../../../components/ErrorWrapper'
 import JustOneSecond from '../../../components/JustOneSecond'
@@ -7,7 +7,6 @@ import { UsersLayout } from '../../../layouts/Users'
 import { useContract } from '../../../hooks/useContract'
 import { useApplicationChat } from '../../../hooks/useApplicationChat'
 import { ContractScreen } from '../../../screens/users/contracts/show'
-import DisplayContext from '../../../context/display-context'
 import { LandingLayout } from '../../../layouts/Landing'
 import Web3Context from '../../../context/web3-context'
 
@@ -32,11 +31,6 @@ const Page = () => {
   } = useApplicationChat(token, contract?.application_id)
 
   const { coinSymbol } = useContext(Web3Context)
-  const { setSmallScreen } = useContext(DisplayContext)
-
-  useEffect(() => {
-    setSmallScreen(window.matchMedia('(max-width: 700px)').matches)
-  }, [])
 
   if (personLoading) {
     return (

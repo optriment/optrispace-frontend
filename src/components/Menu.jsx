@@ -1,15 +1,7 @@
 import React, { useContext } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import {
-  Loader,
-  Icon,
-  Button,
-  Container,
-  Dropdown,
-  Menu,
-} from 'semantic-ui-react'
-import ClientOnly from './ClientOnly'
+import { Loader, Icon, Button, Dropdown, Menu } from 'semantic-ui-react'
 import { useAuth } from '../hooks'
 import { useRouter } from 'next/router'
 import Web3Context from '../context/web3-context'
@@ -19,7 +11,7 @@ const MenuComponent = () => {
   const router = useRouter()
 
   return (
-    <Menu secondary borderless size="large" style={{ marginTop: '10px' }}>
+    <Menu stackable secondary style={{ marginTop: '1em' }}>
       <Menu.Item>
         <Link href="/" passHref>
           <a>
@@ -28,15 +20,13 @@ const MenuComponent = () => {
         </Link>
       </Menu.Item>
 
-      <Menu.Item active={router.pathname == '/jobs'}>
+      <Menu.Item link active={router.pathname == '/jobs'}>
         <Link href="/jobs">
           <a>Jobs</a>
         </Link>
       </Menu.Item>
 
-      <ClientOnly>
-        <AuthDetails />
-      </ClientOnly>
+      <AuthDetails />
     </Menu>
   )
 }
@@ -57,45 +47,49 @@ function AuthDetails() {
   const router = useRouter()
 
   if (isLoading) {
-    return <Loader size="tiny" active inline />
+    return (
+      <Menu.Item>
+        <Loader size="small" active inline />
+      </Menu.Item>
+    )
   }
 
   if (!person) {
     return (
-      <Container>
+      <>
         <Menu.Menu position="right">
-          <Menu.Item active={router.pathname == '/sign_up'}>
+          <Menu.Item link active={router.pathname == '/sign_up'}>
             <Link href="/sign_up" passHref>
               <a>Sign Up</a>
             </Link>
           </Menu.Item>
 
-          <Menu.Item active={router.pathname == '/sign_in'}>
+          <Menu.Item link active={router.pathname == '/sign_in'}>
             <Link href="/sign_in" passHref>
               <a>Log In</a>
             </Link>
           </Menu.Item>
         </Menu.Menu>
-      </Container>
+      </>
     )
   }
 
   return (
-    <Container>
-      <Menu.Item active={router.pathname == '/applications'}>
+    <>
+      <Menu.Item link active={router.pathname == '/applications'}>
         <Link href="/applications" passHref>
           <a>Applications</a>
         </Link>
       </Menu.Item>
 
-      <Menu.Item active={router.pathname == '/contracts'}>
+      <Menu.Item link active={router.pathname == '/contracts'}>
         <Link href="/contracts" passHref>
           <a>Contracts</a>
         </Link>
       </Menu.Item>
 
       <Menu.Menu position="right">
-        <Menu.Item icon>
+        <Menu.Item>
           {isWalletInstalled ? (
             <>
               {isCorrectNetwork ? (
@@ -103,16 +97,19 @@ function AuthDetails() {
                   {isWalletConnected ? (
                     <>
                       {currentAccount === '' ? (
-                        <Icon
-                          name="warning sign"
-                          size="large"
-                          color="orange"
-                          title="Unable to get your wallet address"
-                        />
+                        <>
+                          <Icon
+                            name="warning sign"
+                            size="large"
+                            color="orange"
+                            title="Unable to get your wallet address"
+                          />
+                          Wrong wallet address
+                        </>
                       ) : (
                         <>
                           {accountBalanceLoading ? (
-                            <Loader size="tiny" active inline />
+                            <Loader size="small" active inline />
                           ) : (
                             <b>
                               Balance: {accountBalance} {coinSymbol}
@@ -128,20 +125,27 @@ function AuthDetails() {
                   )}
                 </>
               ) : (
-                <Icon
-                  name="warning sign"
-                  size="large"
-                  color="red"
-                  title={`Please connect your wallet to ${blockchainNetworkName}`}
-                />
+                <>
+                  <Icon
+                    name="warning sign"
+                    size="large"
+                    color="red"
+                    title={`Please connect your wallet to ${blockchainNetworkName}`}
+                  />
+                  Wrong network selected
+                </>
               )}
             </>
           ) : (
-            <a href="https://metamask.io/" target="_blank" rel="noreferrer">
-              <Button color="orange" inverted>
-                Install Wallet
-              </Button>
-            </a>
+            <Button
+              as="a"
+              href="https://metamask.io/"
+              target="_blank"
+              rel="noreferrer noopener"
+              color="orange"
+            >
+              Please Install MetaMask
+            </Button>
           )}
         </Menu.Item>
 
@@ -159,7 +163,7 @@ function AuthDetails() {
           </Dropdown.Menu>
         </Dropdown>
       </Menu.Menu>
-    </Container>
+    </>
   )
 }
 

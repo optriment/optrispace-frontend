@@ -1,75 +1,45 @@
 import React from 'react'
-import { Button, Card, List } from 'semantic-ui-react'
+import { Header, Icon, Label, Divider } from 'semantic-ui-react'
 import Link from 'next/link'
 import { formatDateTime } from '../lib/formatDate'
 
 export default function ApplicationListItem({ application, coinSymbol }) {
-  const formattedDate = formatDateTime(application.created_at)
+  const createdAt = formatDateTime(application.created_at)
 
   return (
-    <Card fluid>
-      <Card.Content>
-        <Card.Header>
-          <Link href="/jobs/[id]" as={`/jobs/${application.job_id}`}>
-            <a>{application.job_title}</a>
-          </Link>
-        </Card.Header>
+    <>
+      <Header as="h3">
+        <Link href={`/jobs/${application.job_id}`}>
+          {application.job_title}
+        </Link>
+      </Header>
 
-        <Card.Description>
-          <div style={{ textAlign: 'justify' }}>
-            {application.job_description
-              .trim()
-              .split('\n')
-              .map((str, idx) => {
-                if (idx === 5) {
-                  return (
-                    <p key={idx}>
-                      <br />
-                      <Link
-                        href="/jobs/[id]"
-                        as={`/jobs/${application.job_id}`}
-                      >
-                        <a>
-                          <Button size="tiny">Read more</Button>
-                        </a>
-                      </Link>
-                    </p>
-                  )
-                }
+      <div style={{ wordWrap: 'break-word' }}>
+        {application.job_description
+          .trim()
+          .split('\n')
+          .map((str, idx) => {
+            if (idx < 5) {
+              return (
+                <div key={idx}>
+                  {str}
 
-                if (idx < 5) {
-                  return (
-                    <div key={idx}>
-                      {str}
+                  <br />
+                </div>
+              )
+            }
+          })}
+      </div>
 
-                      <br />
-                    </div>
-                  )
-                }
-              })}
-          </div>
-        </Card.Description>
-      </Card.Content>
+      <Divider />
 
-      <Card.Content extra>
-        <List horizontal relaxed>
-          <List.Item>
-            <List.Content>
-              <List.Header>
-                <List.Icon name="money" /> {application.price} {coinSymbol}
-              </List.Header>
-            </List.Content>
-          </List.Item>
+      <Label>
+        <Icon name="money" /> {application.price} {coinSymbol}
+      </Label>
 
-          <List.Item>
-            <List.Content>
-              <List.Header>
-                <List.Icon name="clock" title="Created at" /> {formattedDate}
-              </List.Header>
-            </List.Content>
-          </List.Item>
-        </List>
-      </Card.Content>
-    </Card>
+      <Label>
+        <Icon name="clock" title="Created" /> {createdAt}
+      </Label>
+    </>
   )
 }

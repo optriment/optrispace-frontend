@@ -1,19 +1,16 @@
 import React from 'react'
-import { Container, Segment, Grid } from 'semantic-ui-react'
+import { Header, Segment, Grid } from 'semantic-ui-react'
 import { JobCardHeader } from '../JobCardHeader'
-import { FormattedDescription } from '../FormattedDescription'
 import Applications from './Applications'
 import { useJobApplications } from '../../hooks/useJobApplications'
 import { useAuth } from '../../hooks'
 import JustOneSecond from '../JustOneSecond'
 import ErrorWrapper from '../ErrorWrapper'
 import isJobOwner from '../../lib/job'
-import { ShareButtons } from '../ShareButtons/ShareButtons'
 
 export const JobCardForCustomer = ({
   job,
   coinSymbol,
-  domain,
   blockchainViewAddressURL,
 }) => {
   const { isLoading: personLoading, token, person } = useAuth()
@@ -45,39 +42,31 @@ export const JobCardForCustomer = ({
   }
 
   return (
-    <Grid stackable>
-      <Grid.Row>
+    <Grid stackable columns={1}>
+      <Grid.Column>
+        <Segment>
+          <JobCardHeader
+            job={job}
+            coinSymbol={coinSymbol}
+            blockchainViewAddressURL={blockchainViewAddressURL}
+          />
+        </Segment>
+      </Grid.Column>
+
+      {job.applications_count > 0 && (
         <Grid.Column>
           <Segment>
-            <Segment basic>
-              <JobCardHeader
-                job={job}
-                coinSymbol={coinSymbol}
-                blockchainViewAddressURL={blockchainViewAddressURL}
-              />
-            </Segment>
-            <Segment basic>
-              <Container text fluid>
-                <FormattedDescription description={job.description} />
-              </Container>
-            </Segment>
-          </Segment>
-          <ShareButtons domain={domain} job={job} />
-        </Grid.Column>
-      </Grid.Row>
+            <Header as="h3">{`Applications (${job.applications_count})`}</Header>
 
-      <Grid.Row>
-        <Grid.Column>
-          {job.applications_count > 0 && (
             <Applications
               job={job}
               applications={applications}
               blockchainViewAddressURL={blockchainViewAddressURL}
               coinSymbol={coinSymbol}
             />
-          )}
+          </Segment>
         </Grid.Column>
-      </Grid.Row>
+      )}
     </Grid>
   )
 }
