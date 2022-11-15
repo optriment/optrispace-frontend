@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Form, Segment, Message } from 'semantic-ui-react'
+import { Button, Form, Message } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { changeWallet } from '../../lib/settings'
 import { isEmptyString } from '../../lib/validators'
@@ -37,26 +37,22 @@ export const ConnectWalletForm = ({ token, person }) => {
 
   if (!isWalletInstalled) {
     return (
-      <Segment>
-        <Message
-          negative
-          header="MetaMask Wallet is not installed in your browser"
-        />
-      </Segment>
+      <Message
+        negative
+        header="MetaMask Wallet is not installed in your browser"
+      />
     )
   }
 
   if (!isWalletConnected) {
     return (
-      <Segment>
-        <Form>
-          <Form.Input fluid error readOnly placeholder="Please open MetaMask" />
+      <Form>
+        <Form.Input fluid error readOnly placeholder="Please open MetaMask" />
 
-          <Button primary fluid onClick={connectWallet}>
-            Open MetaMask
-          </Button>
-        </Form>
-      </Segment>
+        <Button primary fluid onClick={connectWallet}>
+          Open MetaMask
+        </Button>
+      </Form>
     )
   }
 
@@ -66,19 +62,17 @@ export const ConnectWalletForm = ({ token, person }) => {
         <ErrorWrapper header="Unable to change wallet address" error={error} />
       )}
 
-      <Segment>
-        <Form onSubmit={handleUpdateWallet}>
-          {isEmptyString(person.ethereum_address) && (
-            <Message positive header="Please save settings" />
-          )}
+      <Form onSubmit={handleUpdateWallet}>
+        {isEmptyString(person.ethereum_address) && (
+          <Message positive header="Please save settings" />
+        )}
 
-          <Form.Input fluid value={currentAccount} readOnly />
+        <Form.Input fluid value={currentAccount} readOnly />
 
-          <Button primary fluid>
-            Save
-          </Button>
-        </Form>
-      </Segment>
+        <Button primary fluid>
+          Save
+        </Button>
+      </Form>
     </>
   )
 }

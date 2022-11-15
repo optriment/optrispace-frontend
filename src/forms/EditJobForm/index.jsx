@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Header, Button, Form, TextArea } from 'semantic-ui-react'
+import { Header, Grid, Button, Form, TextArea } from 'semantic-ui-react'
 import { updateJob } from '../../lib/api'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { isEmptyString } from '../../lib/validators'
@@ -82,7 +82,6 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
       <Form.Input
         control={TextArea}
         id="description"
-        label="Description"
         placeholder=""
         rows={12}
         defaultValue={
@@ -113,53 +112,60 @@ export const EditJobForm = ({ job, token, coinSymbol }) => {
 
   return (
     <>
-      <Header as="h1">Edit Job</Header>
-
       {error !== '' && (
         <ErrorWrapper header="Unable to update job" error={error} />
       )}
 
       <Form onSubmit={handleEditJob}>
-        <Form.Group>
-          <Form.Input
-            id="title"
-            label="Title"
-            placeholder=""
-            defaultValue={
-              localStorage.getItem(`editjobTitle-${job.id}`) ?? fields.title
-            }
-            onChange={(event) => {
-              handleInputChange(event)
-              setLocalJobTitle(event.target.value)
-            }}
-            required
-            width={12}
-          />
+        <Grid columns={1}>
+          <Grid.Column>
+            <Header as="h4">Title:</Header>
 
-          <Form.Input
-            id="budget"
-            type="number"
-            min={0.0}
-            step={0.001}
-            label={`Approx. budget (${coinSymbol})`}
-            placeholder=""
-            defaultValue={
-              localStorage.getItem(`editjobBudget-${job.id}`) ?? fields.budget
-            }
-            onChange={(event) => {
-              handleInputChange(event)
-              setLocalJobBudget(event.target.value)
-            }}
-            required
-            width={4}
-          />
-        </Form.Group>
+            <Form.Input
+              id="title"
+              placeholder=""
+              defaultValue={
+                localStorage.getItem(`editjobTitle-${job.id}`) ?? fields.title
+              }
+              onChange={(event) => {
+                handleInputChange(event)
+                setLocalJobTitle(event.target.value)
+              }}
+              required
+            />
+          </Grid.Column>
 
-        <Tab panes={panes} />
+          <Grid.Column>
+            <Header as="h4">Description:</Header>
+            <Tab panes={panes} />
 
-        <MarkdownIsSupported />
+            <MarkdownIsSupported />
+          </Grid.Column>
 
-        <Button content="Update" primary disabled={!formFilled} />
+          <Grid.Column computer={3} tablet={4} mobile={8}>
+            <Header as="h4">{`Budget (${coinSymbol}):`}</Header>
+
+            <Form.Input
+              id="budget"
+              type="number"
+              min={0.0}
+              step={0.001}
+              placeholder=""
+              defaultValue={
+                localStorage.getItem(`editjobBudget-${job.id}`) ?? fields.budget
+              }
+              onChange={(event) => {
+                handleInputChange(event)
+                setLocalJobBudget(event.target.value)
+              }}
+              required
+            />
+          </Grid.Column>
+
+          <Grid.Column>
+            <Button content="Update" primary disabled={!formFilled} />
+          </Grid.Column>
+        </Grid>
       </Form>
     </>
   )

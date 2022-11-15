@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Header, Button, Form, TextArea } from 'semantic-ui-react'
+import { Header, Grid, Button, Form, TextArea } from 'semantic-ui-react'
 import { createJob } from '../../lib/api'
 import { isEmptyString } from '../../lib/validators'
 import ErrorWrapper from '../../components/ErrorWrapper'
@@ -23,7 +23,7 @@ export const NewJobForm = ({ token, coinSymbol }) => {
 
   const panes = [
     {
-      menuItem: { key: 'write', icon: 'pencil', content: 'Write' },
+      menuItem: { key: 'write', icon: 'pencil', content: 'Edit' },
       render: () => <Tab.Pane>{renderWriteJob()}</Tab.Pane>,
     },
     {
@@ -111,7 +111,6 @@ export const NewJobForm = ({ token, coinSymbol }) => {
       <Form.Input
         control={TextArea}
         id="description"
-        label="Description"
         placeholder=""
         rows={12}
         value={description}
@@ -135,42 +134,50 @@ export const NewJobForm = ({ token, coinSymbol }) => {
 
   return (
     <>
-      <Header as="h1">Add New Job</Header>
-
       {error !== '' && (
         <ErrorWrapper header="Unable to create job" error={error} />
       )}
 
       <Form onSubmit={handleCreateJob}>
-        <Form.Group>
-          <Form.Input
-            id="title"
-            label="Title"
-            placeholder=""
-            value={title}
-            onChange={handleTitleChange}
-            required
-            width={12}
-          />
+        <Grid columns={1}>
+          <Grid.Column>
+            <Header as="h4">Title:</Header>
 
-          <Form.Input
-            id="budget"
-            type="number"
-            min={0.0}
-            step={0.001}
-            label={`Approx. budget (${coinSymbol})`}
-            placeholder=""
-            value={budget}
-            onChange={handleBudgetChange}
-            width={4}
-          />
-        </Form.Group>
+            <Form.Input
+              id="title"
+              placeholder=""
+              value={title}
+              onChange={handleTitleChange}
+              required
+            />
+          </Grid.Column>
 
-        <Tab panes={panes} />
+          <Grid.Column>
+            <Header as="h4">Description:</Header>
 
-        <MarkdownIsSupported />
+            <Tab panes={panes} />
 
-        <Button content="Publish" primary disabled={!formFilled} />
+            <MarkdownIsSupported />
+          </Grid.Column>
+
+          <Grid.Column computer={3} tablet={4} mobile={8}>
+            <Header as="h4">{`Budget (${coinSymbol}):`}</Header>
+
+            <Form.Input
+              id="budget"
+              type="number"
+              min={0.0}
+              step={0.001}
+              placeholder=""
+              value={budget}
+              onChange={handleBudgetChange}
+            />
+          </Grid.Column>
+
+          <Grid.Column>
+            <Button content="Publish" primary disabled={!formFilled} />
+          </Grid.Column>
+        </Grid>
       </Form>
 
       <UnsavedChangesDialog

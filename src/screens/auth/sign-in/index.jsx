@@ -3,12 +3,12 @@ import { Grid, Header } from 'semantic-ui-react'
 import { SignInForm } from '../../../forms/SignIn'
 
 export const SignInScreen = () => (
-  <Grid textAlign="center" style={{ marginTop: '1em' }}>
-    <Grid.Column style={{ maxWidth: 450 }}>
-      <Header as="h2" textAlign="center">
-        Sign In
-      </Header>
+  <Grid columns={1} textAlign="center">
+    <Grid.Column>
+      <Header as="h2" content="Sign In" />
+    </Grid.Column>
 
+    <Grid.Column mobile={16} tablet={8} computer={6}>
       <SignInForm />
     </Grid.Column>
   </Grid>

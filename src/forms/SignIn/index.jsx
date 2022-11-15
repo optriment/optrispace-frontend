@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Form, Segment } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 import { useAuth } from '../../hooks'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { errorHandler } from '../../lib/errorHandler'
@@ -50,38 +50,36 @@ export const SignInForm = () => {
         <ErrorWrapper header="Unable to sign in" error={error} />
       )}
 
-      <Segment>
-        <Form onSubmit={handleSignIn}>
-          <Form.Input
-            id="login"
-            fluid
-            icon="user"
-            iconPosition="left"
-            placeholder="Login"
-            required
-            autoComplete="username"
-            value={fields.login}
-            onChange={handleInputChange}
-          />
+      <Form onSubmit={handleSignIn}>
+        <Form.Input
+          id="login"
+          fluid
+          icon="user"
+          iconPosition="left"
+          placeholder="Login"
+          required
+          autoComplete="username"
+          value={fields.login}
+          onChange={handleInputChange}
+        />
 
-          <Form.Input
-            id="password"
-            fluid
-            icon="lock"
-            iconPosition="left"
-            placeholder="Password"
-            type="password"
-            required
-            autoComplete="current-password"
-            value={fields.password}
-            onChange={handleInputChange}
-          />
+        <Form.Input
+          id="password"
+          fluid
+          icon="lock"
+          iconPosition="left"
+          placeholder="Password"
+          type="password"
+          required
+          autoComplete="current-password"
+          value={fields.password}
+          onChange={handleInputChange}
+        />
 
-          <Button primary fluid>
-            Log In
-          </Button>
-        </Form>
-      </Segment>
+        <Button primary fluid>
+          Log In
+        </Button>
+      </Form>
     </>
   )
 }

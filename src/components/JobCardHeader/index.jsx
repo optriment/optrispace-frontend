@@ -1,59 +1,56 @@
-import { Icon, List, Item } from 'semantic-ui-react'
-import { formatDateTime } from '../../lib/formatDate'
+import { Header, Divider, Label, Icon } from 'semantic-ui-react'
+import { formatDate } from '../../lib/formatDate'
 import { isEmptyString } from '../../lib/validators'
+import { FormattedDescription } from '../FormattedDescription'
 
 export const JobCardHeader = ({
   job,
   coinSymbol,
   blockchainViewAddressURL,
 }) => {
-  const createdAt = formatDateTime(job.created_at)
-  const updatedAt = formatDateTime(job.updated_at)
+  const createdAt = formatDate(job.created_at)
 
   return (
-    <Item.Group>
-      <Item>
-        <Item.Image size="tiny" src="/default-userpic-128x128.png" />
+    <>
+      <Header as="h3">{job.customer_display_name}</Header>
 
-        <Item.Content>
-          <Item.Header>
-            {job.customer_display_name}
+      {!isEmptyString(job.customer_ethereum_address) && (
+        <span>
+          {' '}
+          <a
+            href={`${blockchainViewAddressURL}/${job.customer_ethereum_address}`}
+            target="_blank"
+            rel="noreferrer noopener nofollow"
+            title="Open wallet information"
+          >
+            <Icon name="address card" /> View transactions history
+          </a>
+        </span>
+      )}
 
-            {!isEmptyString(job.customer_ethereum_address) && (
-              <>
-                {' '}
-                <a
-                  href={`${blockchainViewAddressURL}/${job.customer_ethereum_address}`}
-                  target="_blank"
-                  rel="noreferrer noopener nofollow"
-                  title="Open wallet information"
-                >
-                  <Icon name="address card" />
-                </a>
-              </>
-            )}
-          </Item.Header>
+      <Divider />
 
-          <Item.Meta>
-            <List bulleted horizontal>
-              {job.budget > 0 && (
-                <List.Item>
-                  Budget: {job.budget} {coinSymbol}
-                </List.Item>
-              )}
-              <List.Item>{job.applications_count} Applicants</List.Item>
-            </List>
-          </Item.Meta>
-          <Item.Extra>
-            <List bulleted horizontal>
-              <List.Item>Created: {createdAt}</List.Item>
-              {updatedAt > createdAt && (
-                <List.Item>Updated: {updatedAt}</List.Item>
-              )}
-            </List>
-          </Item.Extra>
-        </Item.Content>
-      </Item>
-    </Item.Group>
+      <div style={{ wordWrap: 'break-word' }}>
+        <FormattedDescription description={job.description} />
+      </div>
+
+      <Divider />
+
+      {job.budget && job.budget > 0 && (
+        <Label>
+          <Icon name="money" /> {job.budget} {coinSymbol}
+        </Label>
+      )}
+
+      {job.applications_count > 0 && (
+        <Label>
+          <Icon name="user" title="Applicants" /> {job.applications_count}
+        </Label>
+      )}
+
+      <Label>
+        <Icon name="clock" title="Created" /> {createdAt}
+      </Label>
+    </>
   )
 }

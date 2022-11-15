@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { Tab } from 'semantic-ui-react'
-import ApplicationsGroup from './ApplicationsGroup'
+import React from 'react'
+import { Grid, Segment } from 'semantic-ui-react'
+import ApplicationListItem from './ApplicationListItem'
 
 const Applications = ({
   job,
@@ -8,54 +8,25 @@ const Applications = ({
   blockchainViewAddressURL,
   coinSymbol,
 }) => {
-  const [panes, setPanes] = useState(undefined)
-
-  useEffect(() => {
-    if (applications && applications.length > 0 && !panes) {
-      const applicationsWithAcceptedContracts = applications.filter(
-        (application) =>
-          application.contract_status &&
-          application.contract_status !== 'created'
-      )
-      const applicationsWithNotAcceptedContracts = applications.filter(
-        (application) =>
-          application.contract_status &&
-          application.contract_status === 'created'
-      )
-      const applicationsWithoutContracts = applications.filter(
-        (application) => !application.contract_id
-      )
-
-      setPanes([
-        ApplicationsGroup(
-          job,
-          'New applications',
-          applicationsWithoutContracts,
-          'applications',
-          blockchainViewAddressURL,
-          coinSymbol
-        ),
-        ApplicationsGroup(
-          job,
-          'Discussions',
-          applicationsWithNotAcceptedContracts,
-          'discussions',
-          blockchainViewAddressURL,
-          coinSymbol
-        ),
-        ApplicationsGroup(
-          job,
-          'Contract accepted',
-          applicationsWithAcceptedContracts,
-          'accepted',
-          blockchainViewAddressURL,
-          coinSymbol
-        ),
-      ])
-    }
-  }, [job, applications, panes, blockchainViewAddressURL, coinSymbol])
-
-  return <Tab panes={panes} />
+  return (
+    <Grid stackable columns={1}>
+      {applications.map((application) => {
+        return (
+          <Grid.Column key={application.id}>
+            <Segment>
+              <ApplicationListItem
+                key={application.id}
+                job={job}
+                application={application}
+                blockchainViewAddressURL={blockchainViewAddressURL}
+                coinSymbol={coinSymbol}
+              />
+            </Segment>
+          </Grid.Column>
+        )
+      })}
+    </Grid>
+  )
 }
 
 export default Applications

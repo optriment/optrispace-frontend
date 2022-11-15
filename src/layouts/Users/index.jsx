@@ -1,17 +1,13 @@
 import React, { useContext } from 'react'
 import Head from 'next/head'
-import { Icon, Button, Container, Message, Segment } from 'semantic-ui-react'
+import { Divider, Grid, Button, Segment } from 'semantic-ui-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { Web3Debug } from '../../components/Web3Debug'
 import DisplayContext from '../../context/display-context'
-import getConfig from 'next/config'
-import Link from 'next/link'
 import { Favicon } from '../../components/Favicon'
 
 import 'semantic-ui-css/semantic.min.css'
-
-const { publicRuntimeConfig } = getConfig()
 
 export const UsersLayout = ({ children, meta = {} }) => {
   const { isWeb3DebugMode, setIsWeb3DebugMode } = useContext(DisplayContext)
@@ -24,8 +20,6 @@ export const UsersLayout = ({ children, meta = {} }) => {
     setIsWeb3DebugMode(!isWeb3DebugMode)
   }
 
-  const { domain } = publicRuntimeConfig
-
   return (
     <>
       <Head>
@@ -35,52 +29,34 @@ export const UsersLayout = ({ children, meta = {} }) => {
         <Favicon />
       </Head>
 
-      <Container>
-        <Header />
+      <Grid container columns={1}>
+        <Grid.Column>
+          <Header />
 
-        {!domain.match(/my\.optrispace\.com/) && (
-          <Message negative icon>
-            <Icon name="rocket" />
+          <Divider />
+        </Grid.Column>
 
-            <Message.Content>
-              <Message.Header>
-                This is the development version of the platform
-              </Message.Header>
-              <p>
-                Please use production version instead:{' '}
-                <Link href="https://my.optrispace.com/" passHref>
-                  <a
-                    href="https://my.optrispace.com"
-                    target="_self"
-                    rel="noreferrer nofollow noopener"
-                  >
-                    https://my.optrispace.com/
-                  </a>
-                </Link>
-              </p>
-            </Message.Content>
-          </Message>
-        )}
+        <Grid.Column>{children}</Grid.Column>
 
-        <Segment basic>{children}</Segment>
+        <Grid.Column>
+          <Footer />
 
-        <Footer />
+          <Segment basic textAlign="center">
+            <Button
+              compact
+              onClick={onToggleWeb3Debug}
+              content="Toggle Web3 Debug"
+              size="mini"
+            />
 
-        <Segment basic textAlign="center">
-          <Button
-            compact
-            onClick={onToggleWeb3Debug}
-            content="Toggle Web3 Debug"
-            size="mini"
-          />
-
-          {isWeb3DebugMode && (
-            <Segment basic>
-              <Web3Debug />
-            </Segment>
-          )}
-        </Segment>
-      </Container>
+            {isWeb3DebugMode && (
+              <Segment basic>
+                <Web3Debug />
+              </Segment>
+            )}
+          </Segment>
+        </Grid.Column>
+      </Grid>
     </>
   )
 }

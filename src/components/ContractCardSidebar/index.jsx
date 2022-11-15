@@ -10,7 +10,7 @@ export const ContractCardSidebar = ({
   return (
     <Segment.Group>
       <Segment>
-        <Header as="h3">Price</Header>
+        <Header as="h4">Price</Header>
 
         <p>
           {contract.price} {coinSymbol}
@@ -18,7 +18,7 @@ export const ContractCardSidebar = ({
       </Segment>
 
       <Segment>
-        <Header as="h3">Customer Wallet Address</Header>
+        <Header as="h4">Customer Wallet Address</Header>
 
         {contract.customer_address && (
           <p>
@@ -34,7 +34,7 @@ export const ContractCardSidebar = ({
       </Segment>
 
       <Segment>
-        <Header as="h3">Contractor Wallet Address</Header>
+        <Header as="h4">Contractor Wallet Address</Header>
 
         {contract.performer_address ? (
           <p>
@@ -52,7 +52,7 @@ export const ContractCardSidebar = ({
       </Segment>
 
       <Segment>
-        <Header as="h3">Contract Address</Header>
+        <Header as="h4">Contract Address</Header>
 
         {contract.contract_address ? (
           <p>
@@ -70,7 +70,7 @@ export const ContractCardSidebar = ({
       </Segment>
 
       <Segment>
-        <Header as="h3">Contract Balance</Header>
+        <Header as="h4">Contract Balance</Header>
 
         {contract.contract_address ? (
           <p>

@@ -1,6 +1,5 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import { JobScreen } from '../../../screens/users/jobs/show'
-import DisplayContext from '../../../context/display-context'
 import { UsersLayout } from '../../../layouts/Users'
 import { useRouter } from 'next/router'
 import { useJob } from '../../../hooks/useJob'
@@ -17,11 +16,6 @@ const Page = () => {
   const { job, isLoading: jobLoading, error: jobError } = useJob(query.id)
   const { stats, isLoading: statsLoading, error: statsError } = useStats()
   const { coinSymbol } = useContext(Web3Context)
-  const { setSmallScreen } = useContext(DisplayContext)
-
-  useEffect(() => {
-    setSmallScreen(window.matchMedia('(max-width: 700px)').matches)
-  }, [])
 
   if (personLoading) {
     return (

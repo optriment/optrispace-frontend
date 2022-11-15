@@ -32,24 +32,26 @@ export const ChatScreen = ({ chat, token, coinSymbol }) => {
   }
 
   return (
-    <Segment basic>
-      <Header as="h2">
-        <Link href={`/jobs/${application.job_id}`} passHref>
-          <a>{application.job_title}</a>
-        </Link>
-      </Header>
+    <Grid stackable columns={1}>
+      <Grid.Column textAlign="center">
+        <Header as="h2">
+          <Link href={`/jobs/${application.job_id}`}>
+            {application.job_title}
+          </Link>
+        </Header>
+      </Grid.Column>
 
-      <Grid stackable>
-        <Grid.Row>
-          <Grid.Column width={10} verticalAlign="top">
+      <Grid.Column>
+        <Grid stackable>
+          <Grid.Column width={10}>
             <Segment>
               <Chat chatId={chat.id} token={token} />
             </Segment>
           </Grid.Column>
 
-          <Grid.Column width={6} verticalAlign="top">
+          <Grid.Column width={6}>
             <Segment>
-              <Header as="h2" content="Information" />
+              <Header as="h3" content="Information" />
 
               <List divided relaxed>
                 <List.Item>
@@ -65,8 +67,8 @@ export const ChatScreen = ({ chat, token, coinSymbol }) => {
               </List>
             </Segment>
           </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </Segment>
+        </Grid>
+      </Grid.Column>
+    </Grid>
   )
 }

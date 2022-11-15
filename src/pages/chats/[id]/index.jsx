@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import ErrorWrapper from '../../../components/ErrorWrapper'
 import JustOneSecond from '../../../components/JustOneSecond'
-import DisplayContext from '../../../context/display-context'
 import Web3Context from '../../../context/web3-context'
 import { useAuth } from '../../../hooks'
 import { useChat } from '../../../hooks/useChat'
@@ -26,12 +25,6 @@ const Page = () => {
     isLoading: chatLoading,
     error: chatError,
   } = useChat(token, query.id)
-
-  const { setSmallScreen } = useContext(DisplayContext)
-
-  useEffect(() => {
-    setSmallScreen(window.matchMedia('(max-width: 700px)').matches)
-  }, [])
 
   if (personLoading) {
     return (

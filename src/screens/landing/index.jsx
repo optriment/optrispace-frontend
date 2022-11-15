@@ -1,37 +1,27 @@
 import React from 'react'
 import Link from 'next/link'
-import { Container, Divider, Button, Header, List } from 'semantic-ui-react'
+import {
+  Image,
+  Container,
+  Divider,
+  Button,
+  Header,
+  List,
+} from 'semantic-ui-react'
 
-export const LandingScreen = ({ isSmallScreen }) => {
+export const LandingScreen = () => {
   return (
     <>
-      <Container textAlign="center" fluid>
-        <Header
-          as="h1"
-          style={{
-            fontSize: isSmallScreen ? '3.5em' : '5em',
-            fontWeight: 'bold',
-            marginBottom: 0,
-            marginTop: isSmallScreen ? null : '0.7em',
-          }}
-        >
-          OptriSpace
-        </Header>
+      <Container textAlign="center">
+        <Image
+          src="/optrispace-logo-with-slogan.png"
+          alt="OptriSpace"
+          bordered
+          rounded
+          centered
+        />
 
-        <Header
-          as="h2"
-          style={{
-            fontSize: isSmallScreen ? '1.3em' : '1.8em',
-            fontWeight: 'normal',
-            marginTop: isSmallScreen ? '0.8em' : '1.3em',
-          }}
-        >
-          No middlemen. No paperwork.
-          <br />
-          Fast & Secure Payments.
-        </Header>
-
-        <Divider style={{ marginTop: isSmallScreen ? '1em' : '3em' }} hidden />
+        <Divider hidden />
 
         <Button.Group size="huge">
           <Link href="/sign_up" passHref>
@@ -46,18 +36,12 @@ export const LandingScreen = ({ isSmallScreen }) => {
         </Button.Group>
       </Container>
 
-      <Divider style={{ marginTop: isSmallScreen ? '2em' : '5em' }} />
+      <Divider hidden />
+      <Divider />
+      <Divider hidden />
 
       <Container text textAlign="justified">
-        <Header
-          as="h2"
-          content="What is OptriSpace"
-          style={{
-            fontSize: isSmallScreen ? '1.5em' : '1.8em',
-            fontWeight: 'normal',
-            marginTop: isSmallScreen ? '1.0em' : '1.3em',
-          }}
-        />
+        <Header as="h2" content="What is OptriSpace" />
 
         <p>
           We are OptriSpace - an international team who got together to face a
@@ -74,15 +58,7 @@ export const LandingScreen = ({ isSmallScreen }) => {
           terms and conditions which have to be signed by both participants.
         </p>
 
-        <Header
-          as="h2"
-          content="How OptriSpace works"
-          style={{
-            fontSize: isSmallScreen ? '1.5em' : '1.8em',
-            fontWeight: 'normal',
-            marginTop: isSmallScreen ? '1.0em' : '1.3em',
-          }}
-        />
+        <Header as="h2" content="How OptriSpace works" />
 
         <Header as="h3" content="1. Customer posts a job on the platform" />
 
@@ -139,15 +115,7 @@ export const LandingScreen = ({ isSmallScreen }) => {
           crypto wallet.
         </p>
 
-        <Header
-          as="h2"
-          content="What is inside?"
-          style={{
-            fontSize: isSmallScreen ? '1.5em' : '1.8em',
-            fontWeight: 'normal',
-            marginTop: isSmallScreen ? '1.0em' : '1.3em',
-          }}
-        />
+        <Header as="h2" content="What is inside?" />
 
         <List bulleted>
           <List.Item>
@@ -182,15 +150,7 @@ export const LandingScreen = ({ isSmallScreen }) => {
           <List.Item>No middlemen</List.Item>
         </List>
 
-        <Header
-          as="h2"
-          content="What network do we use?"
-          style={{
-            fontSize: isSmallScreen ? '1.5em' : '1.8em',
-            fontWeight: 'normal',
-            marginTop: isSmallScreen ? '1.0em' : '1.3em',
-          }}
-        />
+        <Header as="h2" content="What network do we use?" />
 
         <p>
           Binance Smart Chain.

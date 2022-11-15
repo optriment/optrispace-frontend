@@ -86,82 +86,87 @@ const Wrapper = ({ job, token, children, isAdmin, isCustomer, stats }) => {
   }
 
   return (
-    <>
-      <Header as="h1">{title}</Header>
+    <Grid stackable columns={1}>
+      <Grid.Column textAlign="center">
+        <Header as="h1">{title}</Header>
+      </Grid.Column>
 
       {isCustomer && job.is_suspended && (
-        <Message
-          icon="exclamation"
-          header="You have suspended the acceptance of applications for this job"
-          content="Use a button below to continue receiving applications from freelancers"
-        />
+        <Grid.Column>
+          <Message
+            icon="exclamation"
+            header="You have suspended the acceptance of applications for this job"
+            content="Use a button below to continue receiving applications from freelancers"
+          />
+        </Grid.Column>
       )}
 
-      <Grid stackable>
-        {(isAdmin || isCustomer) && (
-          <Grid.Row>
-            <Grid.Column>
-              <Segment color="red" clearing>
-                {isAdmin && (
-                  <Button
-                    floated="right"
-                    negative
-                    content="Block"
-                    icon="remove"
-                    labelPosition="left"
-                    onClick={handleBlockJob}
-                  />
-                )}
+      {isCustomer && (
+        <Grid.Column>
+          <Segment color="orange" clearing>
+            <Link
+              href="/jobs/[id]/edit"
+              as={`/jobs/${jobId}/edit`}
+              title="Edit"
+              passHref
+            >
+              <Button
+                color="teal"
+                floated="left"
+                icon="pencil"
+                content="Edit"
+                labelPosition="left"
+              />
+            </Link>
 
-                {isCustomer && (
-                  <>
-                    <Link
-                      href="/jobs/[id]/edit"
-                      as={`/jobs/${jobId}/edit`}
-                      title="Edit"
-                      passHref
-                    >
-                      <Button
-                        color="teal"
-                        floated="left"
-                        icon="pencil"
-                        content="Edit"
-                        labelPosition="left"
-                      />
-                    </Link>
+            {job.is_suspended ? (
+              <Button
+                floated="left"
+                icon="play"
+                content="Resume"
+                labelPosition="left"
+                onClick={handleResumeJob}
+              />
+            ) : (
+              <Button
+                floated="left"
+                icon="pause"
+                content="Suspend"
+                labelPosition="left"
+                onClick={handleSuspendJob}
+              />
+            )}
+          </Segment>
+        </Grid.Column>
+      )}
 
-                    {job.is_suspended ? (
-                      <Button
-                        floated="left"
-                        icon="play"
-                        content="Resume"
-                        labelPosition="left"
-                        onClick={handleResumeJob}
-                      />
-                    ) : (
-                      <Button
-                        floated="left"
-                        icon="pause"
-                        content="Suspend"
-                        labelPosition="left"
-                        onClick={handleSuspendJob}
-                      />
-                    )}
-                  </>
-                )}
-              </Segment>
-            </Grid.Column>
-          </Grid.Row>
-        )}
+      <Grid.Column>
+        <Grid columns={2} stackable>
+          <Grid.Column mobile={16} computer={11}>
+            {children}
+          </Grid.Column>
 
-        <Grid.Row>
-          <Grid.Column width={11}>{children}</Grid.Column>
-          <Grid.Column width={5}>
+          <Grid.Column computer={5} only="computer">
             <Sidebar stats={stats} />
           </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </>
+        </Grid>
+      </Grid.Column>
+
+      {isAdmin && (
+        <Grid.Column>
+          <Segment color="red" clearing>
+            <Button
+              floated="right"
+              negative
+              content="Block"
+              icon="remove"
+              labelPosition="left"
+              onClick={handleBlockJob}
+            />
+          </Segment>
+        </Grid.Column>
+      )}
+    </Grid>
   )
 }
 

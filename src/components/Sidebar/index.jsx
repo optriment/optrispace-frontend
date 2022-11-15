@@ -6,11 +6,11 @@ export const Sidebar = ({ stats }) => {
     <>
       <Segment>
         <Segment basic>
-          <Header as="h2" dividing>
+          <Header as="h3" dividing>
             Our Core Features
           </Header>
 
-          <List bulleted size="large">
+          <List bulleted>
             <List.Item>No paperwork</List.Item>
             <List.Item>No middlemen</List.Item>
             <List.Item>No managers</List.Item>
@@ -27,7 +27,7 @@ export const Sidebar = ({ stats }) => {
 
       <Segment>
         <Segment basic>
-          <Header as="h2" dividing>
+          <Header as="h3" dividing>
             Our Community
             <Header.Subheader>Join &amp; Follow Us</Header.Subheader>
           </Header>
@@ -110,11 +110,11 @@ export const Sidebar = ({ stats }) => {
 
       <Segment>
         <Segment basic>
-          <Header as="h2" dividing>
+          <Header as="h3" dividing>
             Our Stats
           </Header>
 
-          <List bulleted size="large">
+          <List bulleted>
             <List.Item>
               <b>Total Registrations:</b> {stats.total_registrations}
             </List.Item>

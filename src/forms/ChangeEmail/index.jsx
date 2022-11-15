@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Form, Segment } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { errorHandler } from '../../lib/errorHandler'
 import { updateEmail } from '../../lib/settings'
@@ -44,31 +44,29 @@ export const ChangeEmail = ({ token, id, email }) => {
   }
 
   return (
-    <Segment>
-      <Form onSubmit={handleChangeEmail}>
-        {error !== '' && (
-          <ErrorWrapper header="Unable to change Email" error={error} />
-        )}
+    <Form onSubmit={handleChangeEmail}>
+      {error !== '' && (
+        <ErrorWrapper header="Unable to change Email" error={error} />
+      )}
 
-        <Form.Input
-          id="email"
-          fluid
-          icon="envelope"
-          iconPosition="left"
-          placeholder="Email"
-          value={fields.email}
-          autoComplete="email"
-          onChange={handleInputChange}
-          required
-          type="email"
-          pattern="[^ @]*@[^ @]*"
-          maxLength={64}
-        />
+      <Form.Input
+        id="email"
+        fluid
+        icon="envelope"
+        iconPosition="left"
+        placeholder="Email"
+        value={fields.email}
+        autoComplete="email"
+        onChange={handleInputChange}
+        required
+        type="email"
+        pattern="[^ @]*@[^ @]*"
+        maxLength={64}
+      />
 
-        <Button primary fluid>
-          Save
-        </Button>
-      </Form>
-    </Segment>
+      <Button primary fluid>
+        Save
+      </Button>
+    </Form>
   )
 }

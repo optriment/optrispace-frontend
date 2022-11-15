@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Form, Segment } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { errorHandler } from '../../lib/errorHandler'
 import { updateDisplayName } from '../../lib/settings'
@@ -41,29 +41,27 @@ export const ChangeDisplayName = ({ token, id, displayName }) => {
   }
 
   return (
-    <Segment>
-      <Form onSubmit={handleChangeDisplayName}>
-        {error !== '' && (
-          <ErrorWrapper header="Unable to change Display Name" error={error} />
-        )}
+    <Form onSubmit={handleChangeDisplayName}>
+      {error !== '' && (
+        <ErrorWrapper header="Unable to change Display Name" error={error} />
+      )}
 
-        <Form.Input
-          id="display_name"
-          fluid
-          icon="user"
-          iconPosition="left"
-          placeholder="Display Name"
-          value={fields.display_name}
-          autoComplete="name"
-          onChange={handleInputChange}
-          required
-          maxLength={64}
-        />
+      <Form.Input
+        id="display_name"
+        fluid
+        icon="user"
+        iconPosition="left"
+        placeholder="Display Name"
+        value={fields.display_name}
+        autoComplete="name"
+        onChange={handleInputChange}
+        required
+        maxLength={64}
+      />
 
-        <Button primary fluid>
-          Save
-        </Button>
-      </Form>
-    </Segment>
+      <Button primary fluid>
+        Save
+      </Button>
+    </Form>
   )
 }

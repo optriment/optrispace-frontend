@@ -1,14 +1,7 @@
 import * as Sentry from '@sentry/nextjs'
 import React, { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
-import {
-  Message,
-  Container,
-  Button,
-  Header,
-  Grid,
-  Segment,
-} from 'semantic-ui-react'
+import { Message, Button, Grid, Segment } from 'semantic-ui-react'
 import { approveContract, deployContract, fundContract } from '../../lib/api'
 import ErrorWrapper from '../ErrorWrapper'
 import { ContractCardSidebar } from '../ContractCardSidebar'
@@ -332,129 +325,129 @@ export const ContractCardForCustomer = ({
   const currentStep = statuses[currentStatus] + 1
 
   return (
-    <>
-      <Header as="h1">{contract.title}</Header>
-
+    <Grid columns={1} stackable>
       {isWalletInstalled && isCorrectNetwork && currentAccount === '' && (
-        <ConnectWallet connectWallet={connectWallet} />
+        <Grid.Column>
+          <ConnectWallet connectWallet={connectWallet} />
+        </Grid.Column>
       )}
 
-      <ContractCardSteps
-        me="customer"
-        currentStatus={currentStatus}
-        currentStep={currentStep}
-        statuses={statuses}
-      />
+      <Grid.Column only="computer">
+        <ContractCardSteps
+          me="customer"
+          currentStatus={currentStatus}
+          currentStep={currentStep}
+          statuses={statuses}
+        />
+      </Grid.Column>
 
-      {isLoadingWeb3 || txLoading ? (
-        <JustOneSecondBlockchain message={txStatus !== '' && txStatus} />
-      ) : (
-        <>
-          {currentStatus === 'created' && (
-            <Message header="Waiting for the contract to be accepted" />
-          )}
+      <Grid.Column>
+        {isLoadingWeb3 || txLoading ? (
+          <JustOneSecondBlockchain message={txStatus !== '' && txStatus} />
+        ) : (
+          <>
+            {currentStatus === 'created' && (
+              <Message header="Waiting for the contract to be accepted" />
+            )}
 
-          {currentStatus === 'accepted' && (
-            <>
-              {contractStatus === 'Created' ? (
-                <>
-                  <Message positive>
-                    <Message.Header>
-                      Smart Contract has been successfully deployed to the
-                      blockchain!
-                    </Message.Header>
-                    <p>
-                      Please click &quot;Set as deployed&quot; to update status
-                      for the contractor.
-                    </p>
-                  </Message>
+            {currentStatus === 'accepted' && (
+              <>
+                {contractStatus === 'Created' ? (
+                  <>
+                    <Message positive>
+                      <Message.Header>
+                        Smart Contract has been successfully deployed to the
+                        blockchain!
+                      </Message.Header>
+                      <p>
+                        Please click &quot;Set as deployed&quot; to update
+                        status for the contractor.
+                      </p>
+                    </Message>
 
-                  <Segment basic textAlign="right">
                     <Button
+                      floated="right"
                       primary
                       content="Set as deployed"
                       onClick={setAsDeployedOnBackend}
                       disabled={isEmptyString(contractAddress)}
                     />
-                  </Segment>
-                </>
-              ) : (
-                <>
-                  <Message>
-                    <Message.Header>
-                      Smart Contract has been successfully accepted!
-                    </Message.Header>
-                    <p>
-                      Please click &quot;Deploy to blockchain&quot; to deploy
-                      Smart Contract.
-                      <br />
-                      When MetaMask wallet will appear on your screen, please
-                      confirm the transaction.
-                    </p>
-                  </Message>
+                  </>
+                ) : (
+                  <>
+                    <Message>
+                      <Message.Header>
+                        Smart Contract has been successfully accepted!
+                      </Message.Header>
+                      <p>
+                        Please click &quot;Deploy to blockchain&quot; to deploy
+                        Smart Contract.
+                        <br />
+                        When MetaMask wallet will appear on your screen, please
+                        confirm the transaction.
+                      </p>
+                    </Message>
 
-                  <Segment basic textAlign="right">
                     <Button
+                      floated="right"
                       primary
                       content="Deploy to blockchain"
                       onClick={deployToBlockchain}
                       disabled={!isWalletReady}
                     />
-                  </Segment>
-                </>
-              )}
-            </>
-          )}
+                  </>
+                )}
+              </>
+            )}
 
-          {currentStatus === 'deployed' && (
-            <>
-              {contractStatus === 'Signed' ? (
-                <Message header="Waiting for the contract to get a signed status" />
-              ) : (
-                <Message header="Waiting for the contract to be signed on the blockchain" />
-              )}
-            </>
-          )}
+            {currentStatus === 'deployed' && (
+              <>
+                {contractStatus === 'Signed' ? (
+                  <Message header="Waiting for the contract to get a signed status" />
+                ) : (
+                  <Message header="Waiting for the contract to be signed on the blockchain" />
+                )}
+              </>
+            )}
 
-          {currentStatus === 'signed' && (
-            <>
-              {contractStatus === 'Funded' ? (
-                <>
-                  <Message positive>
-                    <Message.Header>
-                      Smart Contract has been successfully funded!
-                    </Message.Header>
-                    <p>
-                      <br />
-                      Please click &quot;Set as funded&quot; to allow contractor
-                      to start work.
-                    </p>
-                  </Message>
+            {currentStatus === 'signed' && (
+              <>
+                {contractStatus === 'Funded' ? (
+                  <>
+                    <Message positive>
+                      <Message.Header>
+                        Smart Contract has been successfully funded!
+                      </Message.Header>
+                      <p>
+                        <br />
+                        Please click &quot;Set as funded&quot; to allow
+                        contractor to start work.
+                      </p>
+                    </Message>
 
-                  <Segment basic textAlign="right">
                     <Button
+                      floated="right"
                       primary
                       content="Set as funded"
                       onClick={setAsFundedOnBackend}
                     />
-                  </Segment>
-                </>
-              ) : (
-                <>
-                  <Message>
-                    <Message.Header>Fund Smart Contract</Message.Header>
-                    <p>
-                      <br />
-                      At this step you need to send {contract.price}{' '}
-                      {coinSymbol} to Smart Contract.
-                      <br />
-                      Please click &quot;Fund&quot; button to open MetaMask to
-                      confirm transaction.
-                    </p>
-                  </Message>
+                  </>
+                ) : (
+                  <>
+                    <Message>
+                      <Message.Header>Fund Smart Contract</Message.Header>
+                      <p>
+                        <br />
+                        At this step you need to send {contract.price}{' '}
+                        {coinSymbol} to Smart Contract.
+                        <br />
+                        Please click &quot;Fund&quot; button to open MetaMask to
+                        confirm transaction.
+                      </p>
+                    </Message>
 
-                  <Segment basic textAlign="right">
                     <Button
+                      floated="right"
                       primary
                       content="Fund"
                       onClick={fundOnBlockchain}
@@ -462,115 +455,108 @@ export const ContractCardForCustomer = ({
                         !isWalletReady || accountBalance <= contract.price
                       }
                     />
-                  </Segment>
-                </>
-              )}
-            </>
-          )}
+                  </>
+                )}
+              </>
+            )}
 
-          {currentStatus === 'funded' && (
-            <>
-              {contractStatus === 'Approved' ? (
-                <>
-                  <Message>
-                    <Message.Header>Pay attention twice!</Message.Header>
-                    <p>
-                      <br />
-                      You have allowed withdrawing money for the contractor.
-                      <br />
-                      At this step you need to confirm the operation. Click
-                      &quot;Set as approved&quot; button.
-                    </p>
-                  </Message>
+            {currentStatus === 'funded' && (
+              <>
+                {contractStatus === 'Approved' ? (
+                  <>
+                    <Message>
+                      <Message.Header>Pay attention twice!</Message.Header>
+                      <p>
+                        <br />
+                        You have allowed withdrawing money for the contractor.
+                        <br />
+                        At this step you need to confirm the operation. Click
+                        &quot;Set as approved&quot; button.
+                      </p>
+                    </Message>
 
-                  <Segment basic textAlign="right">
                     <Button
+                      floated="right"
                       positive
                       content="Set as approved"
                       onClick={setAsApprovedOnBackend}
                     />
-                  </Segment>
-                </>
-              ) : (
-                <>
-                  <Message>
-                    <Message.Header>Pay attention!</Message.Header>
-                    <p>
-                      <br />
-                      At this step you can allow contractor to withdraw money
-                      from the Smart Contract.
-                      <br />
-                      Please make sure that you have got the job result from the
-                      contractor and you are agree with the final results.
-                      <br />
-                      <br />
-                      If all is good, click &quot;Approve&quot; button and
-                      confirm the transaction.
-                    </p>
-                  </Message>
+                  </>
+                ) : (
+                  <>
+                    <Message>
+                      <Message.Header>Pay attention!</Message.Header>
+                      <p>
+                        <br />
+                        At this step you can allow contractor to withdraw money
+                        from the Smart Contract.
+                        <br />
+                        Please make sure that you have got the job result from
+                        the contractor and you are agree with the final results.
+                        <br />
+                        <br />
+                        If all is good, click &quot;Approve&quot; button and
+                        confirm the transaction.
+                      </p>
+                    </Message>
 
-                  <Segment basic textAlign="right">
                     <Button
+                      floated="right"
                       positive
                       content="Approve"
                       onClick={approveOnBlockchain}
                       disabled={!isWalletReady}
                     />
-                  </Segment>
-                </>
-              )}
-            </>
-          )}
+                  </>
+                )}
+              </>
+            )}
 
-          {(currentStatus === 'approved' || currentStatus === 'completed') && (
-            <Message positive>
-              <Message.Header>Congratulations!</Message.Header>
-              <p>
-                <br />
-                We hope you have enjoyed working with this freelancer!
-                <br />
-                If you have any ideas on how to improve OptriSpace – feel free
-                to contact us.
-              </p>
-            </Message>
-          )}
-        </>
+            {(currentStatus === 'approved' ||
+              currentStatus === 'completed') && (
+              <Message positive>
+                <Message.Header>Congratulations!</Message.Header>
+                <p>
+                  <br />
+                  We hope you have enjoyed working with this freelancer!
+                  <br />
+                  If you have any ideas on how to improve OptriSpace – feel free
+                  to contact us.
+                </p>
+              </Message>
+            )}
+          </>
+        )}
+      </Grid.Column>
+
+      {error !== '' && (
+        <Grid.Column>
+          <ErrorWrapper header="Failed to perform action" error={error} />
+        </Grid.Column>
       )}
 
-      <Grid stackable verticalAlign="top">
-        {error !== '' && (
-          <Grid.Row>
-            <Grid.Column>
-              <ErrorWrapper header="Failed to perform action" error={error} />
-            </Grid.Column>
-          </Grid.Row>
+      <Grid.Column mobile={16} computer={10}>
+        <Segment>
+          <div style={{ wordWrap: 'break-word' }}>
+            <FormattedDescription description={contract.description} />
+          </div>
+        </Segment>
+
+        {chat?.id && (
+          <Segment>
+            <Chat chatId={chat.id} token={token} />
+          </Segment>
         )}
+      </Grid.Column>
 
-        <Grid.Row>
-          <Grid.Column width={10}>
-            <Segment>
-              <Container text fluid textAlign="justified">
-                <FormattedDescription description={contract.description} />
-              </Container>
-            </Segment>
-
-            {chat?.id && (
-              <Segment>
-                <Chat chatId={chat.id} token={token} />
-              </Segment>
-            )}
-          </Grid.Column>
-
-          <Grid.Column width={6}>
-            <ContractCardSidebar
-              contract={contract}
-              coinSymbol={coinSymbol}
-              blockchainViewAddressURL={blockchainViewAddressURL}
-              contractBalance={contractBalance}
-            />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </>
+      <Grid.Column mobile={16} computer={6}>
+        <ContractCardSidebar
+          contract={contract}
+          coinSymbol={coinSymbol}
+          blockchainViewAddressURL={blockchainViewAddressURL}
+          contractBalance={contractBalance}
+        />
+      </Grid.Column>
+    </Grid>
   )
 }

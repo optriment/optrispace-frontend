@@ -1,14 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
-import {
-  Header,
-  Button,
-  Form,
-  Icon,
-  TextArea,
-  Message,
-} from 'semantic-ui-react'
+import { Header, Grid, Button, Form, TextArea } from 'semantic-ui-react'
 import { createContract } from '../../lib/api'
 import { isEmptyString } from '../../lib/validators'
 import ErrorWrapper from '../../components/ErrorWrapper'
@@ -17,7 +9,6 @@ import WalletIsNotInstalled from '../../components/WalletIsNotInstalled'
 import JustOneSecond from '../../components/JustOneSecond'
 import ConnectWallet from '../../components/ConnectWallet'
 import WrongBlockchainNetwork from '../../components/WrongBlockchainNetwork'
-import { MarkdownIsSupported } from '../../components/MarkdownIsSupported'
 import { errorHandler } from '../../lib/errorHandler'
 
 export const NewContractForm = ({ job, application, token, coinSymbol }) => {
@@ -31,7 +22,6 @@ export const NewContractForm = ({ job, application, token, coinSymbol }) => {
 
   const [fields, setFields] = useState(initialFields)
   const [error, setError] = useState('')
-  const [hideNotice, setHideNotice] = useState(false)
   const [agreedTo, setAgreedTo] = useState(false)
   const [formFilled, setFormFilled] = useState(false)
 
@@ -94,89 +84,85 @@ export const NewContractForm = ({ job, application, token, coinSymbol }) => {
 
   return (
     <>
-      <Header as="h1">Add New Contract</Header>
-
       {error !== '' && (
         <ErrorWrapper header="Unable to create contract" error={error} />
       )}
 
-      {!hideNotice && (
-        <Message onDismiss={() => setHideNotice(true)}>
-          <Icon name="info" />
-          Several fields in this form were auto-filled from the{' '}
-          <Link href="/jobs/[id]" as={`/jobs/${job.id}`} passHref>
-            <a>job card</a>
-          </Link>
-          {' and'} contractor&apos;s application
-        </Message>
-      )}
-
       <Form onSubmit={handleCreateContract}>
-        <Form.Input
-          id="title"
-          label="Title"
-          placeholder=""
-          value={fields.title}
-          onChange={handleInputChange}
-          required
-        />
+        <Grid columns={1}>
+          <Grid.Column>
+            <Header as="h4">Title:</Header>
 
-        <Form.Group>
-          <Form.Input
-            label="Contractor"
-            placeholder=""
-            value={application.applicant_display_name}
-            readOnly
-            width={4}
-          />
+            <Form.Input
+              id="title"
+              placeholder=""
+              value={fields.title}
+              onChange={handleInputChange}
+              required
+            />
+          </Grid.Column>
 
-          <Form.Input
-            label="Wallet Address"
-            placeholder=""
-            value={application.applicant_ethereum_address}
-            readOnly
-            width={6}
-          />
-        </Form.Group>
+          <Grid.Column mobile={16} computer={8}>
+            <Header as="h4">Contractor:</Header>
 
-        <Form.Input
-          control={TextArea}
-          id="description"
-          label="Description"
-          placeholder=""
-          rows={12}
-          value={fields.description}
-          onChange={handleInputChange}
-          required
-        />
+            <Form.Input value={application.applicant_display_name} readOnly />
+          </Grid.Column>
 
-        <MarkdownIsSupported />
+          <Grid.Column mobile={16} computer={8}>
+            <Header as="h4">Wallet Address:</Header>
 
-        <Form.Input
-          id="price"
-          type="number"
-          min={0.0}
-          step={0.001}
-          label={`Price (${coinSymbol})`}
-          placeholder=""
-          value={fields.price}
-          onChange={handleInputChange}
-          required
-          width={3}
-        />
+            <Form.Input
+              value={application.applicant_ethereum_address}
+              readOnly
+            />
+          </Grid.Column>
 
-        <Form.Checkbox
-          label="I agree to the Terms and Conditions"
-          checked={agreedTo}
-          onClick={() => setAgreedTo(!agreedTo)}
-        />
+          <Grid.Column>
+            <Header as="h4">Terms &amp; Conditions:</Header>
 
-        <Button
-          primary
-          type="submit"
-          content="Create"
-          disabled={isLoadingWeb3 || !formFilled}
-        />
+            <Form.Input
+              control={TextArea}
+              id="description"
+              placeholder=""
+              rows={12}
+              value={fields.description}
+              onChange={handleInputChange}
+              required
+            />
+          </Grid.Column>
+
+          <Grid.Column computer={3} tablet={4} mobile={8}>
+            <Header as="h4">{`Price (${coinSymbol}):`}</Header>
+
+            <Form.Input
+              id="price"
+              type="number"
+              min={0.0}
+              step={0.001}
+              placeholder=""
+              value={fields.price}
+              onChange={handleInputChange}
+              required
+            />
+          </Grid.Column>
+
+          <Grid.Column>
+            <Form.Checkbox
+              label="I agree to the Terms and Conditions"
+              checked={agreedTo}
+              onClick={() => setAgreedTo(!agreedTo)}
+            />
+          </Grid.Column>
+
+          <Grid.Column>
+            <Button
+              primary
+              type="submit"
+              content="Create"
+              disabled={isLoadingWeb3 || !formFilled}
+            />
+          </Grid.Column>
+        </Grid>
       </Form>
     </>
   )
