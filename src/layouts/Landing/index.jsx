@@ -6,47 +6,41 @@ import Footer from '../../components/Footer'
 import getConfig from 'next/config'
 import Link from 'next/link'
 import { Favicon } from '../../components/Favicon'
+import { useRouter } from 'next/router'
 
 import 'semantic-ui-css/semantic.min.css'
+import SEOTags from '../../components/SEOTags'
 
 const { publicRuntimeConfig } = getConfig()
 
 export const LandingLayout = ({ children, meta = {} }) => {
   const { title, description } = meta
+  const router = useRouter()
 
-  const productDomain = 'optrispace.com'
   const productTitle = 'OptriSpace'
   const pageTitle = title ? `${title} | ${productTitle}` : productTitle
-
   const defaultDescription =
     'OptriSpace brings together digital and IT experts, founders, freelancers, stakeholders and enthusiasts ' +
     'and provides a decentralized platform for collaboration and services exchange'
+
+  const pageDescription = description
+    ? description + ' - ' + defaultDescription
+    : defaultDescription
 
   const { domain } = publicRuntimeConfig
 
   return (
     <>
       <Head>
-        <title>{pageTitle}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content={description || defaultDescription} />
-
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content={`https://${productDomain}`} />
-        <meta property="og:type" content="website" />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@optrispace" />
-        <meta property="twitter:domain" content={productDomain} />
-        <meta property="twitter:url" content={`https://${productDomain}`} />
-        <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={description} />
-
         <Favicon />
       </Head>
 
       <Container>
+        <SEOTags
+          pageTitle={pageTitle}
+          pageDescription={pageDescription}
+          pageUrl={domain + router.asPath}
+        />
         <Header />
 
         {!domain.match(/my\.optrispace\.com/) && (
