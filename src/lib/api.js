@@ -61,15 +61,13 @@ export async function createApplication(token, jobId, { comment, price }) {
 
 export async function createContract(
   token,
-  { applicationId, contractorId, customerAddress, title, description, price }
+  { applicationId, title, description, price }
 ) {
   return await postWithToken(
     `${publicRuntimeConfig.api_url}/contracts`,
     token,
     {
       application_id: applicationId,
-      performer_id: contractorId,
-      customer_address: customerAddress,
       title: title.trim(),
       description: description.trim(),
       price: convertToPositiveFloat(price),
