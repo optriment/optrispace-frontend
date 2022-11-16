@@ -1,14 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Header, Grid, Button, Form, TextArea } from 'semantic-ui-react'
 import { createContract } from '../../lib/api'
 import { isEmptyString } from '../../lib/validators'
 import ErrorWrapper from '../../components/ErrorWrapper'
-import Web3Context from '../../context/web3-context'
-import WalletIsNotInstalled from '../../components/WalletIsNotInstalled'
-import JustOneSecond from '../../components/JustOneSecond'
-import ConnectWallet from '../../components/ConnectWallet'
-import WrongBlockchainNetwork from '../../components/WrongBlockchainNetwork'
 import { errorHandler } from '../../lib/errorHandler'
 
 export const NewContractForm = ({ job, application, token, coinSymbol }) => {
@@ -25,14 +20,6 @@ export const NewContractForm = ({ job, application, token, coinSymbol }) => {
   const [agreedTo, setAgreedTo] = useState(false)
   const [formFilled, setFormFilled] = useState(false)
 
-  const {
-    isLoading: isLoadingWeb3,
-    isWalletInstalled,
-    isCorrectNetwork,
-    connectWallet,
-    currentAccount,
-  } = useContext(Web3Context)
-
   const handleCreateContract = async (e) => {
     e.preventDefault()
     setError('')
@@ -40,8 +27,6 @@ export const NewContractForm = ({ job, application, token, coinSymbol }) => {
     try {
       const res = await createContract(token, {
         applicationId: application.id,
-        contractorId: application.applicant_id,
-        customerAddress: currentAccount,
         ...fields,
       })
 
@@ -65,22 +50,6 @@ export const NewContractForm = ({ job, application, token, coinSymbol }) => {
         agreedTo === true
     )
   }, [fields, agreedTo])
-
-  if (!isWalletInstalled) {
-    return <WalletIsNotInstalled />
-  }
-
-  if (!isCorrectNetwork) {
-    return <WrongBlockchainNetwork router={router} />
-  }
-
-  if (currentAccount === '') {
-    return <ConnectWallet connectWallet={connectWallet} />
-  }
-
-  if (isLoadingWeb3) {
-    return <JustOneSecond />
-  }
 
   return (
     <>
@@ -159,7 +128,7 @@ export const NewContractForm = ({ job, application, token, coinSymbol }) => {
               primary
               type="submit"
               content="Create"
-              disabled={isLoadingWeb3 || !formFilled}
+              disabled={!formFilled}
             />
           </Grid.Column>
         </Grid>
