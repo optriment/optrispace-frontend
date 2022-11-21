@@ -329,8 +329,8 @@ export const ContractCardForContractor = ({
                     <Divider />
 
                     <p>
-                      Please ask your customer whatever you need to finish this
-                      contract.
+                      Please ask your customer whatever you need to make this
+                      job done.
                       <br />
                       If you agree with the contract and all is good for you,
                       please click &quot;Accept Terms & Conditions &quot; to
