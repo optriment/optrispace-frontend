@@ -92,9 +92,9 @@ function AuthDetails() {
         <Menu.Item>
           {isWalletInstalled ? (
             <>
-              {isCorrectNetwork ? (
+              {isWalletConnected ? (
                 <>
-                  {isWalletConnected ? (
+                  {isCorrectNetwork ? (
                     <>
                       {currentAccount === '' ? (
                         <>
@@ -119,21 +119,21 @@ function AuthDetails() {
                       )}
                     </>
                   ) : (
-                    <Button color="orange" inverted onClick={connectWallet}>
-                      Connect Wallet
-                    </Button>
+                    <>
+                      <Icon
+                        name="warning sign"
+                        size="large"
+                        color="red"
+                        title={`Please connect your wallet to ${blockchainNetworkName}`}
+                      />
+                      Wrong network selected
+                    </>
                   )}
                 </>
               ) : (
-                <>
-                  <Icon
-                    name="warning sign"
-                    size="large"
-                    color="red"
-                    title={`Please connect your wallet to ${blockchainNetworkName}`}
-                  />
-                  Wrong network selected
-                </>
+                <Button color="orange" inverted onClick={connectWallet}>
+                  Connect Wallet
+                </Button>
               )}
             </>
           ) : (

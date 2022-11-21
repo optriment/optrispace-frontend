@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Form, Message } from 'semantic-ui-react'
+import { Divider, Button, Form, Message } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { changeWallet } from '../../lib/settings'
 import { isEmptyString } from '../../lib/validators'
@@ -37,10 +37,23 @@ export const ConnectWalletForm = ({ token, person }) => {
 
   if (!isWalletInstalled) {
     return (
-      <Message
-        negative
-        header="MetaMask Wallet is not installed in your browser"
-      />
+      <Message warning>
+        <Message.Header>
+          MetaMask Wallet is not installed in your browser
+        </Message.Header>
+
+        <Divider />
+
+        <p>
+          <a
+            href="https://metamask.io/"
+            target="_blank"
+            rel="noreferrer noopener nofollow"
+          >
+            Click here to open MetaMask website
+          </a>
+        </p>
+      </Message>
     )
   }
 
