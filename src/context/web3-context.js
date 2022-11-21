@@ -41,16 +41,6 @@ export const Web3Provider = ({ children }) => {
     }
 
     try {
-      let chainId = await wallet.request({ method: 'eth_chainId' })
-
-      if (chainId !== requiredChainId) {
-        alert(
-          `You are not connected to the ${publicRuntimeConfig.blockchain_network_name}`
-        )
-
-        return
-      }
-
       const accounts = await wallet.request({ method: 'eth_requestAccounts' })
 
       setCurrentAccount(accounts[0])
