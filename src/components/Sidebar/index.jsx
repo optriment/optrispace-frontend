@@ -46,7 +46,7 @@ export const Sidebar = ({ stats }) => {
                   content="Twitter"
                 />
                 <Label as="a" basic color="twitter" pointing="left">
-                  8,509
+                  8,428
                 </Label>
               </Button>
             </List.Item>
@@ -64,7 +64,7 @@ export const Sidebar = ({ stats }) => {
                   content="LinkedIn"
                 />
                 <Label as="a" basic color="linkedin" pointing="left">
-                  644
+                  738
                 </Label>
               </Button>
             </List.Item>
@@ -82,7 +82,7 @@ export const Sidebar = ({ stats }) => {
                   content="Discord"
                 />
                 <Label as="a" basic color="discord" pointing="left">
-                  42
+                  45
                 </Label>
               </Button>
             </List.Item>
@@ -100,7 +100,7 @@ export const Sidebar = ({ stats }) => {
                   content="Instagram"
                 />
                 <Label as="a" basic color="instagram" pointing="left">
-                  11
+                  12
                 </Label>
               </Button>
             </List.Item>
