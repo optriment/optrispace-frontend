@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Comment } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { ChatForm } from '../../forms/ChatForm'
 import { useAuth } from '../../hooks'
+import { useInterval } from '../../hooks/useInterval'
 import { getChat } from '../../lib/api'
 import { ChatMessage } from './ChatMessage'
 
@@ -10,27 +11,30 @@ const pollingInterval = 5000 // milliseconds
 
 export const Chat = ({ chatId, token }) => {
   const { person } = useAuth()
-  const [chat, setChat] = useState(null)
+  const [chatUpdates, setChatUpdates] = useState(null)
   const [error, setError] = useState('')
 
-  const update = () => {
-    setError('')
+  useInterval(async () => {
+    try {
+      const chats = await getChat(token, chatId)
+      setChatUpdates(chats)
+    } catch (err) {
+      setError(err?.info?.message || err.message)
+    }
+  }, pollingInterval)
 
+  const update = () => {
     getChat(token, chatId)
-      .then((res) => setChat(res))
+      .then((res) => {
+        setError('')
+        setChatUpdates(res)
+      })
       .catch((err) => {
         setError(err?.info?.message || err.message)
       })
   }
 
-  useEffect(() => {
-    if (!chat) {
-      update()
-    }
-
-    const timer = setTimeout(() => update(), pollingInterval)
-    return () => clearTimeout(timer)
-  }, [chat])
+  const chatMessages = chatUpdates?.messages || []
 
   return (
     <>
@@ -39,7 +43,7 @@ export const Chat = ({ chatId, token }) => {
       )}
 
       <Comment.Group>
-        {chat?.messages?.map((message) => {
+        {chatMessages.map((message) => {
           return (
             <ChatMessage key={message.id} person={person} message={message} />
           )
