@@ -21,9 +21,7 @@ const MenuComponent = () => {
       </Menu.Item>
 
       <Menu.Item link active={router.pathname == '/jobs'}>
-        <Link href="/jobs">
-          <a>Jobs</a>
-        </Link>
+        <Link href="/jobs">Jobs</Link>
       </Menu.Item>
 
       <AuthDetails />
@@ -60,13 +58,13 @@ function AuthDetails() {
         <Menu.Menu position="right">
           <Menu.Item link active={router.pathname == '/sign_up'}>
             <Link href="/sign_up" passHref>
-              <a>Sign Up</a>
+              Sign Up
             </Link>
           </Menu.Item>
 
           <Menu.Item link active={router.pathname == '/sign_in'}>
             <Link href="/sign_in" passHref>
-              <a>Log In</a>
+              Log In
             </Link>
           </Menu.Item>
         </Menu.Menu>
@@ -78,13 +76,19 @@ function AuthDetails() {
     <>
       <Menu.Item link active={router.pathname == '/applications'}>
         <Link href="/applications" passHref>
-          <a>Applications</a>
+          Applications
         </Link>
       </Menu.Item>
 
       <Menu.Item link active={router.pathname == '/contracts'}>
         <Link href="/contracts" passHref>
-          <a>Contracts</a>
+          Contracts
+        </Link>
+      </Menu.Item>
+
+      <Menu.Item active={router.pathname == '/chats'}>
+        <Link href="/chats" passHref>
+          Chats
         </Link>
       </Menu.Item>
 
