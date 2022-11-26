@@ -47,6 +47,7 @@ export const ChatForm = ({ chatId, token, onPostMessage }) => {
           value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
           onKeyDown={keyDownHandler}
+          maxLength={4096}
         />
 
         <Button content="Send" primary disabled={isEmptyString(messageText)} />
