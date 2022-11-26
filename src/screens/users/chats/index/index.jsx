@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Link from 'next/link'
 import {
   Divider,
   Icon,
@@ -11,70 +12,105 @@ import { Chat } from '../../../../components/Chat'
 import ChatsList from '../../../../components/ChatsList'
 
 export const ChatsScreen = ({ chats, person, token }) => {
-  const [selectedChatId, setSelectedChatId] = useState(null)
+  const [selectedChat, setSelectedChat] = useState(null)
 
-  const onSelectChat = (chatId) => {
-    setSelectedChatId(chatId)
+  const onSelectChat = (chat) => {
+    setSelectedChat(chat)
   }
 
   return (
-    <>
-      <Header as="h1">Chats</Header>
+    <Grid stackable columns={1}>
+      <Grid.Column textAlign="center">
+        <Header as="h1">Chats</Header>
+      </Grid.Column>
 
-      <Message warning icon>
-        <Icon name="chat" />
+      {chats.length > 0 && (
+        <Grid.Column>
+          <Message warning icon>
+            <Icon name="chat" />
 
-        <Message.Content>
-          <Message.Header>
-            Friendly reminder from OptriSpace Team
-          </Message.Header>
+            <Message.Content>
+              <Message.Header>
+                Friendly reminder from OptriSpace Team
+              </Message.Header>
 
-          <Divider />
+              <Divider />
 
-          <p>
-            It is the first version of our internal chat system on OptriSpace.
-            <br />
-            Please report any bugs, ideas or issues via our
-            <a
-              href="https://github.com/optriment/optrispace-frontend/issues/new"
-              target="_blank"
-              rel="noreferrer nofollow noopener"
-            >
-              {' GitHub Issues '}
-            </a>
-            or
-            <a
-              href="https://discord.gg/7WEbtmuqtv"
-              target="_blank"
-              rel="noreferrer nofollow noopener"
-            >
-              {' Discord'}
-            </a>
-            .
-          </p>
-        </Message.Content>
-      </Message>
+              <p>
+                It is the first version of our internal chat system on
+                OptriSpace.
+                <br />
+                Right now chats are loading approximately 5 seconds. It is not a
+                bug.
+              </p>
 
-      <Grid columns={2}>
-        <Grid.Column width={6}>
-          <Segment>
-            <ChatsList
-              chats={chats}
-              person={person}
-              onSelectChat={onSelectChat}
-            />
-          </Segment>
+              <p>
+                Please report any bugs, ideas or issues via our
+                <a
+                  href="https://github.com/optriment/optrispace-frontend/issues/new"
+                  target="_blank"
+                  rel="noreferrer nofollow noopener"
+                >
+                  {' GitHub Issues '}
+                </a>
+                or
+                <a
+                  href="https://discord.gg/7WEbtmuqtv"
+                  target="_blank"
+                  rel="noreferrer nofollow noopener"
+                >
+                  {' Discord'}
+                </a>
+                .
+              </p>
+            </Message.Content>
+          </Message>
+
+          <Grid stackable columns={1}>
+            <Grid.Column mobile={16} computer={6}>
+              <Segment>
+                <ChatsList
+                  chats={chats}
+                  person={person}
+                  onSelectChat={onSelectChat}
+                />
+              </Segment>
+            </Grid.Column>
+
+            <Grid.Column mobile={16} computer={10}>
+              <Segment>
+                {selectedChat ? (
+                  <>
+                    <Header as="h3">
+                      {selectedChat.contract_id ? (
+                        <>
+                          Contract:{' '}
+                          <Link href={`/contracts/${selectedChat.contract_id}`}>
+                            {selectedChat.title}
+                          </Link>
+                        </>
+                      ) : (
+                        <>
+                          Job:{' '}
+                          <Link href={`/jobs/${selectedChat.job_id}`}>
+                            {selectedChat.title}
+                          </Link>
+                        </>
+                      )}
+                    </Header>
+
+                    <Divider />
+
+                    <Chat chatId={selectedChat.id} token={token} />
+                  </>
+                ) : (
+                  <p>Please select a chat</p>
+                )}
+              </Segment>
+            </Grid.Column>
+          </Grid>
         </Grid.Column>
-        <Grid.Column width={10}>
-          <Segment>
-            {selectedChatId ? (
-              <Chat chatId={selectedChatId} token={token} />
-            ) : (
-              <p>Please select chat</p>
-            )}
-          </Segment>
-        </Grid.Column>
-      </Grid>
-    </>
+      )}
+    </Grid>
   )
 }

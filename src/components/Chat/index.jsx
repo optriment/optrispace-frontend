@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Comment } from 'semantic-ui-react'
 import ErrorWrapper from '../../components/ErrorWrapper'
 import { ChatForm } from '../../forms/ChatForm'
@@ -13,6 +13,16 @@ export const Chat = ({ chatId, token }) => {
   const { person } = useAuth()
   const [chatUpdates, setChatUpdates] = useState(null)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    getChat(token, chatId)
+      .then((chat) => {
+        setChatUpdates(chat)
+      })
+      .catch((err) => {
+        setError(err?.info?.message || err.message)
+      })
+  }, [chatId, token])
 
   useInterval(async () => {
     try {
