@@ -53,11 +53,13 @@ export const Chat = ({ chatId, token }) => {
       )}
 
       <Comment.Group>
-        {chatMessages.map((message) => {
-          return (
-            <ChatMessage key={message.id} person={person} message={message} />
-          )
-        })}
+        <div style={{ height: '280px', overflow: 'auto' }}>
+          {chatMessages.map((message) => {
+            return (
+              <ChatMessage key={message.id} person={person} message={message} />
+            )
+          })}
+        </div>
 
         <ChatForm chatId={chatId} token={token} onPostMessage={update} />
       </Comment.Group>
