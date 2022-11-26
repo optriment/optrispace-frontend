@@ -13,7 +13,7 @@ export default function ChatListItem({ person, chat, onSelectChat }) {
     (participant) => participant.id !== person.id
   )
 
-  const icon = chat.contract_id ? 'file text' : 'file'
+  const icon = chat.contract_id ? 'file text' : 'file outline'
   const iconTitle = chat.contract_id ? 'Contract' : 'Job Application'
 
   return (
