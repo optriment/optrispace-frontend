@@ -33,7 +33,7 @@ const Page = () => {
   if (personError) {
     return (
       <LandingLayout>
-        <ErrorWrapper header="Internal Server Error" error={personError} />
+        <ErrorWrapper header="Authorization Error" error={personError} />
       </LandingLayout>
     )
   }
