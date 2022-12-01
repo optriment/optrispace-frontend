@@ -23,7 +23,9 @@ const DoNotStartWorking = () => {
       <Icon name="bell" />
 
       <Message.Content>
-        <Message.Header>Friendly reminder from OptriSpace Team:</Message.Header>
+        <Message.Header>
+          Friendly reminder from the OptriSpace Team:
+        </Message.Header>
 
         <Divider />
 

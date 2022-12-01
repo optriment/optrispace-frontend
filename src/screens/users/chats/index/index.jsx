@@ -31,21 +31,21 @@ export const ChatsScreen = ({ chats, person, token }) => {
 
             <Message.Content>
               <Message.Header>
-                Friendly reminder from OptriSpace Team
+                Friendly reminder from the OptriSpace Team
               </Message.Header>
 
               <Divider />
 
               <p>
-                It is the first version of our internal chat system on
+                This is the first version of our internal chat system on
                 OptriSpace.
                 <br />
-                Right now chats are loading approximately 5 seconds. It is not a
-                bug.
+                Right now, chats are loading for approximately 5 seconds. It is
+                not a bug.
               </p>
 
               <p>
-                Please report any bugs, ideas or issues via our
+                Please report any bugs, ideas, or issues via our
                 <a
                   href="https://github.com/optriment/optrispace-frontend/issues/new"
                   target="_blank"
