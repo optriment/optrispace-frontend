@@ -181,7 +181,7 @@ export const ContractCardForCustomer = ({
           return false
         }
 
-        if (accountBalance <= contract.price) {
+        if (+accountBalance <= +contract.price) {
           setError(
             'You do not have enough tokens to fund the contract. Required: ' +
               contract.price +
@@ -327,7 +327,7 @@ export const ContractCardForCustomer = ({
   const contractPrice = contract.price
   console.log('--- debug ---')
   console.log({ accountBalance, contractPrice })
-  console.log(accountBalance > contract.price)
+  console.log(+accountBalance > +contract.price)
 
   return (
     <Grid columns={1} stackable>
@@ -495,7 +495,7 @@ export const ContractCardForCustomer = ({
                   </>
                 ) : (
                   <>
-                    {accountBalance > contract.price ? (
+                    {+accountBalance > +contract.price ? (
                       <WalletWrapper
                         walletAddressToCompareWith={contract.customer_address}
                       >
