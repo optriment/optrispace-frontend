@@ -324,6 +324,11 @@ export const ContractCardForCustomer = ({
     setTxLoading(false)
   }, [isWalletReady, currentStatus])
 
+  const contractPrice = contract.price
+  console.log('--- debug ---')
+  console.log({ accountBalance, contractPrice })
+  console.log(accountBalance > contract.price)
+
   return (
     <Grid columns={1} stackable>
       <Grid.Column only="computer">
@@ -534,7 +539,7 @@ export const ContractCardForCustomer = ({
                             </Message.Header>
                             <p>
                               Your current balance is
-                              {`${accountBalance} ${coinSymbol}`} and it is not
+                              {` ${accountBalance} ${coinSymbol}`} and it is not
                               enough to pay for contract price.
                             </p>
                           </Message.Content>
