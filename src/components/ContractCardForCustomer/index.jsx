@@ -324,11 +324,6 @@ export const ContractCardForCustomer = ({
     setTxLoading(false)
   }, [isWalletReady, currentStatus])
 
-  const contractPrice = contract.price
-  console.log('--- debug ---')
-  console.log({ accountBalance, contractPrice })
-  console.log(+accountBalance > +contract.price)
-
   return (
     <Grid columns={1} stackable>
       <Grid.Column only="computer">
